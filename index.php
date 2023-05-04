@@ -36,14 +36,64 @@
 
 	<section class="library">
 		<div class="shelf">
-			<?php
-				$sql = 'SELECT * FROM book';
-				$res = mysqli_query( $conn, $sql );
+			<h2>Le Top 10</h2>
+			<div class="carousel">
 
-			foreach ( $res as $line ) {
-				echo "<span class='book'><img src=" . $line['link'] . " alt='imagenotfound'></span>";
-			}
-			?>
+				<button type="button" id="moveLeft" class="btn-nav">
+					ᐊ
+				</button>
+				<div class="container-indicators">
+				<div class="indicator active" data-index=0></div>
+				<div class="indicator" data-index=1></div>
+				<div class="indicator" data-index=2></div>
+				</div>
+				
+				<div class="books">
+					
+					<?php
+					$sql = 'SELECT * FROM book';
+					$res = mysqli_query( $conn, $sql );
+
+					foreach ( $res as $line ) {
+						// echo "<span class='book'><img src=" . $line['link'] . " alt='imagenotfound'></span>";
+                        // src="https://raw.githubusercontent.com/julien-gargot/images-placeholder/master/placeholder-portrait.png"
+					}
+
+					for ( $i = 0; $i < 10; $i++ ) {
+						echo '<div class="book" id="book0">
+                        <img
+                            src="https://images.unsplash.com/photo-1585951237318-9ea5e175b891?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                          alt="" srcset="">
+                        <div class="description">
+                          <div class="description__buttons-container">
+                            <div class="description__button"><i class="fas fa-play"></i></div>
+                            <div class="description__button"><i class="fas fa-plus"></i></div>
+                            <div class="description__button"><i class="fas fa-thumbs-up"></i></div>
+                            <div class="description__button"><i class="fas fa-thumbs-down"></i></div>
+                            <div class="description__button"><i class="fas fa-chevron-down"></i></div>
+                          </div>
+                          <div class="description__text-container">
+                            <span class="description__match">97% Match</span>
+                            <span class="description__rating">TV-14</span>
+                            <span class="description__length">2h 11m</span>
+                            <br><br>
+                            <span>Explosive</span>
+                            <span>&middot;</span>
+                            <span>Exciting</span>
+                            <span>&middot;</span>
+                            <span>Family</span>
+                          </div>
+                        </div>
+                      </div>';
+					}
+					?>
+
+				</div>
+				<button type="button" id="moveRight" class="btn-nav">
+				ᐅ
+				</button>
+				
+			</div>
 		</div>
 	</section>
 
