@@ -43,17 +43,29 @@ public class InterfaceAdministrateur {
         JPanel bookPanel = new JPanel();
         mainPanel.add(bookPanel);
 
-        JLabel bookLabel = new JLabel("Ajouter un livre:");
+        JLabel bookLabel = new JLabel("Titre:");
         bookPanel.add(bookLabel);
 
         JTextField bookTextField = new JTextField(15);
         bookPanel.add(bookTextField);
+
+        JLabel authorLabel = new JLabel("Auteur:");
+        bookPanel.add(authorLabel);
+
+        JTextField authorTextField = new JTextField(15);
+        bookPanel.add(authorTextField);
 
         JLabel bookGenreLabel = new JLabel("Genre:");
         bookPanel.add(bookGenreLabel);
 
         JTextField bookGenreTextField = new JTextField(15);
         bookPanel.add(bookGenreTextField);
+
+        JLabel publicationDateLabel = new JLabel("Date de parution (JJ/MM/AAAA):");
+        bookPanel.add(publicationDateLabel);
+
+        JTextField publicationDateTextField = new JTextField(10);
+        bookPanel.add(publicationDateTextField);
 
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
@@ -80,17 +92,20 @@ public class InterfaceAdministrateur {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String book = bookTextField.getText();
+                String author = authorTextField.getText();
                 String genre = bookGenreTextField.getText();
-                if (!book.isEmpty() && !genre.isEmpty()) {
-                    textArea.append("Livre ajouté: " + book + " (Genre: " + genre + ")\n");
+                String publicationDate = publicationDateTextField.getText();
+                if (!book.isEmpty() && !author.isEmpty() && !genre.isEmpty() && !publicationDate.isEmpty()) {
+                    textArea.append("Livre ajouté: " + book + " | Auteur: " + author + " | Genre: " + genre + " | Date de parution: " + publicationDate + "\n");
                     bookTextField.setText("");
+                    authorTextField.setText("");
                     bookGenreTextField.setText("");
+                    publicationDateTextField.setText("");
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un titre de livre et un genre valides.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer toutes les informations requises (titre, auteur, genre et date de parution).", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-
         frame.setVisible(true);
     }
 }
