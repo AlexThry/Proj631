@@ -1,8 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;800;1000&display=swap");
+@import url("./login.css");
 
 :root {
   --primary-light: #abc4f0;
   --primary: #538aec;
+  --primary-hover: #2b70e9;
   --text: black;
   --border: rgb(233, 233, 233);
 }
@@ -17,6 +19,19 @@ html {
 
 body {
   margin: 0;
+}
+
+body,main{
+  min-height: 100vh;
+}
+
+main{
+  display: flex;
+  flex-direction: column;
+}
+
+.page-container{
+  flex: 1;
 }
 
 /* ==========HEADER=========== */

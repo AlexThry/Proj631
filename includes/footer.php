@@ -1,6 +1,7 @@
-<footer class="footer">
-			Copyrigth nous
-		</footer>
+        </div>
+        <footer class="footer">
+            Copyrigth nous
+        </footer>
 	</main>
 </body>
 

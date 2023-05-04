@@ -37,18 +37,12 @@
 	<section class="library">
 		<div class="shelf">
 			<?php
-				error_reporting(E_ALL); ini_set("display_errors", 1);
-				$conn = new mysqli('localhost', 'root', 'root');
-				if (!$conn) {
-					echo "erreur de connexion à la bdd";
-				}
-				mysqli_query($conn, "USE Proj631");
-				$sql = "SELECT * FROM book";
-				$res = mysqli_query($conn, $sql);
+				$sql = 'SELECT * FROM book';
+				$res = mysqli_query( $conn, $sql );
 
-				foreach($res as $line) {
-					echo "<span class='book'><img src=" . $line['link'] . " alt='imagenotfound'></span>";
-				}
+			foreach ( $res as $line ) {
+				echo "<span class='book'><img src=" . $line['link'] . " alt='imagenotfound'></span>";
+			}
 			?>
 		</div>
 	</section>

@@ -5,7 +5,7 @@ require_once 'functions.php';
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
 	<meta charset="UTF-8">
@@ -16,24 +16,24 @@ require_once 'functions.php';
 	<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body>
+<body class="page-<?php echo get_url_basename(); ?>">
 	<main>
-
-		<header class="header">
-			<div class="header-menu left-part">
-				<a href="linktohomepage" class="homepage-link">
-					<img src="assets/images/logo.png" alt="Readable">
-					<h1>Readable</h1>
-				</a>
-			</div>
-
-			<div class="header-menu right-part">
-				<div class="btn signup">
-					<a href="inscription.php">Inscription</a>
+		<div class="page-container">
+			<header class="header">
+				<div class="header-menu left-part">
+					<a href="<?php echo get_home_url(); ?>" class="homepage-link">
+						<img src="assets/images/logo.png" alt="Readable">
+						<h1>Readable</h1>
+					</a>
 				</div>
 
-				<div class="btn login">
-					<a href="login.php">Connexion</a>
+				<div class="header-menu right-part">
+					<div class="btn signup">
+						<a href="subscription.php">Inscription</a>
+					</div>
+
+					<div class="btn login">
+						<a href="connection.php">Connexion</a>
+					</div>
 				</div>
-			</div>
-		</header>
+			</header>
