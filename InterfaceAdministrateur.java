@@ -17,13 +17,18 @@ public class InterfaceAdministrateur {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Interface Administrateur");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
+        frame.setSize(600, 400);
 
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
 
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(2, 1));
+        contentPane.add(mainPanel, BorderLayout.CENTER);
+
+        // Panel pour ajouter un genre
         JPanel genrePanel = new JPanel();
-        contentPane.add(genrePanel, BorderLayout.CENTER);
+        mainPanel.add(genrePanel);
 
         JLabel genreLabel = new JLabel("Ajouter un genre:");
         genrePanel.add(genreLabel);
@@ -31,15 +36,34 @@ public class InterfaceAdministrateur {
         JTextField genreTextField = new JTextField(15);
         genrePanel.add(genreTextField);
 
-        JButton addButton = new JButton("Ajouter");
-        genrePanel.add(addButton);
+        JButton addGenreButton = new JButton("Ajouter genre");
+        genrePanel.add(addGenreButton);
 
-        JTextArea textArea = new JTextArea(10, 30);
+        // Panel pour ajouter un livre
+        JPanel bookPanel = new JPanel();
+        mainPanel.add(bookPanel);
+
+        JLabel bookLabel = new JLabel("Ajouter un livre:");
+        bookPanel.add(bookLabel);
+
+        JTextField bookTextField = new JTextField(15);
+        bookPanel.add(bookTextField);
+
+        JLabel bookGenreLabel = new JLabel("Genre:");
+        bookPanel.add(bookGenreLabel);
+
+        JTextField bookGenreTextField = new JTextField(15);
+        bookPanel.add(bookGenreTextField);
+
+        JButton addBookButton = new JButton("Ajouter livre");
+        bookPanel.add(addBookButton);
+
+        JTextArea textArea = new JTextArea(10, 50);
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
         contentPane.add(scrollPane, BorderLayout.SOUTH);
 
-        addButton.addActionListener(new ActionListener() {
+        addGenreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String genre = genreTextField.getText();
@@ -48,6 +72,21 @@ public class InterfaceAdministrateur {
                     genreTextField.setText("");
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        addBookButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String book = bookTextField.getText();
+                String genre = bookGenreTextField.getText();
+                if (!book.isEmpty() && !genre.isEmpty()) {
+                    textArea.append("Livre ajouté: " + book + " (Genre: " + genre + ")\n");
+                    bookTextField.setText("");
+                    bookGenreTextField.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un titre de livre et un genre valides.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
