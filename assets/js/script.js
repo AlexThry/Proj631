@@ -8,6 +8,7 @@ class BookEventHandler {
   }
 
   handleMouseEnter(e) {
+    console.log(this.timeout);
     if (this.timeout) {
       this.book.classList.add("hovered");
       clearTimeout(this.timeout);
@@ -22,16 +23,21 @@ class BookEventHandler {
   }
 
   handleMouseLeave(e) {
+    // console.log(this.timeout);
     if (this.timeout) {
       clearTimeout(this.timeout);
       return;
     }
 
+    this.book.addEventListener(
+      "transitionend",
+      () => {
+        this.book.classList.remove("first-plan");
+      },
+      { once: true }
+    );
+
     this.book.classList.remove("hovered");
-    this.timeout = setTimeout(() => {
-      this.book.classList.remove("first-plan");
-      this.timeout = null;
-    }, 800);
   }
 }
 
@@ -97,7 +103,41 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  let currentBook = null;
+  let timeout = null;
+
+  books.addEventListener("mousemove", (e) => {
+    const book = e.target.closest(".book");
+    if (!book) {
+      if (currentBook) {
+        currentBook.classList.remove("hovered");
+      }
+      currentBook = book;
+      return;
+    }
+
+    if (currentBook !== book) {
+      if (currentBook) {
+        // currentBook.classList.remove("hovered");
+        // currentBook.classList.remove("first-plan");
+
+        currentBook.classList.remove("hovered");
+        book.classList.add("first-plan");
+        book.classList.add("hovered");
+      } else {
+        book.classList.add("first-plan");
+        book.classList.add("hovered");
+      }
+    }
+
+    currentBook = book;
+  });
+
   for (const book of books.querySelectorAll(".book")) {
-    new BookEventHandler(book);
+    book.addEventListener("transitionend", () => {
+      if (!book.classList.contains("hovered")) {
+        book.classList.remove("first-plan");
+      }
+    });
   }
 });

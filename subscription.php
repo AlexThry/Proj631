@@ -4,7 +4,7 @@ require_once 'includes/header.php';
 
 ?>
 
-<seciton class="connection-container">
+<section class="connection-container">
 <div class="connection">
 	<form action="./inscription.php" method="post">
 
@@ -37,6 +37,6 @@ require_once 'includes/header.php';
 	</form>
 	
 </div>
-</seciton>
+</section>
 
 <?php require_once 'includes/footer.php'; ?>

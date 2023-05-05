@@ -79,7 +79,7 @@
   color: white;
   padding: 0 2px;
   font-size: 0.8rem;
-  transition: all 0.3s ease-in-out 0.5s;
+  transition: all 0.3s ease-in-out 0s;
   cursor: pointer;
 }
 
@@ -114,10 +114,10 @@
     transform: scale(1.3);
   }
 
-  .book.hovered > .description {
+  .book.first-plan > .description {
     display: block;
   }
-  .book.hovered > img {
+  .book.first-plan > img {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
