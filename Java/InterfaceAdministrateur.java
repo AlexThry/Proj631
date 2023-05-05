@@ -32,7 +32,7 @@ public class InterfaceAdministrateur {
         booksAndGenresPanel.setLayout(new GridLayout(2, 1));
         tabbedPane.addTab("Genres et Livres", booksAndGenresPanel);
 
-        // Panel pour ajouter un genre
+        // Panel pour ajouter et supprimer un genre
         JPanel genrePanel = new JPanel();
         booksAndGenresPanel.add(genrePanel);
 
@@ -45,7 +45,17 @@ public class InterfaceAdministrateur {
         JButton addGenreButton = new JButton("Ajouter genre");
         genrePanel.add(addGenreButton);
 
-        // Panel pour ajouter un livre
+        JLabel genreListLabel = new JLabel("Sélectionnez un genre:");
+        genrePanel.add(genreListLabel);
+
+        String[] genres = new String[0];
+        JComboBox<String> genreComboBox = new JComboBox<>(genres);
+        genrePanel.add(genreComboBox);
+
+        JButton removeGenreButton = new JButton("Supprimer genre");
+        genrePanel.add(removeGenreButton);
+
+        // Panel pour ajouter et supprimer un livre
         JPanel bookPanel = new JPanel();
         booksAndGenresPanel.add(bookPanel);
 
@@ -91,9 +101,6 @@ public class InterfaceAdministrateur {
         JTextField userTextField = new JTextField(15);
         usersPanel.add(userTextField);
 
-        JButton addUserButton = new JButton("Ajouter utilisateur");
-        usersPanel.add(addUserButton);
-
         JButton removeUserButton = new JButton("Supprimer utilisateur");
         usersPanel.add(removeUserButton);
 
@@ -101,6 +108,39 @@ public class InterfaceAdministrateur {
         usersTextArea.setEditable(false);
         JScrollPane usersScrollPane = new JScrollPane(usersTextArea);
         contentPane.add(usersScrollPane, BorderLayout.SOUTH);
+
+        JPanel removeReviewPanel = new JPanel();
+        tabbedPane.addTab("Supprimer Avis", removeReviewPanel);
+
+        JLabel bookTitleLabel = new JLabel("Titre du livre:");
+        removeReviewPanel.add(bookTitleLabel);
+
+        String[] bookTitles = new String[0];
+        JComboBox<String> bookTitleComboBox = new JComboBox<>(bookTitles);
+        removeReviewPanel.add(bookTitleComboBox);
+
+        JLabel reviewerNameLabel = new JLabel("Nom d'utilisateur:");
+        removeReviewPanel.add(reviewerNameLabel);
+
+        JTextField reviewerNameTextField = new JTextField(15);
+        removeReviewPanel.add(reviewerNameTextField);
+
+        JButton removeReviewButton = new JButton("Supprimer Avis");
+        removeReviewPanel.add(removeReviewButton);
+
+        JTextArea reviewsTextArea = new JTextArea(10, 50);
+        reviewsTextArea.setEditable(false);
+        JScrollPane reviewsScrollPane = new JScrollPane(reviewsTextArea);
+        contentPane.add(reviewsScrollPane, BorderLayout.SOUTH);
+
+        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
+        bookPanel.add(bookListLabel);
+
+        JComboBox<String> bookListComboBox = new JComboBox<>(bookTitles);
+        bookPanel.add(bookListComboBox);
+
+        JButton removeBookButton = new JButton("Supprimer livre");
+        bookPanel.add(removeBookButton);
 
         addGenreButton.addActionListener(new ActionListener() {
             @Override
@@ -133,18 +173,6 @@ public class InterfaceAdministrateur {
                 }
             }
         });
-        addUserButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = userTextField.getText();
-                if (!username.isEmpty()) {
-                    usersTextArea.append("Utilisateur ajouté: " + username + "\n");
-                    userTextField.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
         removeUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,6 +185,46 @@ public class InterfaceAdministrateur {
                 }
             }
         });
+
+        removeReviewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String bookTitle = (String) bookTitleComboBox.getSelectedItem();
+                String reviewerName = reviewerNameTextField.getText();
+                if (bookTitle != null && !reviewerName.isEmpty()) {
+                    reviewsTextArea.append("Avis supprimé pour le livre \"" + bookTitle + "\" de l'utilisateur \"" + reviewerName + "\"\n");
+                    reviewerNameTextField.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre et entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        removeGenreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedGenre = (String) genreComboBox.getSelectedItem();
+                if (selectedGenre != null) {
+                    // Supprimez le genre sélectionné de vos données et mettez à jour le menu déroulant des genres
+                    textArea.append("Genre supprimé: " + selectedGenre + "\n");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        removeBookButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedBook = (String) bookListComboBox.getSelectedItem();
+                if (selectedBook != null) {
+                    // Supprimez le livre sélectionné de vos données et mettez à jour le menu déroulant des livres
+                    textArea.append("Livre supprimé: " + selectedBook + "\n");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         frame.setVisible(true);
     }
 }
