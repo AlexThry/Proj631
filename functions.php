@@ -1,5 +1,7 @@
 <?php
 
+require_once("class/user.php");
+
 const DB_USERNAME = 'root';
 const DB_PASSWORD = '';
 
@@ -84,7 +86,10 @@ function compute_connection( $username, $password ): void {
 
 	echo "<span class='success'>Authentifié avec succès.</span>";
 
+	$_SESSION['current_user'] = new User($result['id'], $result['user_name'], $result['password']);
+
 	// TODO : Redirect to user page
+	header("Location: account.php");
 }
 
 /**
@@ -124,6 +129,15 @@ function input_value($input): void {
 }
 
 /**
+ * Returns the current user or false if theres none.
+ * @return bool|User
+ */
+function current_user() {
+	if(!isset($_SESSION['current_user'])) return false;
+	return $_SESSION['current_user'];
+}
+
+/**
  * Get current url.
  *
  * @return string
@@ -151,6 +165,7 @@ function get_url_basename(): string {
  * @return void
  */
 function main(): void {
+	session_start();
 	start_debugger();
 	connect_db();
 }
