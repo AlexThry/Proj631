@@ -67,6 +67,38 @@ main {
   font-weight: 400;
 }
 
+.btn-primary, .btn-secondary {
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--primary-hover);
+}
+.btn-secondary {
+  background-color: var(--primary-light);
+}
+
+.btn-disabled {
+  background-color: transparent;
+  color: var(--text);
+}
+
+.ligth-frame {
+  border: 4px solid var(--primary-light);
+  border-radius: 20px;
+  padding: 20px 30px;
+}
+
+.separator {
+  background-color: var(--border);
+  height: 3px;
+  border-radius: 5px;
+}
+
 .header-menu .login {
   background-color: var(--primary);
   padding: 10px 20px;

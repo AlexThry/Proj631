@@ -1,7 +1,7 @@
 <?php
 
 const DB_USERNAME = 'root';
-const DB_PASSWORD = 'root';
+const DB_PASSWORD = '';
 
 final class Database {
 
@@ -12,7 +12,7 @@ final class Database {
     public static function connect_db() {
         global $conn;
         $conn  = new mysqli('localhost', DB_USERNAME, DB_PASSWORD);
-        
+
         if ( ! $conn ) {
             echo 'Erreur de connexion à la bdd';
         }
@@ -86,7 +86,7 @@ final class Database {
         }
         return $users;
     }
-    
+
 
 }
 

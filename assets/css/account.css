@@ -1,0 +1,33 @@
+.infos {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid red;
+    margin-top: 50px;
+    gap: 50px;
+}
+
+main {
+    flex: 1;
+}
+
+aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: fit-content;
+    gap: 12px;
+    min-width: 20em;
+}
+
+.btn-secondary {
+    border-radius: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 15px 30px;
+}
+
+@media screen and (max-width: 768px) {
+    .infos {
+        flex-direction: column;
+    }
+}

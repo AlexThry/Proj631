@@ -1,12 +1,10 @@
 <?php
 
-
-
-
-
 function includes():void {
+	require_once("class/user.php");
 	require_once "class/Database.php";
 }
+
 /**
  * Get home url.
  *
@@ -69,7 +67,9 @@ function compute_connection( $username, $password ): void {
 
 	echo "<span class='success'>Authentifié avec succès.</span>";
 
-	// TODO : Redirect to user page
+	$_SESSION['current_user'] = new User($result['id'], $result['user_name'], $result['password']);
+
+	header("Location: account.php");
 }
 
 /**
@@ -81,12 +81,24 @@ function compute_connection( $username, $password ): void {
  *
  * @return void
  */
-function compute_subscription( $username, $password, $confirm_password ): void {
-	global $conn;
+function compute_subscription($username, $password, $confirm_password ): void {
+	// Validate inputs
+	$errors = array();
+	if(empty($username)) $errors[] = "Insérez votre nom d'utilisateur";
+	if(empty($password)) $errors[] = "Insérez votre mot de passe";
+	if(!empty($password) && empty($confirm_password)) $errors[] = "Confirmer votre mot de passe";
+	if(!empty($errors)) {
+		foreach($errors as $error_message)  {
+			echo "<span class='error'>$error_message</span>";
+		}
+		return;
+	}
 
+	global $conn;
 	if ( $password === $confirm_password ) {
 		$date = date( 'Y-m-d' );
-		$sql  = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $username . "','" . $password . "','" . $date . "')";
+		$hash_password = hash("sha256", $password);
+		$sql  = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $username . "','" . $hash_password . "','" . $date . "')";
 
 		if ( mysqli_query( $conn, $sql ) ) {
 			echo "<span class='success'>Vous avez créé votre compte.</span>";
@@ -100,12 +112,21 @@ function compute_subscription( $username, $password, $confirm_password ): void {
 
 
 /**
- * Returns a value field for html inputs
+ * Displays a value field for html inputs
  * Only if the input is in $_POST or $_GET
  */
 function input_value($input): void {
 	if(isset($_POST[$input])) echo "value='".$_POST[$input]."'";
 	if(isset($_GET[$input])) echo "value='".$_GET[$input]."'";
+}
+
+/**
+ * Returns the current user or false if theres none.
+ * @return bool|User
+ */
+function current_user() {
+	if(!isset($_SESSION['current_user'])) return false;
+	return $_SESSION['current_user'];
 }
 
 /**
@@ -137,6 +158,7 @@ function get_url_basename(): string {
  */
 function main(): void {
 	includes();
+	session_start();
 	start_debugger();
 }
 

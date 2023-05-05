@@ -6,7 +6,7 @@ require_once 'includes/header.php';
 
 <section class="connection-container">
 <div class="connection">
-	<form action="./inscription.php" method="post">
+	<form action="./subscription.php" method="post">
 
 		<h2>Inscription</h2>
 
@@ -30,12 +30,12 @@ require_once 'includes/header.php';
 			<label for="confirm-password">Confirm</label>
 			<input type="password" name="confirm-password" id="confirm-password-input-creation" placeholder="Confirm password">
 		</div>
-  
+
 		<input type="submit" name="submit" id="submit-input-creation" value="Inscription">
 
 		<small>Vous avez déjà un compte ? <a href="./connection.php">Connectez-vous</a></small>
 	</form>
-	
+
 </div>
 </section>
 
