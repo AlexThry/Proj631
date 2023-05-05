@@ -19,18 +19,22 @@ public class InterfaceAdministrateur {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Interface Administrateur");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
+        frame.setSize(800, 500);
 
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(2, 1));
-        contentPane.add(mainPanel, BorderLayout.CENTER);
+        JTabbedPane tabbedPane = new JTabbedPane();
+        contentPane.add(tabbedPane, BorderLayout.CENTER);
+
+        // Panel pour gérer les genres et les livres
+        JPanel booksAndGenresPanel = new JPanel();
+        booksAndGenresPanel.setLayout(new GridLayout(2, 1));
+        tabbedPane.addTab("Genres et Livres", booksAndGenresPanel);
 
         // Panel pour ajouter un genre
         JPanel genrePanel = new JPanel();
-        mainPanel.add(genrePanel);
+        booksAndGenresPanel.add(genrePanel);
 
         JLabel genreLabel = new JLabel("Ajouter un genre:");
         genrePanel.add(genreLabel);
@@ -43,7 +47,7 @@ public class InterfaceAdministrateur {
 
         // Panel pour ajouter un livre
         JPanel bookPanel = new JPanel();
-        mainPanel.add(bookPanel);
+        booksAndGenresPanel.add(bookPanel);
 
         JLabel bookLabel = new JLabel("Titre:");
         bookPanel.add(bookLabel);
@@ -77,6 +81,27 @@ public class InterfaceAdministrateur {
         JScrollPane scrollPane = new JScrollPane(textArea);
         contentPane.add(scrollPane, BorderLayout.SOUTH);
 
+        // Panel pour gérer les utilisateurs
+        JPanel usersPanel = new JPanel();
+        tabbedPane.addTab("Utilisateurs", usersPanel);
+
+        JLabel userLabel = new JLabel("Nom d'utilisateur:");
+        usersPanel.add(userLabel);
+
+        JTextField userTextField = new JTextField(15);
+        usersPanel.add(userTextField);
+
+        JButton addUserButton = new JButton("Ajouter utilisateur");
+        usersPanel.add(addUserButton);
+
+        JButton removeUserButton = new JButton("Supprimer utilisateur");
+        usersPanel.add(removeUserButton);
+
+        JTextArea usersTextArea = new JTextArea(10, 50);
+        usersTextArea.setEditable(false);
+        JScrollPane usersScrollPane = new JScrollPane(usersTextArea);
+        contentPane.add(usersScrollPane, BorderLayout.SOUTH);
+
         addGenreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -105,6 +130,30 @@ public class InterfaceAdministrateur {
                     publicationDateTextField.setText("");
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer toutes les informations requises (titre, auteur, genre et date de parution).", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        addUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = userTextField.getText();
+                if (!username.isEmpty()) {
+                    usersTextArea.append("Utilisateur ajouté: " + username + "\n");
+                    userTextField.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        removeUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = userTextField.getText();
+                if (!username.isEmpty()) {
+                    usersTextArea.append("Utilisateur supprimé: " + username + "\n");
+                    userTextField.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
