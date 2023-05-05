@@ -88,7 +88,6 @@ function compute_connection( $username, $password ): void {
 
 	$_SESSION['current_user'] = new User($result['id'], $result['user_name'], $result['password']);
 
-	// TODO : Redirect to user page
 	header("Location: account.php");
 }
 
