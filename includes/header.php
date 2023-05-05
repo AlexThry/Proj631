@@ -27,13 +27,31 @@ require_once 'functions.php';
 					</a>
 				</div>
 
-				<div class="header-menu right-part">
-					<div class="btn signup">
-						<a href="subscription.php">Inscription</a>
+				<?php if(!current_user()): ?>
+
+					<!-- DISCONNECTED USER -->
+					<div class="header-menu right-part">
+						<div class="btn signup">
+							<a href="subscription.php">Inscription</a>
+						</div>
+
+						<div class="btn login">
+							<a href="connection.php">Connexion</a>
+						</div>
 					</div>
 
-					<div class="btn login">
-						<a href="connection.php">Connexion</a>
+				<?php else: ?>
+
+					<!-- CONNECTED USER -->
+					<div class="header-menu right-part">
+						<h1><?php echo current_user()->getname() ?></h1>
+						<a href="account.php">
+							<img src="assets/images/account.svg" alt="Mon compte">
+						</a>
+						<a href="logout.php">
+							<img src="assets/images/logout.svg" alt="Se déconnecter">
+						</a>
 					</div>
-				</div>
+
+				<?php endif; ?>
 			</header>
