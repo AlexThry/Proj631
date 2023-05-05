@@ -1,0 +1,222 @@
+:root {
+  --book-width: 15.5vw;
+  --book-height: 300px;
+  --arrow-width: 40px;
+  --slider-py: 200px;
+}
+
+.library h2 {
+  font-size: 90px;
+  font-weight: 900;
+  opacity: 0.2;
+  margin: 0;
+  text-transform: uppercase;
+  padding-left: 30px;
+  transform: translateY(20px);
+}
+
+@media only screen and (max-width: 1000px) {
+  :root {
+    --book-width: 25vw;
+  }
+}
+
+.library .books {
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: visible;
+  white-space: nowrap;
+  position: relative;
+  padding-top: 60px;
+  padding-bottom: var(--slider-py);
+}
+
+.library ::-webkit-scrollbar {
+  width: 0px; /* remove scrollbar space */
+  background: transparent; /* optional: just make scrollbar invisible */
+}
+
+.carousel {
+  position: relative;
+}
+
+/*
+  *
+  * SLIDER INDICATORS
+  *
+  *********************************/
+.container-indicators {
+  width: 200px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  visibility: hidden;
+}
+.indicator {
+  width: 50px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: grey;
+  opacity: 0.4;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+.indicator.active {
+  background-color: var(--primary);
+  opacity: 1;
+}
+
+/*
+  *
+  * book ELEMENTS!
+  *
+  *********************************/
+.book {
+  width: var(--book-width);
+  height: var(--book-height);
+  display: inline-block;
+  position: relative;
+  color: white;
+  padding: 0 2px;
+  font-size: 0.8rem;
+  transition: all 0.3s ease-in-out 0.5s;
+  cursor: pointer;
+}
+
+.book:nth-of-type(1) {
+  margin-left: var(--arrow-width);
+}
+
+.book img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.description {
+  position: absolute;
+  display: none;
+  z-index: 9999;
+  background-color: #272727;
+  width: calc(var(--book-width) - 4px);
+  margin-top: -10px;
+  padding: 10px 0;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+@media only screen and (min-width: 900px) {
+  .book.first-plan {
+    z-index: 2;
+  }
+  .book.hovered {
+    transform: scale(1.3);
+  }
+
+  .book.hovered > .description {
+    display: block;
+  }
+  .book.hovered > img {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.book-buttons-container {
+  display: flex;
+  flex-direction: row;
+  padding: 0 10px;
+}
+
+.description-text-container {
+  padding: 10px;
+}
+
+.description-match {
+  color: green;
+}
+
+.description-rating {
+  outline: 1px solid white;
+  padding: 0 3px;
+  margin: 0 5px;
+}
+
+.book-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid white;
+  text-align: center;
+  font-size: 8px;
+  margin-right: 5px;
+  border-radius: 100%;
+  padding: 8px;
+  font-size: 20px;
+  color: white;
+}
+
+.book-buttons svg {
+  fill: currentColor;
+}
+
+.book-buttons:hover {
+  border-color: grey;
+  color: grey;
+  cursor: pointer;
+}
+
+.book-buttons:nth-of-type(5) {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+/*
+  *
+  * BUTTONS
+  *
+  *********************************/
+.btn-nav {
+  width: var(--arrow-width);
+  height: var(--book-height);
+  border-radius: 5px;
+  position: absolute;
+  bottom: 0;
+  color: white;
+  mix-blend-mode: difference;
+  outline: none;
+  border: none;
+  top: 60px;
+  z-index: 5;
+  visibility: hidden;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.btn-nav svg {
+  fill: currentColor;
+}
+
+#moveLeft {
+  left: 0;
+}
+
+#moveRight {
+  right: 0;
+}
+
+@media only screen and (max-width: 900px) {
+  .btn-nav {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 901px) {
+  .carousel:hover .btn-nav,
+  .carousel:hover .container-indicators {
+    visibility: visible;
+  }
+}

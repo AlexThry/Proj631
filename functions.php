@@ -1,27 +1,12 @@
 <?php
 
-const DB_USERNAME = 'root';
-const DB_PASSWORD = '';
 
-global $conn;
 
-/**
- * Connect to DB.
- *
- * @return void
- */
-function connect_db(): void {
-	global $conn;
 
-	$conn = new mysqli( 'localhost', DB_USERNAME, DB_PASSWORD );
 
-	if ( ! $conn ) {
-		echo 'Erreur de connexion : ' . mysqli_connect_error();
-	}
-
-	mysqli_query( $conn, 'USE Proj631' );
+function includes():void {
+	require_once "class/Database.php";
 }
-
 /**
  * Get home url.
  *
@@ -39,7 +24,7 @@ function get_home_url(): string {
 function start_debugger(): void {
 	ini_set( 'display_errors', '1' );
 	ini_set( 'display_startup_errors', '1' );
-	error_reporting( E_ALL );
+	error_reporting(E_ALL);
 }
 
 /**
@@ -50,7 +35,41 @@ function start_debugger(): void {
  * @return void
  */
 function compute_connection( $username, $password ): void {
-	// add your code here ...
+	// Validate inputs
+	$errors = array();
+	if(empty($username)) $errors[] = "Insérez votre nom d'utilisateur";
+	if(empty($password)) $errors[] = "Insérez votre mot de passe";
+	if(!empty($errors)) {
+		foreach($errors as $error_message)  {
+			echo "<span class='error'>$error_message</span>";
+		}
+		return;
+	}
+
+	global $conn;
+	// Protect from XSS attack
+	$query = sprintf("SELECT * FROM user WHERE user_name='%s' LIMIT 1",
+		$conn->real_escape_string($username)
+	);
+
+	$result = $conn->query($query);
+	if (!$result) {
+		echo "<span class='error'>Erreur de connexion (".mysql_error().")</span>"; return;
+	}
+
+	$result = mysqli_fetch_assoc($result);
+	if(!$result) {
+		echo "<span class='error'>Ce compte n'existe pas</span>"; return;
+	}
+
+	$hash_password = hash("sha256", $password);
+	if($result['password'] !== $hash_password) {
+		echo "<span class='error'>Mot de passe incorrect</span>"; return;
+	}
+
+	echo "<span class='success'>Authentifié avec succès.</span>";
+
+	// TODO : Redirect to user page
 }
 
 /**
@@ -77,6 +96,16 @@ function compute_subscription( $username, $password, $confirm_password ): void {
 	} else {
 		echo "<span class='error'>Les mots de passe ne correspondent pas.</span>";
 	}
+}
+
+
+/**
+ * Returns a value field for html inputs
+ * Only if the input is in $_POST or $_GET
+ */
+function input_value($input): void {
+	if(isset($_POST[$input])) echo "value='".$_POST[$input]."'";
+	if(isset($_GET[$input])) echo "value='".$_GET[$input]."'";
 }
 
 /**
@@ -107,8 +136,8 @@ function get_url_basename(): string {
  * @return void
  */
 function main(): void {
+	includes();
 	start_debugger();
-	connect_db();
 }
 
 main();
