@@ -21,7 +21,8 @@ function connect_db(): void {
 		echo 'Erreur de connexion : ' . mysqli_connect_error();
 	}
 
-	mysqli_query( $conn, 'USE Proj631' );
+	$conn->query('USE Proj631' );
+	$conn->set_charset('utf-8');
 }
 
 /**
@@ -105,7 +106,8 @@ function compute_subscription( $username, $password, $confirm_password ): void {
 
 	if ( $password === $confirm_password ) {
 		$date = date( 'Y-m-d' );
-		$sql  = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $username . "','" . $password . "','" . $date . "')";
+		$hash_password = hash("sha256", $password);
+		$sql  = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $username . "','" . $hash_password . "','" . $date . "')";
 
 		if ( mysqli_query( $conn, $sql ) ) {
 			echo "<span class='success'>Vous avez créé votre compte.</span>";
@@ -119,7 +121,7 @@ function compute_subscription( $username, $password, $confirm_password ): void {
 
 
 /**
- * Returns a value field for html inputs
+ * Displays a value field for html inputs
  * Only if the input is in $_POST or $_GET
  */
 function input_value($input): void {
