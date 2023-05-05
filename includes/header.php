@@ -37,3 +37,7 @@ require_once 'functions.php';
 					</div>
 				</div>
 			</header>
+
+
+			<?php
+			var_dump(Database::get_users());
