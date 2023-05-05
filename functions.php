@@ -1,27 +1,12 @@
 <?php
 
-const DB_USERNAME = 'root';
-const DB_PASSWORD = '';
 
-global $conn;
 
-/**
- * Connect to DB.
- *
- * @return void
- */
-function connect_db(): void {
-	global $conn;
 
-	$conn = new mysqli( 'localhost', DB_USERNAME, DB_PASSWORD );
 
-	if ( ! $conn ) {
-		echo 'Erreur de connexion : ' . mysqli_connect_error();
-	}
-
-	mysqli_query( $conn, 'USE Proj631' );
+function includes():void {
+	require_once "class/Database.php";
 }
-
 /**
  * Get home url.
  *
@@ -151,8 +136,8 @@ function get_url_basename(): string {
  * @return void
  */
 function main(): void {
+	includes();
 	start_debugger();
-	connect_db();
 }
 
 main();

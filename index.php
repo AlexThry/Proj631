@@ -50,14 +50,9 @@
 			
 			<div class="books" id="books">
 				
-				<?php
-					$sql = 'SELECT * FROM book';
-					$res = mysqli_query( $conn, $sql );
-
-				foreach ( $res as $line ) {
-					// echo "<span class='book'><img src=" . $line['link'] . " alt='imagenotfound'></span>";
-					// src="https://raw.githubusercontent.com/julien-gargot/images-placeholder/master/placeholder-portrait.png"
-				}
+				<div class="books">
+					
+					<?php
 
 				for ( $i = 0; $i < 10; $i++ ) {
 					echo '<div class="book" id="book' . strval( $i ) . '">
