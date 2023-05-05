@@ -18,7 +18,7 @@ require_once 'includes/header.php';
 
 		<div class="field">
 			<label for="username">Username</label>
-			<input type="text" name="username" id="username-input-creation" placeholder="Username">
+			<input type="text" name="username" id="username-input-creation" placeholder="Username" <?php input_value("username") ?>>
 		</div>
 
 		<div class="field">
