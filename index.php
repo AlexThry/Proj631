@@ -47,9 +47,9 @@
 				<div class="indicator" data-index=1></div>
 				<div class="indicator" data-index=2></div>
 				</div>
-				
+
 				<div class="books">
-					
+
 					<?php
 					$sql = 'SELECT * FROM book';
 					$res = mysqli_query( $conn, $sql );
@@ -92,13 +92,15 @@
 				<button type="button" id="moveRight" class="btn-nav">
 				ᐅ
 				</button>
-				
+
 			</div>
 		</div>
 	</section>
 
 
 </div>
+
+<script src="assets/js/script.js" defer></script>
 
 <?php
 require_once 'includes/footer.php';
