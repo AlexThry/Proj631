@@ -23,12 +23,19 @@ class User {
     }
 
     /**
-     * Returns a the list of books the user wants to read
-     * and has already read
+     * Returns the list of books the user wants to read and has already read
      * @return array(Book)
      */
     public function books(): array {
         return Database::get_user_books($this->id);
+    }
+
+    /**
+     * Returns the list of books the user wants to read
+     * @return array(Book)
+     */
+    public function wishlist(): array {
+        return Database::get_user_wishlist($this->id);
     }
 
     // public function setname($name) {

@@ -88,6 +88,11 @@ final class Database {
         return $users;
     }
 
+    /**
+     * Returns the list of books a user wants to read and has already read
+     * @param int $user_id The user's id.
+     * @return array(Book)
+     */
     public static function get_user_books($user_id): array {
         $query = "SELECT b.id, title, author, parution_date, link FROM book b
             JOIN has_read hr ON hr.id_user = $user_id
@@ -97,9 +102,26 @@ final class Database {
 
         // TODO : check for query errors + XSS attack
         global $conn;
-        $res = $conn->query($query);
-        $books = array();
-        foreach ($res as $line) {
+        $books = [];
+        foreach ($conn->query($query) as $line) {
+            $books[] = new Book((int)$line["id"], $line["author"], $line["parution_date"], $line["title"], $line["link"]);
+        }
+        return $books;
+    }
+
+    /**
+     * Returns the list of books a user wants to read
+     * @param int $user_id The user's id.
+     * @return array(Book)
+     */
+    public static function get_user_wishlist($user_id): array {
+        $query = "SELECT b.id, title, author, parution_date, link FROM book b
+            JOIN wants_to_read wtr ON wtr.id_user = $user_id";
+
+        // TODO : check for query errors + XSS attack
+        global $conn;
+        $books = [];
+        foreach ($conn->query($query) as $line) {
             $books[] = new Book((int)$line["id"], $line["author"], $line["parution_date"], $line["title"], $line["link"]);
         }
         return $books;

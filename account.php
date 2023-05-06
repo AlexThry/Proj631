@@ -10,28 +10,85 @@
 
 <div class="content">
     <section class="infos">
+
+
+
+
+
+
+
+        <!---------------------------------------------------- Choix de page ---------------------------------------------->
+
         <aside class="ligth-frame">
-            <div class="btn-secondary">Mes livres</div>
-            <div class="separator"></div>
-            <div class="btn-secondary btn-disabled">Ma WishList</div>
-            <div class="separator"></div>
-            <div class="btn-secondary btn-disabled">Mes infos</div>
-            <div class="separator"></div>
-            <div class="btn-secondary btn-disabled">Mon cercle</div>
+            <?php
+                $buttons = [
+                    "mes_livres" => "Mes livres",
+                    "ma_wishlist" => "Ma wishlist",
+                    "mes_infos" => "Mes infos",
+                    "mon_cercle" => "Mon cercle"
+                ];
+
+                $currentChoice = isset($_GET['choix']) ? $_GET['choix'] : 'mes_livres';
+
+                foreach($buttons as $choice => $text) {
+                    // Affichage du séparateur
+                    if ($choice != "mes_livres") echo "<div class='separator'></div>";
+                    // Affichage du bouton
+                    $isSelected = $currentChoice == $choice;
+                    echo "<a href='?choix=$choice' class='not-default btn-secondary " . ($isSelected ? "" : "btn-disabled") . "'>$text</a>";
+                }
+            ?>
         </aside>
-        <article class="ligth-frame" id="books_container">
-            <?php foreach(current_user()->books() as $book): ?>
-                <div class="book">
-                    <img src="<?php echo $book->getLink(); ?>" alt="<?php echo $book->getTitle(); ?>">
-                    <?php Component::user_score(current_user(), $book); ?>
-                    <p><?php echo $book->getTitle(); ?></p>
-                </div>
-            <?php endforeach; ?>
+
+
+
+
+
+
+
+        <article class="ligth-frame">
+
+        <!------------------------------------ Premier choix: Mes livres --------------------------------------------------->
+
+        <?php
+        if($currentChoice == 'mes_livres') {
+            $books = current_user()->books();
+            Component::books_display($books);
+        }
+        ?>
+
+        <!------------------------------------ Deuxième choix: Ma Whishlist (TODO) ----------------------------------------->
+
+        <?php
+        if($currentChoice == 'ma_wishlist') {
+            $whishlist = current_user()->wishlist();
+            Component::books_display($whishlist);
+        }
+        ?>
+
+        <!------------------------------------ Troisième choix: Mon infos (TODO) ------------------------------------------>
+
+        <?php if($currentChoice == 'mes_infos'): ?>
+        <?php endif; ?>
+
+        <!------------------------------------ Quatrième choix: Mon cercle (TODO) ----------------------------------------->
+
+        <?php if($currentChoice == 'mon_cercle'): ?>
+        <?php endif; ?>
+
         </article>
+
+
+
+
+
+
+
+
+
     </section>
 </div>
 
-<script src="assets/js/account.js" defer></script>
+<!-- <script src="assets/js/account.js" defer></script> -->
 
-<?php
-require_once 'includes/footer.php';
+<?php require_once 'includes/footer.php';

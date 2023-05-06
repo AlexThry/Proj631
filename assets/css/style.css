@@ -21,8 +21,7 @@ body {
   margin: 0;
 }
 
-body,
-main {
+body, main {
   min-height: 100vh;
 }
 
@@ -33,6 +32,10 @@ main {
 
 .page-container {
   flex: 1;
+}
+
+a.not-default {
+  text-decoration: none;
 }
 
 /* ==========HEADER=========== */
@@ -89,7 +92,6 @@ main {
 .ligth-frame {
   border: 4px solid var(--primary-light);
   border-radius: 20px;
-  padding: 20px 30px;
 }
 
 .separator {

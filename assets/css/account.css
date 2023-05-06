@@ -11,8 +11,12 @@
     gap: 50px;
 }
 
+article {
+    flex: 1; /* Prends le reste de l'espace */
+    padding: 100px;
+}
+
 #books_container {
-    flex: 1; /* takes remaining space of section "infos" */
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -25,6 +29,11 @@ aside {
     justify-content: space-between;
     height: fit-content;
     gap: 12px;
+    padding: 20px 30px;
+}
+
+aside a {
+    white-space: nowrap; /* Empêche le texte de sauter une ligne */
 }
 
 /* Book display */
@@ -43,20 +52,29 @@ aside {
     text-align: center;
 }
 
-.book::after { /* Séparateur entre les lignes */
+.separator_container::after { /* Séparateur entre les lignes */
     content: "";
-    width: 130%;
-    height: 2px;
+    display: block;
+    width: 150%;
     background-color: var(--border);
-    margin: 40px 0;
-    padding: 2px 0;
+    padding: 3px 0;
+    margin: 40% 0;
     border-radius: 10px;
-    transform: translateX(-14%);
+    transform: translateX(-17%);
 }
 
 .score {
     margin-top: 15px;
 }
+
+.no-book-message {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
 /* Boutons specifications */
 
 .btn-secondary {
