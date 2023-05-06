@@ -10,7 +10,7 @@ class User {
         $this->password = $password;
     }
 
-    public function getname() {
+    public function getName() {
         return ucfirst($this->name);
     }
 
@@ -18,7 +18,7 @@ class User {
         return $this->password;
     }
 
-    public function getid() {
+    public function getId() {
         return $this->id;
     }
 

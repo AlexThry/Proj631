@@ -14,7 +14,7 @@ class Book {
         $this->link = $link;
     }
 
-    public function getid() {
+    public function getId() {
         return $this->id;
     }
 

@@ -44,7 +44,7 @@ require_once 'functions.php';
 
 					<!-- CONNECTED USER -->
 					<div class="header-menu right-part">
-						<h1><?php echo current_user()->getname() ?></h1>
+						<h1><?php echo current_user()->getName(); ?></h1>
 						<a href="account.php">
 							<img src="assets/images/account.svg" alt="Mon compte">
 						</a>
