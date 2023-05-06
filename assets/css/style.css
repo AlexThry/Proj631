@@ -217,6 +217,17 @@ main {
   border: 1px solid var(--border);
 }
 
+/* ============ NOTES =============== */
+
+.score {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+.score img {
+  width: 25px;
+}
+
 /* ============ FOOTER =============== */
 
 .footer {

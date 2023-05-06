@@ -44,6 +44,9 @@ aside {
     text-align: center;
 }
 
+.score {
+    margin-top: 15px;
+}
 /* Boutons specifications */
 
 .btn-secondary {

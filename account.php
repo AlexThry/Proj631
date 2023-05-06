@@ -23,6 +23,7 @@
             <?php foreach(current_user()->books() as $book): ?>
                 <div class="book">
                     <img src="<?php echo $book->getLink(); ?>" alt="<?php echo $book->getTitle(); ?>">
+                    <?php Component::user_score(current_user(), $book); ?>
                     <p><?php echo $book->getTitle(); ?></p>
                 </div>
             <?php endforeach; ?>

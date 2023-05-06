@@ -100,9 +100,20 @@ final class Database {
         $res = $conn->query($query);
         $books = array();
         foreach ($res as $line) {
-            $books[] = new Book($line["id"], $line["author"], $line["parution_date"], $line["title"], $line["link"]);
+            $books[] = new Book((int)$line["id"], $line["author"], $line["parution_date"], $line["title"], $line["link"]);
         }
         return $books;
+    }
+
+    public static function get_review($user_id, $book_id) {
+        $query = "SELECT * FROM review
+            WHERE id_user = $user_id
+            AND id_book = $book_id";
+
+        // TODO : check for query errors + XSS attack
+        global $conn;
+        $res = mysqli_fetch_assoc($conn->query($query));
+        return ($res === null) ? null : new Review($user_id, $book_id, $res['content'], (int)$res['score'], $res['parution_date']);
     }
 }
 

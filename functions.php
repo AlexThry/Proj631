@@ -2,8 +2,10 @@
 
 function includes():void {
 	require_once "class/Database.php";
+	require_once "class/Component.php";
 	require_once "class/book.php";
 	require_once "class/user.php";
+	require_once "class/review.php";
 }
 
 /**
@@ -68,7 +70,7 @@ function compute_connection( $username, $password ): void {
 
 	echo "<span class='success'>Authentifié avec succès.</span>";
 
-	$_SESSION['current_user'] = new User($result['id'], $result['user_name'], $result['password']);
+	$_SESSION['current_user'] = new User((int)$result['id'], $result['user_name'], $result['password']);
 
 	header("Location: account.php");
 }
