@@ -26,7 +26,7 @@ require_once 'includes/header.php';
 			<input type="password" name="password" id="password-input-creation" placeholder="Mot de passe">
 		</div>
 
-		<input type="submit" name="submit" id="submit-input-creation" value="Inscription">
+		<input type="submit" name="submit" id="submit-input-creation" value="Connexion">
 
 		<small>Vous n'avez pas encore de compte ? <a href="./subscription.php">Inscrivez-vous</a></small>
 	</form>

@@ -17,21 +17,21 @@ require_once 'includes/header.php';
 		?>
 
 		<div class="field">
-			<label for="username">Username</label>
-			<input type="text" name="username" id="username-input-creation" placeholder="Username" <?php input_value("username") ?>>
+			<label for="username">Nom d'utilisateur</label>
+			<input type="text" name="username" id="username-input-creation" placeholder="Nom d'utilisateur" <?php input_value("username") ?>>
 		</div>
 
 		<div class="field">
-			<label for="password">Password</label>
-			<input type="password" name="password" id="password-input-creation" placeholder="Password">
+			<label for="password">Mot de passe</label>
+			<input type="password" name="password" id="password-input-creation" placeholder="Mot de passe">
 		</div>
 
 		<div class="field">
-			<label for="confirm-password">Confirm</label>
-			<input type="password" name="confirm-password" id="confirm-password-input-creation" placeholder="Confirm password">
+			<label for="confirm-password">Confirmation de mot de passe</label>
+			<input type="password" name="confirm-password" id="confirm-password-input-creation" placeholder="Mot de passe">
 		</div>
 
-		<input type="submit" name="submit" id="submit-input-creation" value="Inscription">
+		<input type="submit" name="submit" id="submit-input-creation" value="S'incrire">
 
 		<small>Vous avez déjà un compte ? <a href="./connection.php">Connectez-vous</a></small>
 	</form>
