@@ -4,12 +4,14 @@ class Book {
     private $author;
     private $parution_date;
     private $title;
+    private $link;
 
-    public function __construct($id, $author, $parution_date, $title) {
+    public function __construct($id, $author, $parution_date, $title, $link) {
         $this->id = $id;
         $this->author = $author;
         $this->parution_date = $parution_date;
         $this->title = $title;
+        $this->link = $link;
     }
 
     public function getid() {
@@ -26,5 +28,9 @@ class Book {
 
     public function getTitle() {
         return $this->title;
+    }
+
+    public function getLink() {
+        return $this->link;
     }
 }

@@ -19,13 +19,14 @@
             <div class="separator"></div>
             <div class="btn-secondary btn-disabled">Mon cercle</div>
         </aside>
-        <main class="ligth-frame">
+        <article class="ligth-frame">
             <?php foreach(current_user()->books() as $book): ?>
-                <div class="book ligth-frame">
+                <div class="book">
+                    <img src="<?php echo $book->getLink(); ?>" alt="<?php echo $book->getTitle(); ?>">
                     <p><?php echo $book->getTitle(); ?></p>
                 </div>
             <?php endforeach; ?>
-        </main>
+        </article>
     </section>
 </div>
 

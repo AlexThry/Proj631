@@ -89,10 +89,10 @@ final class Database {
     }
 
     public static function get_user_books($user_id): array {
-        $query = "SELECT b.id, title, author, parution_date FROM book b
+        $query = "SELECT b.id, title, author, parution_date, link FROM book b
             JOIN has_read hr ON hr.id_user = $user_id
             UNION
-            SELECT b.id, title, author, parution_date FROM book b
+            SELECT b.id, title, author, parution_date, link FROM book b
             JOIN wants_to_read wtr ON wtr.id_user = $user_id";
 
         // TODO : check for query errors + XSS attack
@@ -100,7 +100,7 @@ final class Database {
         $res = $conn->query($query);
         $books = array();
         foreach ($res as $line) {
-            $books[] = new Book($line["id"], $line["author"], $line["parution_date"], $line["title"]);
+            $books[] = new Book($line["id"], $line["author"], $line["parution_date"], $line["title"], $line["link"]);
         }
         return $books;
     }

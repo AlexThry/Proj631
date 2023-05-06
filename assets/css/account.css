@@ -1,3 +1,9 @@
+/* Page display */
+
+.content {
+    margin: 40px;
+}
+
 .infos {
     display: flex;
     flex-direction: row;
@@ -6,8 +12,12 @@
     gap: 50px;
 }
 
-main {
-    flex: 1;
+article {
+    flex: 1; /* takes remaining space of section "infos" */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5%;
 }
 
 aside {
@@ -16,8 +26,25 @@ aside {
     justify-content: space-between;
     height: fit-content;
     gap: 12px;
-    min-width: 20em;
 }
+
+/* Book display */
+
+.book {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.book * {
+    width: 10em;
+}
+
+.book p {
+    text-align: center;
+}
+
+/* Boutons specifications */
 
 .btn-secondary {
     border-radius: 20px;
