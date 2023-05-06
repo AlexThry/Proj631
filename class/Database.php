@@ -17,7 +17,8 @@ final class Database {
             echo 'Erreur de connexion à la bdd';
         }
 
-        mysqli_query($conn, "USE Proj631");
+        $conn->query("USE Proj631");
+        $conn->query("SET NAMES utf8");
 
     }
 
@@ -75,7 +76,7 @@ final class Database {
     public static function get_users():array {
         global $conn;
         $sql = "SELECT * FROM user";
-        $res = mysqli_query($conn, $sql);
+        $res = $conn->query($sql);
         $users = array();
         foreach ($res as $line) {
             $user = array();
@@ -87,7 +88,22 @@ final class Database {
         return $users;
     }
 
+    public static function get_user_books($user_id): array {
+        $query = "SELECT b.id, title, author, parution_date FROM book b
+            JOIN has_read hr ON hr.id_user = $user_id
+            UNION
+            SELECT b.id, title, author, parution_date FROM book b
+            JOIN wants_to_read wtr ON wtr.id_user = $user_id";
 
+        // TODO : check for query errors + XSS attack
+        global $conn;
+        $res = $conn->query($query);
+        $books = array();
+        foreach ($res as $line) {
+            $books[] = new Book($line["id"], $line["author"], $line["parution_date"], $line["title"]);
+        }
+        return $books;
+    }
 }
 
 Database::setup();

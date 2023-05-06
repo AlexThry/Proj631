@@ -22,7 +22,7 @@
         </aside>
         <main class="ligth-frame">
             <?php foreach(current_user()->books() as $book): ?>
-                <p><?php echo $book['title']; ?></p>
+                <p><?php echo $book->getTitle();?></p>
             <?php endforeach; ?>
         </main>
     </section>

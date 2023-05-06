@@ -1,8 +1,9 @@
 <?php
 
 function includes():void {
-	require_once("class/user.php");
 	require_once "class/Database.php";
+	require_once "class/book.php";
+	require_once "class/user.php";
 }
 
 /**
