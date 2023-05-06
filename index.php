@@ -1,4 +1,5 @@
 <?php require_once 'includes/header.php'; ?>
+<style><?php require_once 'assets/css/carousel.css'; ?></style>
 
 <div class="content">
 	<section class="hero">

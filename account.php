@@ -4,10 +4,9 @@
     if(!current_user()) header("Location: ".get_home_url());
 
     require_once 'includes/header.php';
-    echo "<style>";
-    require_once 'assets/css/account.css';
-    echo "</style>";
 ?>
+
+<style><?php require_once 'assets/css/account.css'; ?></style>
 
 <div class="content">
     <section class="infos">
@@ -22,7 +21,9 @@
         </aside>
         <main class="ligth-frame">
             <?php foreach(current_user()->books() as $book): ?>
-                <p><?php echo $book->getTitle();?></p>
+                <div class="book ligth-frame">
+                    <p><?php echo $book->getTitle(); ?></p>
+                </div>
             <?php endforeach; ?>
         </main>
     </section>
