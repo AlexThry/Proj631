@@ -19,7 +19,7 @@
             <div class="separator"></div>
             <div class="btn-secondary btn-disabled">Mon cercle</div>
         </aside>
-        <article class="ligth-frame">
+        <article class="ligth-frame" id="books_container">
             <?php foreach(current_user()->books() as $book): ?>
                 <div class="book">
                     <img src="<?php echo $book->getLink(); ?>" alt="<?php echo $book->getTitle(); ?>">

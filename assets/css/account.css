@@ -7,12 +7,11 @@
 .infos {
     display: flex;
     flex-direction: row;
-    border: 1px solid red;
     margin-top: 50px;
     gap: 50px;
 }
 
-article {
+#books_container {
     flex: 1; /* takes remaining space of section "infos" */
     display: flex;
     flex-wrap: wrap;
@@ -42,6 +41,17 @@ aside {
 
 .book p {
     text-align: center;
+}
+
+.book::after { /* Séparateur entre les lignes */
+    content: "";
+    width: 130%;
+    height: 2px;
+    background-color: var(--border);
+    margin: 40px 0;
+    padding: 2px 0;
+    border-radius: 10px;
+    transform: translateX(-14%);
 }
 
 .score {
