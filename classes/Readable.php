@@ -34,6 +34,7 @@ if ( ! class_exists( 'Readable' ) ) {
 		 * @return void
 		 */
 		private static function includes():void {
+			require_once 'classes/AlertManager.php';
 			require_once 'classes/Database.php';
 			require_once 'classes/Component.php';
 			require_once 'classes/Book.php';

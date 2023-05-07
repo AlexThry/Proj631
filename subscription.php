@@ -13,33 +13,33 @@ require_once 'includes/header.php';
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
 	<form class="space-y-6" action="./connection.php" method="POST">
 		<?php
-		if ( isset( $_POST['username'] ) && isset( $_POST['password'] ) && isset( $_POST['confirm-password'] ) ) {
-			compute_subscription( $_POST['username'], $_POST['password'], $_POST['confirm-password'] );
+		if ( isset( $_POST['subscription-username'] ) && isset( $_POST['subscription-password'] ) && isset( $_POST['subscription-confirm-password'] ) ) {
+			compute_subscription( $_POST['subscription-username'], $_POST['subscription-password'], $_POST['subscription-confirm-password'] );
 		}
 		?>
 
 	  <div>
-		<label for="username" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom d'utilisateur</label>
+		<label for="subscription-username" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom d'utilisateur</label>
 		<div class="mt-2">
-		  <input <?php display_input_value( 'username' ); ?> type="text" name="username" id="username-input-creation" placeholder="Nom d'utilisateur" required autocomplete="off" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+		  <input <?php display_input_value( 'username' ); ?> type="text" name="subscription-username" id="subscription-username-input-creation" placeholder="Nom d'utilisateur" required autocomplete="off" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 		</div>
 	  </div>
 
 	  <div>
 		<div class="flex items-center justify-between">
-		  <label for="password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Mot de passe</label>
+		  <label for="subscription-password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Mot de passe</label>
 		</div>
 		<div class="mt-2">
-		  <input type="password" name="password" id="password-input-creation" placeholder="Mot de passe" autocomplete="current-password" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+		  <input type="password" name="subscription-password" id="subscription-password-input-creation" placeholder="Mot de passe" autocomplete="current-password" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 		</div>
 	  </div>
 
 	  <div>
 		<div class="flex items-center justify-between">
-		  <label for="confirm-password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Confirmer votre mot de passe</label>
+		  <label for="subscription-confirm-password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Confirmer votre mot de passe</label>
 		</div>
 		<div class="mt-2">
-		  <input type="password" name="confirm-password" id="confirm-password-input-creation" placeholder="Mot de passe" autocomplete="current-password" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+		  <input type="password" name="subscription-confirm-password" id="subscription-confirm-password-input-creation" placeholder="Mot de passe" autocomplete="current-password" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 		</div>
 	  </div>
 

@@ -10,7 +10,9 @@ require_once 'classes/Readable.php';
  * @return void
  */
 function compute_connection( $username, $password ): void {
-	// Validate inputs
+	global $conn;
+	
+	// Validate inputs.
 	$errors = array();
 	if ( empty( $username ) ) {
 		$errors[] = "Insérez votre nom d'utilisateur";
@@ -20,13 +22,12 @@ function compute_connection( $username, $password ): void {
 	}
 	if ( ! empty( $errors ) ) {
 		foreach ( $errors as $error_message ) {
-			echo "<span class='error'>$error_message</span>";
+			AlertManager::display_error( $error_message );
 		}
 		return;
 	}
 
-	global $conn;
-	// Protect from XSS attack
+	// Protect from XSS attack.
 	$query = sprintf(
 		"SELECT * FROM user WHERE user_name='%s' LIMIT 1",
 		$conn->real_escape_string( $username )
@@ -34,28 +35,29 @@ function compute_connection( $username, $password ): void {
 
 	$result = $conn->query( $query );
 	if ( ! $result ) {
-		echo "<span class='error'>Erreur de connexion (" . mysql_error() . ')</span>';
+		AlertManager::display_error( 'Erreur de connexion (' . mysql_error() . ')' );
 		return;
 	}
 
 	$result = mysqli_fetch_assoc( $result );
 	if ( ! $result ) {
-		echo "<span class='error'>Ce compte n'existe pas</span>";
+		AlertManager::display_error( "Ce compte n'existe pas." );
 		return;
 	}
 
 	$hash_password = md5( $password );
 	if ( $result['password'] !== $hash_password ) {
-		echo "<span class='error'>Mot de passe incorrect</span>";
+		AlertManager::display_error( 'Mot de passe incorrect.' );
 		return;
 	}
 
-	echo "<span class='success'>Authentifié avec succès.</span>";
+	AlertManager::display_success( 'Authentifié avec succès.' );
 
 	$_SESSION['current_user'] = new User( (int) $result['id'], $result['user_name'], $result['password'] );
 
 	header( 'Location: account.php' );
 }
+
 
 /**
  * Compute subscription.
@@ -67,7 +69,9 @@ function compute_connection( $username, $password ): void {
  * @return void
  */
 function compute_subscription( $username, $password, $confirm_password ): void {
-	// Validate inputs
+	global $conn;
+
+	// Validate inputs.
 	$errors = array();
 	if ( empty( $username ) ) {
 		$errors[] = "Insérez votre nom d'utilisateur";
@@ -80,24 +84,23 @@ function compute_subscription( $username, $password, $confirm_password ): void {
 	}
 	if ( ! empty( $errors ) ) {
 		foreach ( $errors as $error_message ) {
-			echo "<span class='error'>$error_message</span>";
+			AlertManager::display_error( $error_message );
 		}
 		return;
 	}
 
-	global $conn;
 	if ( $password === $confirm_password ) {
 		$date          = date( 'Y-m-d' );
 		$hash_password = md5( $password );
 		$sql           = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $username . "','" . $hash_password . "','" . $date . "')";
 
 		if ( mysqli_query( $conn, $sql ) ) {
-			echo "<span class='success'>Vous avez créé votre compte.</span>";
+			AlertManager::display_success( 'Vous avez créé votre compte avec succès.' );
 		} else {
-			echo "<span class='error'>Erreur lors de l'inscription.</span>";
+			AlertManager::display_error( "Erreur lors de l'inscription." );
 		}
 	} else {
-		echo "<span class='error'>Les mots de passe ne correspondent pas.</span>";
+		AlertManager::display_error( 'Les mots de passe ne correspondent pas.' );
 	}
 }
 
@@ -162,9 +165,9 @@ function is_home_page(): bool {
  * @return string
  */
 function get_url_basename(): string {
-	$file_name = basename( get_url() ); // get the file name with extension
-	$extension = pathinfo( $file_name, PATHINFO_EXTENSION ); // get the file extension
-	return str_replace( '.' . $extension, '', $file_name ); // remove the extension to get the inscription part
+	$file_name = basename( get_url() ); // get the file name with extension.
+	$extension = pathinfo( $file_name, PATHINFO_EXTENSION ); // get the file extension.
+	return str_replace( '.' . $extension, '', $file_name ); // remove the extension to get the inscription part.
 }
 
 Readable::start();

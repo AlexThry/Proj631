@@ -50,13 +50,6 @@
 
 					<?php require_once 'includes/search-bar.php'; ?>
 
-
-
-
-
-
-
-
 				</div>
 			</div>
 			</div>
