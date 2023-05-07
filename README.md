@@ -1,5 +1,13 @@
 # Proj631
 
+## TodoList
+
+Des trucs à faire :
+
+ - Dans core/connection-helpers.php : `subscribe_user` faire en sorte de connecter l'utilisateur quand on cree son compte (en gérant les erreurs éventuelles)
+ - Dans core/connection-helpers.php : `connect_user` vérifier l'unicité du username (en gérant les erreurs éventuelles)
+ - Dans classes/Database.php faire une méthode pour récupérer le top 10 des livres
+
 ## Architecture
 
  - `.` la racine contient les pages html, les fichiers de configuration et un exemple de contenu de la base de donnée (`proj631.md`).
@@ -18,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
  - Mettez une majuscule à vos noms de classe php.
  - Ne fermez pas php à la fin d'un fichier si il est ouvert.
  - 99.99% du temps, une méthode ou fonction doit commencer par un verbe.
+ - en `php` écrire en snake_case.
 
 ## Sécurité
 

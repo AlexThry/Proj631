@@ -2,9 +2,9 @@
 
 if ( ! class_exists( 'Book' ) ) {
 
-    /**
-     * Book class
-     */
+	/**
+	 * Book class
+	 */
 	class Book {
 		private $id;
 		private $author;
@@ -20,23 +20,23 @@ if ( ! class_exists( 'Book' ) ) {
 			$this->link          = $link;
 		}
 
-		public function getId() {
+		public function get_id() {
 			return $this->id;
 		}
 
-		public function getAuthor() {
+		public function get_author() {
 			return $this->author;
 		}
 
-		public function getParutionDate() {
+		public function get_parution_date() {
 			return $this->parution_date;
 		}
 
-		public function getTitle() {
+		public function get_title() {
 			return $this->title;
 		}
 
-		public function getLink() {
+		public function get_link() {
 			return $this->link;
 		}
 	}

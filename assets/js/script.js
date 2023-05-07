@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const slider = document.getElementById("books");
-  const btnLeft = document.getElementById("moveLeft");
-  const btnRight = document.getElementById("moveRight");
+  const btnLeft = document.getElementById("move-left");
+  const btnRight = document.getElementById("move-right");
   const indicators = document.querySelectorAll(".indicator");
 
   let activeIndex = 0; // the current page on the slider

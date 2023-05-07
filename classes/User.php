@@ -15,15 +15,15 @@ if ( ! class_exists( 'User' ) ) {
 			$this->password = $password;
 		}
 
-		public function getName() {
+		public function get_name() {
 			return ucfirst( $this->name );
 		}
 
-		public function getPassword() {
+		public function get_password() {
 			return $this->password;
 		}
 
-		public function getId() {
+		public function get_id() {
 			return $this->id;
 		}
 
@@ -44,17 +44,5 @@ if ( ! class_exists( 'User' ) ) {
 		public function wishlist(): array {
 			return Database::get_user_wishlist( $this->id );
 		}
-
-		// public function setname($name) {
-		// $this->name = $name;
-		// }
-
-		// public function setPassword($password) {
-		// $this->password = $password;
-		// }
-
-		// public function setid($id) {
-		// $this->id = $id;
-		// }
 	}
 }

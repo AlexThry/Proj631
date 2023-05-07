@@ -2,7 +2,7 @@
 
 <div class="content">
 
-	<div class="relative bg-white dark:bg-gray-800">
+	<section class="relative bg-white dark:bg-gray-800">
 		<div class="pb-80 pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
 			<div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
 			<div class="sm:max-w-lg">
@@ -54,25 +54,85 @@
 			</div>
 			</div>
 		</div>
-	</div>
+	</section>
 
+	<?php
+	$genres = Database::get_all_genre();
 
-	
+	foreach ( $genres as $genre ) {
+		$books = Database::get_books_by_genre( $genre );
+		?>
 
+		<section class="relative bg-white dark:bg-gray-800 library">
+			<div class="sm:pb-40 sm:pt-24 lg:pb-0 shelf">
+				<div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
+					<h2 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">Dans le thème <?php echo $genre; ?></h2>
+				</div>
+				<div class="carousel">
+					<button type="button" class="btn-nav move-left">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg>
+					</button>
+					<div class="container-indicators">
+						<div class="indicator active" data-index=0></div>
+						<div class="indicator" data-index=1></div>
+						<div class="indicator" data-index=2></div>
+					</div>
 
-	<div class="bg-transparent py-24 sm:py-32">
-	<div class="mx-auto max-w-7xl px-6 lg:px-8">
-		<h2 class="text-center text-lg font-semibold leading-8 text-gray-900">Les équipes les plus innovantes du monde lui font confiance</h2>
-		<div class="mx-auto mt-10 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
-		<img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1" src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-900.svg" alt="Transistor" width="158" height="48">
-		<img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1" src="https://tailwindui.com/img/logos/158x48/reform-logo-gray-900.svg" alt="Reform" width="158" height="48">
-		<img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1" src="https://tailwindui.com/img/logos/158x48/tuple-logo-gray-900.svg" alt="Tuple" width="158" height="48">
-		<img class="col-span-2 max-h-12 w-full object-contain sm:col-start-2 lg:col-span-1" src="https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-900.svg" alt="SavvyCal" width="158" height="48">
-		<img class="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1" src="https://tailwindui.com/img/logos/158x48/statamic-logo-gray-900.svg" alt="Statamic" width="158" height="48">
+					<div class="books">
+						<?php
+						for ( $i = 0; $i < 10; $i++ ) {
+							echo '<div class="book" id="book' . strval( $i ) . '">
+								<img
+								src="https://images.unsplash.com/photo-1585951237318-9ea5e175b891?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+								alt="" srcset="">
+								<div class="description">
+								<div class="book-buttons-container">
+								<div class="book-buttons">8</i></div>
+								<a class="book-buttons page-button" href="./single-book.php?id=1">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+								</a>
+								</div>
+								<div class="description-text-container">
+								<span class="description-rating">Auteur</span>
+								<br><br>
+								<span class="book-theme">Explosive</span>
+								<span>&middot;</span>
+								<span class="book-theme">Exciting</span>
+								<span>&middot;</span>
+								<span class="book-theme">Family</span>
+								</div>
+								</div>
+								</div>';
+						}
+						?>
+
+					</div>
+
+					<button type="button" class="btn-nav move-right">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/></svg>
+					</button>
+				</div>
+			</div>
+		</section>
+		
+
+		<?php
+	}
+	?>
+
+	<div class="bg-gray-100 dark:bg-gray-900 py-12 sm:py-16">
+		<div class="mx-auto max-w-7xl px-6 lg:px-8">
+			<h2 class="text-center text-lg font-semibold leading-8 text-gray-900 dark:text-white">Les équipes les plus innovantes du monde lui font confiance</h2>
+			<div class="mx-auto mt-10 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
+				<img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 dark:bg-white dark:rounded" src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-900.svg" alt="Transistor" width="158" height="48">
+				<img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 dark:bg-white dark:rounded" src="https://tailwindui.com/img/logos/158x48/reform-logo-gray-900.svg" alt="Reform" width="158" height="48">
+				<img class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 dark:bg-white dark:rounded" src="https://tailwindui.com/img/logos/158x48/tuple-logo-gray-900.svg" alt="Tuple" width="158" height="48">
+				<img class="col-span-2 max-h-12 w-full object-contain sm:col-start-2 dark:bg-white dark:rounded lg:col-span-1" src="https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-900.svg" alt="SavvyCal" width="158" height="48">
+				<img class="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1 dark:bg-white dark:rounded" src="https://tailwindui.com/img/logos/158x48/statamic-logo-gray-900.svg" alt="Statamic" width="158" height="48">
+			</div>
 		</div>
 	</div>
-	</div>
-
+	
 </div>
 
 <script src="assets/js/script.js" defer></script>

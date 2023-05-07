@@ -16,15 +16,15 @@ if ( ! class_exists( 'Component' ) ) {
 		 * @return void
 		 */
 		public static function user_score( $user, $book ): void {
-			$review = Database::get_review( $user->getId(), $book->getId() );
+			$review = Database::get_review( $user->get_id(), $book->get_id() );
 			if ( $review === null ) {
 				return;
 			}
 			echo "<div class='score'>";
-			for ( $i = 0; $i < $review->getScore(); $i++ ) {
+			for ( $i = 0; $i < $review->get_score(); $i++ ) {
 				echo "<img src='./assets/images/full-hearth.svg' alt='coeur'/>";
 			}
-			for ( $i = 0; $i < Review::MAX_SCORE - $review->getScore(); $i++ ) {
+			for ( $i = 0; $i < Review::MAX_SCORE - $review->get_score(); $i++ ) {
 				echo "<img src='./assets/images/hearth.svg' alt='coeur'/>";
 			}
 			echo '</div>';
@@ -45,10 +45,10 @@ if ( ! class_exists( 'Component' ) ) {
 					?>Ï
 					<div class='book'>
 					<?php // Couverture du livre ?>
-					<img src="<?php echo $book->getLink(); ?>" alt="<?php echo $book->getTitle(); ?>">
+					<img src="<?php echo $book->get_link(); ?>" alt="<?php echo $book->get_title(); ?>">
 					<div class='separator_container'>
 					<?php // Titre du livre ?>
-					<p><?php echo $book->getTitle(); ?></p>
+					<p><?php echo $book->get_title(); ?></p>
 					<?php
 					// Note du livre.
 					self::user_score( get_user(), $book )

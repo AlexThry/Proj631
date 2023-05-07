@@ -4,9 +4,9 @@ const DB_USERNAME = 'root';
 const DB_PASSWORD = '';
 
 if ( ! class_exists( 'Database' ) ) {
-    /**
-     * Database class
-     */
+	/**
+	 * Database class
+	 */
 	final class Database {
 
 		public static function setup() {
@@ -44,6 +44,31 @@ if ( ! class_exists( 'Database' ) ) {
 
 		}
 
+		/**
+		 * Get all genres
+		 *
+		 * @return array $genres All genres
+		 */
+		public static function get_all_genre(): array {
+			global $conn;
+
+			$sql    = 'SELECT * FROM genre;';
+			$result = mysqli_query( $conn, $sql );
+			$genres = array();
+
+			foreach ( $result as $line ) {
+				$genres[] = $line['label'];
+			}
+
+			return $genres;
+		}
+
+		/**
+		 * Get all books by genre
+		 *
+		 * @param array $genre Genre.
+		 * @return array $books Books
+		 */
 		public static function get_books_by_genre( $genre ):array {
 			global $conn;
 			$sql   = "SELECT * FROM book WHERE id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'));";

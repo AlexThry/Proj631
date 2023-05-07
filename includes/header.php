@@ -46,6 +46,7 @@ require_once 'functions.php';
 			},
 		}
 	</script>
+	<link rel="stylesheet" href="assets/css/carousel.css">
 	<link rel="stylesheet" href="assets/css/tailwind-style.css">
 </head>
 
@@ -164,16 +165,41 @@ require_once 'functions.php';
 
 					<?php else : ?>
 
-					<!-- CONNECTED USER -->
-					<div class="header-menu right-part">
-						<h1><?php echo $current_user->getName(); ?></h1>
-						<a href="account.php">
-							<img src="assets/images/account.svg" alt="Mon compte">
-						</a>
-						<a href="logout.php">
-							<img src="assets/images/logout.svg" alt="Se déconnecter">
-						</a>
+				<!-- Profile dropdown -->
+				<div class="relative ml-3">
+					<button data-dropdown-toggle="dropdown-user" data-tooltip-target="tooltip-user" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+						<span class="sr-only">Mon compte</span>
+						<img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+					</button>
+					<div id="tooltip-user" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip" data-popper-placement="top" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(815px, -64px, 0px);">
+						<?php echo $current_user->get_name(); ?>
+						<div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate3d(99px, 0px, 0px);"></div>
 					</div>
+
+					<div id="dropdown-user" class="z-10 hidden bg-white divide-y border divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+						<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+						<li>
+							<a href="account.php" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mon compte</a>
+						</li>
+						<li>
+							<a href="account.php?tab=user_books" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mes livres</a>
+						</li>
+						<li>
+							<a href="account.php?tab=user_wishlist" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Ma whishlist</a>
+						</li>
+						<li>
+							<a href="account.php?tab=user_circles" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mes cercles</a>
+						</li>
+						<li>
+							<a href="logout.php" class="flex items-center p-3 text-sm font-medium text-red-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-red-500">
+								<svg class="w-5 h-5 mr-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z"></path></svg>
+								Déconnexion
+							</a>
+						</li>
+						</ul>
+					</div>
+
+				</div>
 
 					<?php endif; ?>
 				</div>
