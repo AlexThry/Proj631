@@ -1,9 +1,11 @@
 <?php
+/**
+ * Contains de subscription page
+ */
 
 require_once 'includes/header.php';
 
 ?>
-
 
 <div class="bg-white dark:bg-gray-800 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -11,10 +13,10 @@ require_once 'includes/header.php';
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-	<form class="space-y-6" action="./connection.php" method="POST">
+	<form class="space-y-6" action="subscribe.php" method="POST">
 		<?php
-		if ( isset( $_POST['subscription-username'] ) && isset( $_POST['subscription-password'] ) && isset( $_POST['subscription-confirm-password'] ) ) {
-			compute_subscription( $_POST['subscription-username'], $_POST['subscription-password'], $_POST['subscription-confirm-password'] );
+		if ( isset( $_GET['subscription_error'] ) ) {
+			AlertManager::display_error( html_entity_decode( $_GET['subscription_error'] ) );
 		}
 		?>
 

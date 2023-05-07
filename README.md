@@ -1,9 +1,15 @@
 # Proj631
 
+## Architecture
+
+ - `.` la racine contient les pages html, les fichiers de configuration et un exemple de contenu de la base de donnée (`proj631.md`).
+ - `includes` contient des bouts de code html réutilisable.
+ - `core` contient des fonctions et scripts s'occupant de la logique du site (soumission de formulaire, redirection, rooting, ...) 
+
 ## Normalisation
 
  - Si vous écrivez du JavaScript déclencher le script comme ceci
-````
+````js
 document.addEventListener('DOMContentLoaded', function() {
     // your code here...
 });

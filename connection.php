@@ -1,4 +1,7 @@
 <?php
+/**
+ * Contains the connection page.
+ */
 
 require_once 'includes/header.php';
 
@@ -10,10 +13,10 @@ require_once 'includes/header.php';
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-	<form class="space-y-6" action="./connection.php" method="POST">
+	<form class="space-y-6" action="login.php" method="POST">
 		<?php
-		if ( isset( $_POST['connection-username'] ) && isset( $_POST['connection-password'] ) ) {
-			compute_connection( $_POST['connection-username'], $_POST['connection-password'] );
+		if ( isset( $_GET['connection_error'] ) ) {
+			AlertManager::display_error( html_entity_decode( $_GET['connection_error'] ) );
 		}
 		?>
 

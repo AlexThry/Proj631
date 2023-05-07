@@ -1,4 +1,7 @@
 <?php
+/**
+ * Contains the logout form processing.
+*/
 
 require_once 'functions.php';
 
