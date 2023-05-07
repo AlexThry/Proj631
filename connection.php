@@ -4,9 +4,9 @@ require_once 'includes/header.php';
 
 ?>
 
-<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+<div class="bg-white dark:bg-gray-800 flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-	<h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Connexion</h2>
+	<h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">Connexion</h2>
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -18,32 +18,32 @@ require_once 'includes/header.php';
 		?>
 
 	  <div>
-		<label for="username" class="block text-sm font-medium leading-6 text-gray-900">Nom d'utilisateur</label>
+		<label for="username" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom d'utilisateur</label>
 		<div class="mt-2">
-		  <input type="text" name="username" id="username-input-creation" placeholder="Nom d'utilisateur" required autocomplete="false" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+		  <input  <?php display_input_value( 'username' ); ?>  type="text" name="username" id="username-input-creation" placeholder="Nom d'utilisateur" required autocomplete="off" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 		</div>
 	  </div>
 
 	  <div>
 		<div class="flex items-center justify-between">
-		  <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Mot de passe</label>
+		  <label for="password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Mot de passe</label>
 		  <div class="text-sm">
-			<a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Mot de passe oublié?</a>
+			<a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-primary-500">Mot de passe oublié?</a>
 		  </div>
 		</div>
 		<div class="mt-2">
-		  <input <?php display_input_value( 'username' ); ?> type="password" name="password" id="password-input-creation" placeholder="Mot de passe" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+		  <input type="password" name="password" id="password-input-creation" placeholder="Mot de passe" autocomplete="current-password" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 		</div>
 	  </div>
 
 	  <div>
-		<button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+		<button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Se connecter</button>
 	  </div>
 	</form>
 
 	<p class="mt-10 text-center text-sm text-gray-500">
 		Vous n'avez pas encore de compte ?
-	  <a href="./subscription.php" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Inscrivez-vous</a>
+	  <a href="./subscription.php" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 dark:text-primary-500">Inscrivez-vous</a>
 	</p>
   </div>
 </div>

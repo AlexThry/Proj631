@@ -146,6 +146,15 @@ function get_home_url(): string {
 }
 
 /**
+ * Check if current page is home page.
+ *
+ * @return boolean
+ */
+function is_home_page(): bool {
+	return get_url_basename() === 'Proj631';
+}
+
+/**
  * Get url basename.
  *
  * Example: http://localhost:8888/Proj631/inscription.php returns inscription

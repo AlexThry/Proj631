@@ -1,1 +1,6 @@
+RewriteEngine on
+Options +FollowSymLinks
+RewriteCond %{THE_REQUEST} ^.*/index.php
+RewriteRule ^(.*)index.php$ http://localhost/Proj631/$1 [R=301,L]
+
 ErrorDocument 404 http://localhost/Proj631/404.php
