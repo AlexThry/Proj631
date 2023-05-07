@@ -1,3 +1,8 @@
+<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-800"> 
+    <h1 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white" id="content">Mes données</h1>
+    <p class="mb-4 text-lg text-gray-600 dark:text-gray-400">Ajoutez, modifiez ou supprimez vos données.</p>
+</div>
+
 <!--
   This example requires some changes to your config:
   

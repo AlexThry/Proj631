@@ -1,6 +1,6 @@
         </div>
         
-        <footer class="mx-auto mt-32 w-full max-w-container px-4 sm:px-6 lg:px-8">
+        <footer class="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
             <div class="border-t border-slate-900/5 py-10">
             <h2 class="logo-line text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
                 <img src="assets/images/logo.svg" alt="Readbable">

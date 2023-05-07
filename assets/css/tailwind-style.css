@@ -12,6 +12,7 @@ main {
   flex: 1;
 }
 
+form textarea,
 form input {
   padding: 5px 10px;
 }
