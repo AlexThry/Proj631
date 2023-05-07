@@ -1,5 +1,4 @@
-
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function() {
     let selectedButton = document.querySelector('aside > .btn-secondary');
 
     let buttons = document.querySelectorAll('aside .btn-secondary');

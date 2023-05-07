@@ -1,5 +1,4 @@
 <?php require_once 'includes/header.php'; ?>
-<style><?php require_once 'assets/css/carousel.css'; ?></style>
 
 <div class="content">
 	<section class="hero">
@@ -48,7 +47,7 @@
 				<div class="indicator" data-index=2></div>
 			</div>
 
-			<div class="books">
+			<div class="books" id="books">
 				<?php
 				for ( $i = 0; $i < 10; $i++ ) {
 					echo '<div class="book" id="book' . strval( $i ) . '">

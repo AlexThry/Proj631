@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost
--- Généré le : ven. 05 mai 2023 à 15:15
--- Version du serveur : 10.4.27-MariaDB
--- Version de PHP : 8.2.0
+-- Host: localhost
+-- Generation Time: May 07, 2023 at 04:18 PM
+-- Server version: 10.4.21-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `Proj631`
+-- Database: `Proj631`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `book`
+-- Table structure for table `book`
 --
 
 CREATE TABLE `book` (
@@ -34,10 +34,10 @@ CREATE TABLE `book` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `link` longtext NOT NULL,
   `description` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `book`
+-- Dumping data for table `book`
 --
 
 INSERT INTO `book` (`title`, `author`, `parution_date`, `id`, `link`, `description`) VALUES
@@ -61,16 +61,16 @@ INSERT INTO `book` (`title`, `author`, `parution_date`, `id`, `link`, `descripti
 -- --------------------------------------------------------
 
 --
--- Structure de la table `genre`
+-- Table structure for table `genre`
 --
 
 CREATE TABLE `genre` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `label` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `genre`
+-- Dumping data for table `genre`
 --
 
 INSERT INTO `genre` (`id`, `label`) VALUES
@@ -88,17 +88,17 @@ INSERT INTO `genre` (`id`, `label`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `has_genre`
+-- Table structure for table `has_genre`
 --
 
 CREATE TABLE `has_genre` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_book` bigint(20) NOT NULL,
   `id_genre` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `has_genre`
+-- Dumping data for table `has_genre`
 --
 
 INSERT INTO `has_genre` (`id`, `id_book`, `id_genre`) VALUES
@@ -122,17 +122,17 @@ INSERT INTO `has_genre` (`id`, `id_book`, `id_genre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `has_read`
+-- Table structure for table `has_read`
 --
 
 CREATE TABLE `has_read` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_book` bigint(20) NOT NULL,
   `id_user` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `has_read`
+-- Dumping data for table `has_read`
 --
 
 INSERT INTO `has_read` (`id`, `id_book`, `id_user`) VALUES
@@ -155,7 +155,7 @@ INSERT INTO `has_read` (`id`, `id_book`, `id_user`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `review`
+-- Table structure for table `review`
 --
 
 CREATE TABLE `review` (
@@ -165,10 +165,10 @@ CREATE TABLE `review` (
   `score` int(11) NOT NULL,
   `id_user` bigint(20) NOT NULL,
   `id_book` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `review`
+-- Dumping data for table `review`
 --
 
 INSERT INTO `review` (`id`, `parution_date`, `content`, `score`, `id_user`, `id_book`) VALUES
@@ -178,7 +178,7 @@ INSERT INTO `review` (`id`, `parution_date`, `content`, `score`, `id_user`, `id_
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -186,34 +186,34 @@ CREATE TABLE `user` (
   `user_name` varchar(25) NOT NULL,
   `password` varchar(256) NOT NULL,
   `creation_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `user_name`, `password`, `creation_date`) VALUES
-(1, 'Alexis', 'root', '2023-05-01'),
-(2, 'Carlyne', 'root2', '2023-05-05'),
-(3, 'Arnaud', 'root3', '2023-04-26'),
-(4, 'Arthur', 'root4', '2023-05-03'),
-(5, 'Hugo', 'root5', '2023-05-05'),
-(6, 'Adam', 'root6', '2023-04-18');
+(1, 'Alexis', '63a9f0ea7bb98050796b649e85481845', '2023-05-01'),
+(2, 'Carlyne', '63a9f0ea7bb98050796b649e85481845', '2023-05-05'),
+(3, 'Arnaud', '63a9f0ea7bb98050796b649e85481845', '2023-04-26'),
+(4, 'Arthur', '63a9f0ea7bb98050796b649e85481845', '2023-05-03'),
+(5, 'Hugo', '63a9f0ea7bb98050796b649e85481845', '2023-05-05'),
+(6, 'Adam', '63a9f0ea7bb98050796b649e85481845', '2023-04-18');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `wants_to_read`
+-- Table structure for table `wants_to_read`
 --
 
 CREATE TABLE `wants_to_read` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `id_book` bigint(20) NOT NULL,
   `id_user` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `wants_to_read`
+-- Dumping data for table `wants_to_read`
 --
 
 INSERT INTO `wants_to_read` (`id`, `id_book`, `id_user`) VALUES
@@ -225,100 +225,100 @@ INSERT INTO `wants_to_read` (`id`, `id_book`, `id_user`) VALUES
 (8, 16, 3);
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `book`
+-- Indexes for table `book`
 --
 ALTER TABLE `book`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `genre`
+-- Indexes for table `genre`
 --
 ALTER TABLE `genre`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `has_genre`
+-- Indexes for table `has_genre`
 --
 ALTER TABLE `has_genre`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `has_read`
+-- Indexes for table `has_read`
 --
 ALTER TABLE `has_read`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `review`
+-- Indexes for table `review`
 --
 ALTER TABLE `review`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Index pour la table `wants_to_read`
+-- Indexes for table `wants_to_read`
 --
 ALTER TABLE `wants_to_read`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `book`
+-- AUTO_INCREMENT for table `book`
 --
 ALTER TABLE `book`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT pour la table `genre`
+-- AUTO_INCREMENT for table `genre`
 --
 ALTER TABLE `genre`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT pour la table `has_genre`
+-- AUTO_INCREMENT for table `has_genre`
 --
 ALTER TABLE `has_genre`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT pour la table `has_read`
+-- AUTO_INCREMENT for table `has_read`
 --
 ALTER TABLE `has_read`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT pour la table `review`
+-- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT pour la table `wants_to_read`
+-- AUTO_INCREMENT for table `wants_to_read`
 --
 ALTER TABLE `wants_to_read`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
