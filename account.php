@@ -12,7 +12,7 @@ if ( ! get_user() ) {
 	<section class="lg:flex">
 
 		<aside class="full-height w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">
-			<div class="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+			<div style="height: calc(100% - 64px);" class="flex flex-col justify-between overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
 				<ul class="space-y-2">
 					<?php
 					$buttons = array(
@@ -50,6 +50,14 @@ if ( ! get_user() ) {
 						<?php
 					}
 					?>
+				</ul>
+				<ul class="space-y-2">
+					<li>
+						<a href="logout.php" class="flex items-center p-3 text-sm font-medium text-red-600 border-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white dark:border-gray-600 dark:text-red-500">
+							<svg class="w-5 h-5 mr-1" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z"></path></svg>
+							Déconnexion
+						</a>
+					</li>
 				</ul>
 			</div>
 		</aside>
