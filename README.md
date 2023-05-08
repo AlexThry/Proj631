@@ -8,6 +8,7 @@ Des trucs à faire :
  - Dans core/connection-helpers.php : `connect_user` vérifier l'unicité du username (en gérant les erreurs éventuelles)
  - Dans classes/Database.php faire une méthode pour récupérer le top 10 des livres
  - Dans classes/Database.php pour la méthode `get_sorted_books` pouvoir trier les livres par note en faisant la moyenne
+ - Dans classes/Database.php pour la méthode `get_sorted_books`: corriger bug quand on veux trier avec `genre` (il faut gérer la jointure de table dans ce cas) => visible si vous triez par genre sur le site
 
 ## Architecture
 

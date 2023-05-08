@@ -38,7 +38,11 @@ form input {
   gap: 20px;
 }
 
-.logo-line img{
-    width: 40px;
-    height: 40px;
+.logo-line img {
+  width: 40px;
+  height: 40px;
+}
+
+.w-450 {
+  width: 450px;
 }
