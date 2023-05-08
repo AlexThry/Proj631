@@ -108,7 +108,7 @@ require_once 'functions.php';
 					<a href="<?php echo get_home_url(); ?>" class="text-sm font-medium text-gray-900 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-500">Accueil</a>
 					</li>
 					<li class="mb-3 lg:px-2 xl:px-2 lg:mb-0">
-					<a href="#" class="text-sm font-medium text-gray-900 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-500">Cercles</a>
+					<a href="circles.php" class="text-sm font-medium text-gray-900 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-500">Cercles</a>
 					</li>
 				</ul>
 				
