@@ -11,7 +11,7 @@ if ( ! get_user() ) {
 <div class="content">
 	<section class="lg:flex">
 
-		<aside class="full-height top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">
+		<aside class="full-height w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">
 			<div class="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
 				<ul class="space-y-2">
 					<?php
@@ -56,7 +56,7 @@ if ( ! get_user() ) {
 
 		<article class="flex-auto w-full min-w-0 lg:static lg:max-h-full lg:overflow-visible">
 			<div class="flex w-full">
-				<div class="flex-auto max-w-4xl min-w-0 pt-6 lg:px-8 lg:pt-8 pb:12 xl:pb-24 lg:pb-16">
+				<div class="flex-auto min-w-0 pt-6 lg:px-8 lg:pt-8 pb:12 xl:pb-24 lg:pb-16">
 
 			<?php
 

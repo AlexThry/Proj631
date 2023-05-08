@@ -40,7 +40,7 @@ if ( ! class_exists( 'Component' ) ) {
 		 */
 		public static function display_books( $books ): void {
 			if ( $books ) : ?>
-				<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+				<div class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
 					<?php foreach ( $books as $book ) : ?>
 						<div>
 							<img class="h-auto max-w-full rounded-lg" src="<?php echo $book->get_link(); ?>" alt="<?php echo $book->get_title(); ?>">
