@@ -1,10 +1,114 @@
 <?php
 
-$genre = isset( $_GET['genre'] ) && ! empty( $_GET['genre'] ) ? htmlentities( $_GET['genre'] ) : null;
-$start = isset( $_GET['start'] ) && ! empty( $_GET['start'] ) ? htmlentities( $_GET['start'] ) : 0;
-$limit = isset( $_GET['limit'] ) && ! empty( $_GET['limit'] ) ? htmlentities( $_GET['limit'] ) : 12;
-$sort  = isset( $_GET['sort'] ) && ! empty( $_GET['sort'] ) ? htmlentities( $_GET['sort'] ) : null;
-$order = isset( $_GET['order'] ) && ! empty( $_GET['order'] ) ? htmlentities( $_GET['order'] ) : 'DESC';
+$genre  = isset( $_GET['genre'] ) && ! empty( $_GET['genre'] ) ? htmlentities( $_GET['genre'] ) : null;
+$start  = isset( $_GET['start'] ) && ! empty( $_GET['start'] ) ? htmlentities( $_GET['start'] ) : 0;
+$limit  = isset( $_GET['limit'] ) && ! empty( $_GET['limit'] ) ? htmlentities( $_GET['limit'] ) : 12;
+$sort   = isset( $_GET['sort'] ) && ! empty( $_GET['sort'] ) ? htmlentities( $_GET['sort'] ) : null;
+$order  = isset( $_GET['order'] ) && ! empty( $_GET['order'] ) ? htmlentities( $_GET['order'] ) : 'DESC';
+$search = isset( $_GET['search'] ) && ! empty( $_GET['search'] ) ? htmlentities( $_GET['search'] ) : null;
+
+/**
+ * Display the books grid.
+ *
+ * @param array $books Books to display.
+ * @return void
+ */
+function display_books_grid( $books ): void {
+	if ( ! count( $books ) ) :
+		AlertManager::display_info( 'Aucun livre ne correspond à votre recherche.' );
+	endif;
+	?>
+	<div class="grid grid-cols-2 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
+		<?php
+
+		foreach ( $books as $book ) {
+			Component::display_single_book( $book['title'], $book['link'], $book['author'], $book['id'] );
+		}
+
+		?>
+	</div>
+	<?php
+}
+
+/**
+ * Display the pagination.
+ *
+ * @param int    $total_books Total number of books matching the query.
+ * @param string $genre Genre to filter.
+ * @param int    $start Start index.
+ * @param int    $limit Number of books per page.
+ * @param string $sort Sort by.
+ * @param string $order Order can be ASC or DESC.
+ * @return void
+ */
+function display_pagination( $total_books, $genre, $start, $limit, $sort, $order ):void {
+	?>
+	<nav class="flex justify-center py-4 md:py-8" aria-label="Page navigation example">
+		<ul class="inline-flex items-center -space-x-px">
+			<li>
+				<?php
+
+				$previous_url = get_home_url() . '?' . http_build_query(
+					array(
+						'genre' => $genre,
+						'start' => 0,
+						'limit' => $limit,
+						'sort'  => $sort,
+						'order' => $order,
+					)
+				);
+
+				?>
+				<a href="<?php echo $previous_url; ?>" class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+					<span class="sr-only">Previous</span>
+					<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+				</a>
+			</li>
+			<?php
+
+			$nb_pages = ceil( $total_books / $limit );
+
+			for ( $i = 0; $i < $nb_pages; $i++ ) :
+				$is_selected = strval( $i * $limit ) === strval( $start );
+				$page_url    = get_home_url() . '?' . http_build_query(
+					array(
+						'genre' => $genre,
+						'start' => $i * $limit,
+						'limit' => $limit,
+						'sort'  => $sort,
+						'order' => $order,
+					)
+				);
+				?>
+
+			<li>
+				<a href="<?php echo $page_url; ?>" <?php echo $is_selected ? 'aria-current="page"' : ''; ?> class="<?php echo $is_selected ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'; ?> border border-gray-300 px-3 py-2 leading-tight"><?php echo htmlentities( strval( $i + 1 ) ); ?></a>
+			</li>
+
+			<?php endfor; ?>
+			<li>
+				<?php
+
+				$next_url = get_home_url() . '?' . http_build_query(
+					array(
+						'genre' => $genre,
+						'start' => ( $nb_pages - 1 ) * $limit,
+						'limit' => $limit,
+						'sort'  => $sort,
+						'order' => $order,
+					)
+				);
+
+				?>
+				<a href="<?php echo $next_url; ?>" class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+					<span class="sr-only">Next</span>
+					<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+				</a>
+			</li>
+		</ul>
+	</nav>
+	<?php
+}
 
 ?>
 
@@ -172,104 +276,31 @@ $order = isset( $_GET['order'] ) && ! empty( $_GET['order'] ) ? htmlentities( $_
 			</div>
 
 
-							<?php
+			<?php
 
-							$args = array(
-								'genre' => $genre,
-								'start' => $start,
-								'limit' => $limit,
-								'sort'  => $sort,
-								'order' => $order,
-							);
+			$args = array(
+				'genre'  => $genre,
+				'start'  => $start,
+				'limit'  => $limit,
+				'sort'   => $sort,
+				'order'  => $order,
+				'search' => $search,
+			);
 
-							try {
-								$args_copy          = $args;
-								$args_copy['limit'] = null;
-								$total_books        = Database::get_sorted_books_length( $args_copy );
-								$books              = Database::get_sorted_books( $args );
+			try {
+				$args_copy          = $args;
+				$args_copy['limit'] = null;
+				$total_books        = Database::get_sorted_books_length( $args_copy );
+				$books              = Database::get_sorted_books( $args );
 
-								?>
-				<div class="grid grid-cols-2 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
-									<?php
+				display_books_grid( $books );
+				display_pagination( $total_books, $genre, $start, $limit, $sort, $order );
 
-									foreach ( $books as $book ) {
-										Component::display_single_book( $book['title'], $book['link'], $book['author'], $book['id'] );
-									}
+			} catch ( Exception $e ) {
+				AlertManager::display_error( $e->getMessage() );
+			}
 
-									?>
-				</div>
-
-				<nav class="flex justify-center py-4 md:py-8" aria-label="Page navigation example">
-					<ul class="inline-flex items-center -space-x-px">
-						<li>
-										<?php
-
-										$previous_url = get_home_url() . '?' . http_build_query(
-											array(
-												'genre' => $genre,
-												'start' => 0,
-												'limit' => $limit,
-												'sort'  => $sort,
-												'order' => $order,
-											)
-										);
-
-										?>
-						<a href="<?php echo $previous_url; ?>" class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-							<span class="sr-only">Previous</span>
-							<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-						</a>
-						</li>
-								<?php
-
-								$nb_pages = ceil( $total_books / $limit );
-
-								for ( $i = 0; $i < $nb_pages; $i++ ) :
-									$is_selected = strval( $i * $limit ) === strval( $start );
-									$page_url    = get_home_url() . '?' . http_build_query(
-										array(
-											'genre' => $genre,
-											'start' => $i * $limit,
-											'limit' => $limit,
-											'sort'  => $sort,
-											'order' => $order,
-										)
-									);
-									?>
-
-								<li>
-									<a href="<?php echo $page_url; ?>" <?php echo $is_selected ? 'aria-current="page"' : ''; ?> class="<?php echo $is_selected ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : 'text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'; ?> border border-gray-300 px-3 py-2 leading-tight"><?php echo htmlentities( strval( $i + 1 ) ); ?></a>
-								</li>
-
-								<?php endfor; ?>
-						<li>
-										<?php
-
-										$next_url = get_home_url() . '?' . http_build_query(
-											array(
-												'genre' => $genre,
-												'start' => ( $nb_pages - 1 ) * $limit,
-												'limit' => $limit,
-												'sort'  => $sort,
-												'order' => $order,
-											)
-										);
-
-										?>
-						<a href="<?php echo $next_url; ?>" class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-							<span class="sr-only">Next</span>
-							<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-						</a>
-						</li>
-					</ul>
-				</nav>
-								<?php
-
-							} catch ( Exception $e ) {
-								AlertManager::display_error( $e->getMessage() );
-							}
-
-							?>
+			?>
 
 		</div>
 	</div>

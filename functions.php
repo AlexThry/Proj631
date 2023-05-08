@@ -16,6 +16,17 @@ function display_input_value( $input ): void {
 }
 
 /**
+ * Generates a random string of a given length.
+ *
+ * @param integer $length Length of the string to generate.
+ * @return string Random string.
+ */
+function generate_random_string( $length = 10 ) {
+	return substr( str_shuffle( str_repeat( $x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil( $length / strlen( $x ) ) ) ), 1, $length );
+}
+
+
+/**
  * Returns the current user or false if theres none.
  *
  * @return bool|User

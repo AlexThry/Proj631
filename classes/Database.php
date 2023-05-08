@@ -126,6 +126,24 @@ if ( ! class_exists( 'Database' ) ) {
 		}
 
 		/**
+		 * Filter books according to the $search parameter.
+		 *
+		 * @param array  $books Books to filter.
+		 * @param string $search Search string.
+		 * @return array
+		 */
+		private static function search_books( $books, $search ): array {
+			return array_filter(
+				$books,
+				function ( $book ) use ( $search ) {
+					return strpos( strtolower( $book['title'] ), strtolower( $search ) ) !== false
+						|| strpos( strtolower( $book['author'] ), strtolower( $search ) ) !== false
+						|| strpos( strtolower( $book['description'] ), strtolower( $search ) ) !== false;
+				}
+			);
+		}
+
+		/**
 		 * Query books in the db according to the given parameters.
 		 *
 		 * @param array $args Arguemnts are :
@@ -140,11 +158,12 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function get_sorted_books( $args ): array {
 			global $conn;
 
-			$genre = isset( $args['genre'] ) && ! empty( $args['genre'] ) ? $args['genre'] : null;
-			$start = isset( $args['start'] ) ? $args['start'] : 0;
-			$limit = isset( $args['limit'] ) ? $args['limit'] : null;
-			$sort  = isset( $args['sort'] ) ? $args['sort'] : 'parution_date';
-			$order = isset( $args['order'] ) && 'DESC' === $args['order'] ? $args['order'] : 'ASC';
+			$genre  = isset( $args['genre'] ) && ! empty( $args['genre'] ) ? $args['genre'] : null;
+			$start  = isset( $args['start'] ) ? $args['start'] : 0;
+			$limit  = isset( $args['limit'] ) ? $args['limit'] : null;
+			$sort   = isset( $args['sort'] ) ? $args['sort'] : 'parution_date';
+			$order  = isset( $args['order'] ) && 'DESC' === $args['order'] ? $args['order'] : 'ASC';
+			$search = isset( $args['search'] ) ? $args['search'] : null;
 
 			$sql = 'SELECT * FROM book';
 
@@ -168,7 +187,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$books[ $line['id'] ]  = $book;
 			}
 
-			return $books;
+			return isset( $search ) ? self::search_books( $books, $search ) : $books;
 		}
 
 		/**
