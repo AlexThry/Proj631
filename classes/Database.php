@@ -26,6 +26,37 @@ if ( ! class_exists( 'Database' ) ) {
 
 		}
 
+		/**
+		 * Get a single book.
+		 *
+		 * @param int $book_id Book id.
+		 * @return array
+		 */
+		public static function get_single_book( $book_id ):array {
+			global $conn;
+
+			$sql  = 'SELECT * FROM book WHERE id = ' . $book_id . ';';
+			$res  = mysqli_query( $conn, $sql );
+			$books = array();
+			foreach ( $res as $line ) {
+				$book                  = array();
+				$book['id']            = $line['id'];
+				$book['title']         = $line['title'];
+				$book['author']        = $line['author'];
+				$book['description']   = $line['description'];
+				$book['link']          = $line['link'];
+				$book['parution_date'] = $line['parution_date'];
+				$books[]               = $book;
+			}
+
+
+			if ( count( $books ) !== 1 ) {
+				throw new Exception( 'Le livre n\'est pas ou plusieurs fois présent.' );
+			}
+
+			return $books[0];
+
+		}
 		public static function get_books():array {
 			global $conn;
 			$sql   = 'SELECT * FROM book;';
@@ -33,6 +64,7 @@ if ( ! class_exists( 'Database' ) ) {
 			$books = array();
 			foreach ( $res as $line ) {
 				$book                  = array();
+				$book['id']            = $line['id'];
 				$book['title']         = $line['title'];
 				$book['author']        = $line['author'];
 				$book['description']   = $line['description'];
@@ -76,6 +108,7 @@ if ( ! class_exists( 'Database' ) ) {
 			$books = array();
 			foreach ( $res as $line ) {
 				$book                  = array();
+				$book['id']            = $line['id'];
 				$book['title']         = $line['title'];
 				$book['author']        = $line['author'];
 				$book['description']   = $line['description'];
@@ -120,6 +153,7 @@ if ( ! class_exists( 'Database' ) ) {
 			$books = array();
 			foreach ( $res as $line ) {
 				$book                  = array();
+				$book['id']            = $line['id'];
 				$book['title']         = $line['title'];
 				$book['author']        = $line['author'];
 				$book['description']   = $line['description'];
@@ -146,6 +180,7 @@ if ( ! class_exists( 'Database' ) ) {
 			$sql     = "SELECT * FROM review WHERE id_book = $id_book";
 			$res     = mysqli_query( $conn, $sql );
 			$reviews = array();
+
 			foreach ( $res as $line ) {
 				$review                  = array();
 				$review['id_user']       = $line['id_user'];
@@ -154,6 +189,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$review['parution_date'] = $line['parution_date'];
 				$reviews[ $line['id'] ]  = $review;
 			}
+
 			return $reviews;
 		}
 

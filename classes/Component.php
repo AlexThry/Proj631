@@ -36,9 +36,9 @@ if ( ! class_exists( 'Component' ) ) {
 		 * @param Book $book The book to display.
 		 * @return void
 		 */
-		public static function display_single_book( $title, $link, $author ) : void {
+		public static function display_single_book( $title, $link, $author, $id ) : void {
 			?>
-			<div>
+			<a href="book.php?id=<?php echo htmlentities( $id ); ?>" class="cursor-pointer hover:scale-90 transition ease duration-300">
 				<img class="h-auto max-w-full rounded-lg" src="<?php echo addslashes( $link ); ?>" alt="<?php echo addslashes( $title ); ?>">
 				<h3 class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200"><?php echo addslashes( $title ); ?></h3>
 				<span class="mt-1 text-gray-600 dark:text-gray-400"><?php echo addslashes( $author ); ?></span>
@@ -52,7 +52,7 @@ if ( ! class_exists( 'Component' ) ) {
 					<p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">4.95 out of 5</p>
 				</div>
 
-			</div>
+			</a>
 			<?php
 		}
 
@@ -70,7 +70,7 @@ if ( ! class_exists( 'Component' ) ) {
 				<div class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
 					<?php
 					foreach ( $books as $book ) :
-						self::display_single_book( $book->get_title(), $book->get_link(), $book->get_author() );
+						self::display_single_book( $book->get_title(), $book->get_link(), $book->get_author(), $book->get_id() );
 					endforeach;
 					?>
 				 </div>

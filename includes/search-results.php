@@ -193,7 +193,7 @@ $order = isset( $_GET['order'] ) && ! empty( $_GET['order'] ) ? htmlentities( $_
 									<?php
 
 									foreach ( $books as $book ) {
-										Component::display_single_book( $book['title'], $book['link'], $book['author'] );
+										Component::display_single_book( $book['title'], $book['link'], $book['author'], $book['id'] );
 									}
 
 									?>
