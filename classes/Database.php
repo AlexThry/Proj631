@@ -35,8 +35,8 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function get_single_book( $book_id ):array {
 			global $conn;
 
-			$sql  = 'SELECT * FROM book WHERE id = ' . $book_id . ';';
-			$res  = mysqli_query( $conn, $sql );
+			$sql   = 'SELECT * FROM book WHERE id = ' . $book_id . ';';
+			$res   = mysqli_query( $conn, $sql );
 			$books = array();
 			foreach ( $res as $line ) {
 				$book                  = array();
@@ -49,14 +49,20 @@ if ( ! class_exists( 'Database' ) ) {
 				$books[]               = $book;
 			}
 
-
 			if ( count( $books ) !== 1 ) {
 				throw new Exception( 'Le livre n\'est pas ou plusieurs fois présent.' );
 			}
 
-			return $books[0];
+			$book = $books[0];
 
+			$genres = array();
+
+			// récupérer les genres ...
+
+			$book['genres'] = $genres;
+			return $book;
 		}
+
 		public static function get_books():array {
 			global $conn;
 			$sql   = 'SELECT * FROM book;';
