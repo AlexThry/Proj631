@@ -2,6 +2,7 @@
 
 <div class="content">
 
+	<?php if ( empty( $_GET ) ) : ?>
 	<section class="relative bg-white dark:bg-gray-800">
 		<div class="pb-80 pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
 			<div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
@@ -55,92 +56,125 @@
 			</div>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<section class="relative">
-		<div class="pb-80 pt-16 sm:pb-40 sm:pt-24 lg:pb-48 lg:pt-40">
-			<div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
+		<div class="<?php empty( $_GET ) ? 'pt-16 sm:pt-24 lg:pt-40 ' : ''; ?>pb-40 sm:pb-20 lg:pb-24">
+			<div class="relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8 flex flex-col gap-4 align-center">
 
-
-			
-				<div class="flex items-center justify-start py-4 md:py-8 flex-wrap">
+				<div class="flex items-center justify-start py-2 md:py-4 flex-wrap">
 					<button type="button" class="text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800">All categories</button>
 					<button type="button" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800">Shoes</button>
 					<button type="button" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800">Bags</button>
 					<button type="button" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800">Electronics</button>
 					<button type="button" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800">Gaming</button>
 				</div>
-				<div class="grid grid-cols-2 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-6.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-7.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-8.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-10.jpg" alt="">
-					</div>
-					<div>
-						<img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg" alt="">
-					</div>
-				</div>
-				
 
 
-				<nav aria-label="Page navigation example">
-				<ul class="inline-flex items-center -space-x-px">
-					<li>
-					<a href="#" class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-						<span class="sr-only">Previous</span>
-						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-					</a>
-					</li>
-					<li>
-					<a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-					</li>
-					<li>
-					<a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-					</li>
-					<li>
-					<a href="#" aria-current="page" class="z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-					</li>
-					<li>
-					<a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-					</li>
-					<li>
-					<a href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-					</li>
-					<li>
-					<a href="#" class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-						<span class="sr-only">Next</span>
-						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-					</a>
-					</li>
-				</ul>
-				</nav>
+				<?php
+
+				$genre = isset( $_GET['genre'] ) && ! empty( $_GET['genre'] ) ? htmlentities( $_GET['genre'] ) : null;
+				$start = isset( $_GET['start'] ) && ! empty( $_GET['start'] ) ? htmlentities( $_GET['start'] ) : 0;
+				$limit = isset( $_GET['limit'] ) && ! empty( $_GET['limit'] ) ? htmlentities( $_GET['limit'] ) : 12;
+				$sort  = isset( $_GET['sort'] ) && ! empty( $_GET['sort'] ) ? htmlentities( $_GET['sort'] ) : 'parution_date';
+				$order = isset( $_GET['order'] ) && ! empty( $_GET['order'] ) ? htmlentities( $_GET['order'] ) : 'DESC';
+
+				$args = array(
+					'genre' => $genre,
+					'start' => $start,
+					'limit' => $limit,
+					'sort'  => $sort,
+					'order' => $order,
+				);
+
+				try {
+					$args_copy          = $args;
+					$args_copy['limit'] = null;
+					$total_books        = Database::get_sorted_books_length( $args_copy );
+					$books              = Database::get_sorted_books( $args );
+
+					?>
+					<div class="grid grid-cols-2 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
+						<?php
+
+						foreach ( $books as $book ) {
+							Component::display_single_book( $book['title'], $book['link'], $book['author'] );
+						}
+
+						?>
+					</div>
+
+					<nav class="flex justify-center py-4 md:py-8" aria-label="Page navigation example">
+						<ul class="inline-flex items-center -space-x-px">
+							<li>
+							<?php
+
+							$previous_url = get_home_url() . '?' . http_build_query(
+								array(
+									'genre' => $genre,
+									'start' => 0,
+									'limit' => $limit,
+									'sort'  => $sort,
+									'order' => $order,
+								)
+							);
+
+							?>
+							<a href="<?php echo $previous_url; ?>" class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+								<span class="sr-only">Previous</span>
+								<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+							</a>
+							</li>
+							<?php
+
+							$nb_pages = ceil( $total_books / $limit );
+
+							for ( $i = 0; $i < $nb_pages; $i++ ) :
+
+								$page_url = get_home_url() . '?' . http_build_query(
+									array(
+										'genre' => $genre,
+										'start' => $i * $limit,
+										'limit' => $limit,
+										'sort'  => $sort,
+										'order' => $order,
+									)
+								);
+								?>
+
+								<li>
+									<a href="<?php echo $page_url; ?>" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?php echo htmlentities( strval( $i + 1 ) ); ?></a>
+								</li>
+
+							<?php endfor; ?>
+							<li>
+							<?php
+
+							$next_url = get_home_url() . '?' . http_build_query(
+								array(
+									'genre' => $genre,
+									'start' => ( $nb_pages - 1 ) * $limit,
+									'limit' => $limit,
+									'sort'  => $sort,
+									'order' => $order,
+								)
+							);
+
+							?>
+							<a href="<?php echo $next_url; ?>" class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+								<span class="sr-only">Next</span>
+								<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+							</a>
+							</li>
+						</ul>
+					</nav>
+								<?php
+
+				} catch ( Exception $e ) {
+					AlertManager::display_error( $e->getMessage() );
+				}
+
+				?>
 
 			</div>
 		</div>

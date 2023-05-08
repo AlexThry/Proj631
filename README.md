@@ -7,6 +7,7 @@ Des trucs à faire :
  - Dans core/connection-helpers.php : `subscribe_user` faire en sorte de connecter l'utilisateur quand on cree son compte (en gérant les erreurs éventuelles)
  - Dans core/connection-helpers.php : `connect_user` vérifier l'unicité du username (en gérant les erreurs éventuelles)
  - Dans classes/Database.php faire une méthode pour récupérer le top 10 des livres
+ - Dans classes/Database.php pour la méthode `get_sorted_books` pouvoir trier les livres par note en faisant la moyenne
 
 ## Architecture
 

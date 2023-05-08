@@ -46,7 +46,14 @@ require_once 'functions.php';
 			},
 		}
 	</script>
-	<!-- <link rel="stylesheet" href="assets/css/carousel.css"> -->
+	<script>
+		// On page load or when changing themes, best to add inline in `head` to avoid FOUC
+		if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark')
+		}
+	</script>
 	<link rel="stylesheet" href="assets/css/tailwind-style.css">
 </head>
 
@@ -55,7 +62,7 @@ require_once 'functions.php';
 		<div class="page-container overflow-hidden">
 
 		<header class="sticky top-0 z-40 flex-none w-full mx-auto bg-white border-b border-gray-200 dark:border-gray-600 dark:bg-gray-800">
-			<?php if ( is_home_page() ) : ?>
+			<?php if ( is_home_page() && empty( $_GET ) ) : ?>
 			<div id="banner" tabindex="-1" class="z-50 flex justify-center w-full px-4 py-3 border border-b border-gray-200 bg-gray-50 dark:border-gray-600 lg:py-4 dark:bg-gray-700">
 				<div class="items-center md:flex">
 					<p class="text-sm font-medium text-gray-900 md:my-0 dark:text-white">
