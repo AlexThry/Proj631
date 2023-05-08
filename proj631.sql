@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 07, 2023 at 04:18 PM
+-- Generation Time: May 09, 2023 at 12:06 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.1.6
 
@@ -185,20 +185,25 @@ CREATE TABLE `user` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_name` varchar(25) NOT NULL,
   `password` varchar(256) NOT NULL,
-  `creation_date` date NOT NULL
+  `creation_date` date NOT NULL,
+  `profile_url` longtext NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `user_name`, `password`, `creation_date`) VALUES
-(1, 'Alexis', '63a9f0ea7bb98050796b649e85481845', '2023-05-01'),
-(2, 'Carlyne', '63a9f0ea7bb98050796b649e85481845', '2023-05-05'),
-(3, 'Arnaud', '63a9f0ea7bb98050796b649e85481845', '2023-04-26'),
-(4, 'Arthur', '63a9f0ea7bb98050796b649e85481845', '2023-05-03'),
-(5, 'Hugo', '63a9f0ea7bb98050796b649e85481845', '2023-05-05'),
-(6, 'Adam', '63a9f0ea7bb98050796b649e85481845', '2023-04-18');
+INSERT INTO `user` (`id`, `user_name`, `password`, `creation_date`, `profile_url`, `first_name`, `last_name`, `email`) VALUES
+(1, 'Alexis', '63a9f0ea7bb98050796b649e85481845', '2023-05-01', '', '', '', ''),
+(2, 'Carlyne', '63a9f0ea7bb98050796b649e85481845', '2023-05-05', '', '', '', ''),
+(3, 'Arnaud', '63a9f0ea7bb98050796b649e85481845', '2023-04-26', '', '', '', ''),
+(4, 'Arthur', '63a9f0ea7bb98050796b649e85481845', '2023-05-03', '', '', '', ''),
+(5, 'Hugo', '63a9f0ea7bb98050796b649e85481845', '2023-05-05', '', '', '', ''),
+(6, 'Adam', '63a9f0ea7bb98050796b649e85481845', '2023-04-18', '', '', '', ''),
+(7, 'romain', 'd0fa06cd93335c8cae357ffe5cd1c4e9', '2023-05-07', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -315,7 +320,7 @@ ALTER TABLE `review`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `wants_to_read`

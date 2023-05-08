@@ -6,23 +6,79 @@ if ( ! class_exists( 'User' ) ) {
 	 * User class
 	 */
 	class User {
-		private $name;
+		private $username;
+		private $firstname;
+		private $lastname;
+		private $email;
 		private $password;
 
-		public function __construct( $id, $name, $password ) {
-			$this->id       = $id;
-			$this->name     = $name;
-			$this->password = $password;
+		/**
+		 * Constructor
+		 *
+		 * @param string $id     User ID.
+		 * @param string $username User username.
+		 * @param string $firstname User firstname.
+		 * @param string $lastname User lastname.
+		 * @param string $password User password.
+		 */
+		public function __construct( $id, $username, $firstname, $lastname, $password ) {
+			$this->id        = $id;
+			$this->username  = $username;
+			$this->firstname = $firstname;
+			$this->lastname  = $lastname;
+			$this->password  = $password;
 		}
 
-		public function get_name() {
-			return ucfirst( $this->name );
+		/**
+		 * Returns the user's username
+		 *
+		 * @return string
+		 */
+		public function get_username() {
+			return ucfirst( $this->username );
 		}
 
+		/**
+		 * Returns the user's firstname
+		 *
+		 * @return string
+		 */
+		public function get_firstname() {
+			return ucfirst( $this->firstname );
+		}
+
+		/**
+		 * Returns the user's lastname
+		 *
+		 * @return string
+		 */
+		public function get_lastname() {
+			return ucfirst( $this->lastname );
+		}
+
+		/**
+		 * Returns the user's email
+		 *
+		 * @return string
+		 */
+		public function get_email() {
+			return $this->email;
+		}
+
+		/**
+		 * Returns the user's password
+		 *
+		 * @return string
+		 */
 		public function get_password() {
 			return $this->password;
 		}
 
+		/**
+		 * Returns the user's ID
+		 *
+		 * @return string
+		 */
 		public function get_id() {
 			return $this->id;
 		}
