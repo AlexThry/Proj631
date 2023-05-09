@@ -48,6 +48,9 @@ public class InterfaceAdministrateur {
         JTabbedPane tabbedPane = new JTabbedPane();
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
+        JButton UpdateDb = new JButton("Update DB");
+        contentPane.add(UpdateDb,BorderLayout.NORTH);
+
         // Panel pour gérer les genres et les livres
         JPanel booksAndGenresPanel = new JPanel();
         booksAndGenresPanel.setLayout(new GridLayout(2, 1));
@@ -69,7 +72,7 @@ public class InterfaceAdministrateur {
         JLabel genreListLabel = new JLabel("Sélectionnez un genre:");
         genrePanel.add(genreListLabel);
 
-        ArrayList<String> genres = connectionDatabase.selectList("SELECT label FROM genre;",connect);
+        ArrayList<String> genres = connectionDatabase.selectList("SELECT label FROM genre;",connect,"label");
         JComboBox genreComboBox = new JComboBox();
         for(String mot:genres) {
             genreComboBox.addItem(mot);
@@ -99,6 +102,9 @@ public class InterfaceAdministrateur {
         bookPanel.add(bookGenreLabel);
 
         JComboBox bookGenreComboBox = new JComboBox();
+        for(String mot:genres) {
+            bookGenreComboBox.addItem(mot);
+        }
         bookPanel.add(bookGenreComboBox);
 
         JLabel publicationDateLabel = new JLabel("Date de parution (JJ/MM/AAAA):");
@@ -158,9 +164,15 @@ public class InterfaceAdministrateur {
         contentPane.add(reviewsScrollPane, BorderLayout.SOUTH);
 
         JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
+        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookListComboBox = new JComboBox();
+        for(String mot:livres) {
+            bookListComboBox.addItem(mot);
+        }
         bookPanel.add(bookListLabel);
 
-        JComboBox<String> bookListComboBox = new JComboBox<>(bookTitles);
+
+
         bookPanel.add(bookListComboBox);
 
         JButton removeBookButton = new JButton("Supprimer livre");
@@ -176,6 +188,8 @@ public class InterfaceAdministrateur {
                     connectionDatabase.insert(sql,connect);
                     textArea.append("Genre ajouté: " + genre + "\n");
                     genreTextField.setText("");
+                    createAndShowGUI();
+                    frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -189,7 +203,7 @@ public class InterfaceAdministrateur {
                 String author = authorTextField.getText();
                 String genre = (String) bookGenreComboBox.getSelectedItem();
                 String publicationDate = publicationDateTextField.getText();
-                if (!book.isEmpty() && !author.isEmpty() && !genre.isEmpty() && !publicationDate.isEmpty()) {
+                if (!book.isEmpty() && !author.isEmpty()  && !publicationDate.isEmpty()) {
                     textArea.append("Livre ajouté: " + book + " | Auteur: " + author + " | Genre: " + genre + " | Date de parution: " + publicationDate + "\n");
                     bookTextField.setText("");
                     authorTextField.setText("");
@@ -232,7 +246,10 @@ public class InterfaceAdministrateur {
                 String selectedGenre = (String) genreComboBox.getSelectedItem();
                 if (selectedGenre != null) {
                     // Supprimez le genre sélectionné de vos données et mettez à jour le menu déroulant des genres
+                    connectionDatabase.delete("DELETE FROM genre WHERE label = '"+selectedGenre+"';",connect);
                     textArea.append("Genre supprimé: " + selectedGenre + "\n");
+                    createAndShowGUI();
+                    frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
