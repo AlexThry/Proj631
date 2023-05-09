@@ -7,7 +7,6 @@ Des trucs à faire :
  - Dans core/connection-helpers.php : `subscribe_user` faire en sorte de connecter l'utilisateur quand on cree son compte (en gérant les erreurs éventuelles)
  - Dans core/connection-helpers.php : `connect_user` vérifier l'unicité du username (en gérant les erreurs éventuelles)
  - Dans classes/Database.php faire une méthode pour récupérer le top 10 des livres
- - Dans classes/Database.php pour la méthode `get_sorted_books` pouvoir trier les livres par note en faisant la moyenne
  - Dans classes/Database.php pour la méthode `get_sorted_books`: corriger bug quand on veux trier avec `genre` (il faut gérer la jointure de table dans ce cas) => visible si vous triez par genre sur le site
  - Mettre à jour la base de données pour administer les cercles d'amis (un cercle d'amis est créer par un membre (on peut s'y abonner), il a un nom, il a une liste de livre)
  - Dans classes/Database.php get_single_book faire en sorte de pouvoir récupérer tous les avis avec les notes ainsi que le note moyenne
@@ -17,7 +16,7 @@ Des trucs à faire :
 
  - `.` la racine contient les pages html, les fichiers de configuration et un exemple de contenu de la base de donnée (`proj631.md`).
  - `includes` contient des bouts de code html réutilisable.
- - `core` contient des fonctions et scripts s'occupant de la logique du site (soumission de formulaire, redirection, rooting, ...) 
+ - `core` contient des fonctions et scripts s'occupant de la logique du site (soumission de formulaire, redirection, rooting, ...)
 
 ## Normalisation
 
