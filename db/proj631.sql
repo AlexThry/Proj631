@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 09, 2023 at 12:06 AM
+-- Generation Time: May 09, 2023 at 04:23 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.1.6
 
@@ -57,6 +57,61 @@ INSERT INTO `book` (`title`, `author`, `parution_date`, `id`, `link`, `descripti
 ('La Parure', 'Guy de Maupassant', '1884-02-17', 14, 'https://images.epagine.fr/227/9782290091227_1_75.jpg', 'Lorsque son mari lui annonce qu\'ils sont invités à un bal, Mathilde Loisel se désole : elle n\'a ni bijoux ni robe à porter. Une amie lui prête un collier, et Mathilde oublie, le temps d\'une soirée, sa vie morne de femme d\'employé. Mais de retour chez elle, la parure n\'est plus à son cou. Pour remplacer et rendre le collier, les Loisel contractent une dette qu\'ils mettront une vie entière à rembourser. Jusqu\'au jour où Mathilde, rendue méconnaissable par les épreuves, croise son amie qui lui fait une terrible révélation…'),
 ('Dune', 'Frank Herbert', '1965-06-01', 15, 'https://m.media-amazon.com/images/I/614RBqUr5lL.jpg', 'Dans un futur lointain, l\'humanité a colonisé de nombreuses planètes, dont la désertique Arrakis, source de l\'épice, une substance aux pouvoirs surhumains. Paul Atréides, héritier de la famille régnante, doit faire face à la conspiration qui vise à lui voler son pouvoir et à contrôler cette substance.'),
 ('Fondation', 'Isaac Asimov', '1951-05-01', 16, 'https://images.leslibraires.ca/books/9782070360536/front/9782070360536_large.jpg', 'Dans un futur lointain, l\'Empire galactique est sur le déclin. Le savant Hari Seldon prévoit l\'effondrement de la civilisation et met en place un plan pour préserver les connaissances humaines et permettre une renaissance plus rapide. Ce plan repose sur la Fondation, une organisation chargée de collecter et de préserver ces connaissances.');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `book_in_circle`
+--
+
+CREATE TABLE `book_in_circle` (
+  `id` int(11) NOT NULL,
+  `circle_id` int(11) NOT NULL,
+  `book_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `book_in_circle`
+--
+
+INSERT INTO `book_in_circle` (`id`, `circle_id`, `book_id`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 3),
+(4, 1, 4),
+(5, 1, 5),
+(6, 1, 6),
+(7, 1, 7),
+(8, 2, 15),
+(9, 3, 10),
+(10, 3, 13),
+(11, 3, 11),
+(12, 4, 12),
+(13, 4, 2),
+(14, 4, 9);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `circle`
+--
+
+CREATE TABLE `circle` (
+  `id` int(11) NOT NULL,
+  `admin_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` longtext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `circle`
+--
+
+INSERT INTO `circle` (`id`, `admin_id`, `title`, `description`) VALUES
+(1, 3, 'Les fans d\'harry', 'Groupe de partage autour de l\'univers d\'harry potter.'),
+(2, 3, 'Les duneux', 'On est là pour partager du contenu sur dune yes'),
+(3, 2, 'Cercle 3', 'Lorem ipsum ... '),
+(4, 1, 'Circle 42', 'Lorem ipsum ...');
 
 -- --------------------------------------------------------
 
@@ -186,10 +241,10 @@ CREATE TABLE `user` (
   `user_name` varchar(25) NOT NULL,
   `password` varchar(256) NOT NULL,
   `creation_date` date NOT NULL,
-  `profile_url` longtext NOT NULL,
-  `first_name` varchar(255) NOT NULL,
-  `last_name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL
+  `profile_url` longtext DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -199,11 +254,38 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `user_name`, `password`, `creation_date`, `profile_url`, `first_name`, `last_name`, `email`) VALUES
 (1, 'Alexis', '63a9f0ea7bb98050796b649e85481845', '2023-05-01', '', '', '', ''),
 (2, 'Carlyne', '63a9f0ea7bb98050796b649e85481845', '2023-05-05', '', '', '', ''),
-(3, 'Arnaud', '63a9f0ea7bb98050796b649e85481845', '2023-04-26', '', '', '', ''),
+(3, 'Arnaud', '63a9f0ea7bb98050796b649e85481845', '2023-04-26', 'Screenshot 2023-02-19 at 21.29.08.png', 'Arnaud', 'Pfundstein', 'contact@gmail.com'),
 (4, 'Arthur', '63a9f0ea7bb98050796b649e85481845', '2023-05-03', '', '', '', ''),
 (5, 'Hugo', '63a9f0ea7bb98050796b649e85481845', '2023-05-05', '', '', '', ''),
 (6, 'Adam', '63a9f0ea7bb98050796b649e85481845', '2023-04-18', '', '', '', ''),
-(7, 'romain', 'd0fa06cd93335c8cae357ffe5cd1c4e9', '2023-05-07', '', '', '', '');
+(7, 'romain', 'd0fa06cd93335c8cae357ffe5cd1c4e9', '2023-05-07', '', '', '', ''),
+(8, 'azer', 'c9acf5ec0b8b58ff87d7e8eb942c58e9', '2023-05-09', NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_in_circle`
+--
+
+CREATE TABLE `user_in_circle` (
+  `id` int(11) NOT NULL,
+  `circle_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user_in_circle`
+--
+
+INSERT INTO `user_in_circle` (`id`, `circle_id`, `user_id`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 4),
+(4, 1, 5),
+(5, 2, 1),
+(6, 3, 3),
+(7, 4, 1),
+(8, 4, 5);
 
 -- --------------------------------------------------------
 
@@ -241,6 +323,18 @@ ALTER TABLE `book`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `book_in_circle`
+--
+ALTER TABLE `book_in_circle`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `circle`
+--
+ALTER TABLE `circle`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `genre`
 --
 ALTER TABLE `genre`
@@ -276,6 +370,12 @@ ALTER TABLE `user`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `user_in_circle`
+--
+ALTER TABLE `user_in_circle`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `wants_to_read`
 --
 ALTER TABLE `wants_to_read`
@@ -291,6 +391,18 @@ ALTER TABLE `wants_to_read`
 --
 ALTER TABLE `book`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `book_in_circle`
+--
+ALTER TABLE `book_in_circle`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `circle`
+--
+ALTER TABLE `circle`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `genre`
@@ -320,7 +432,13 @@ ALTER TABLE `review`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `user_in_circle`
+--
+ALTER TABLE `user_in_circle`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `wants_to_read`

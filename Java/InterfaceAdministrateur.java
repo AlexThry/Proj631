@@ -48,8 +48,8 @@ public class InterfaceAdministrateur {
         JTabbedPane tabbedPane = new JTabbedPane();
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
-        JButton UpdateDb = new JButton("Update DB");
-        contentPane.add(UpdateDb,BorderLayout.NORTH);
+        JButton updateDb = new JButton("Update DB");
+        contentPane.add(updateDb,BorderLayout.NORTH);
 
         // Panel pour gérer les genres et les livres
         JPanel booksAndGenresPanel = new JPanel();
@@ -266,6 +266,14 @@ public class InterfaceAdministrateur {
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        updateDb.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createAndShowGUI();
+                frame.dispose();
             }
         });
 

@@ -1,6 +1,79 @@
 <?php
 
-$user = get_user();
+$user                 = get_user();
+$password_issue_label = null;
+$save_label           = null;
+
+if ( ! $user ) {
+	die();
+}
+
+if ( ! empty( $_POST ) && $user !== false ) {
+	$password = '';
+
+	if (
+		! empty( $_POST['new_password'] ) &&
+		empty( $_POST['new_confirm_password'] ) ||
+		empty( $_POST['new_password'] ) &&
+		! empty( $_POST['new_confirm_password'] )
+	) {
+		$password_issue_label = 'Si vous modifiez votre mot de passe, vous devez renseigner les deux champs simultanément.';
+	}
+
+	if (
+		key_exists( 'new_password', $_POST ) &&
+		key_exists( 'new_confirm_password', $_POST ) &&
+		isset( $_POST['new_password'] ) &&
+		isset( $_POST['new_confirm_password'] ) &&
+		! empty( $_POST['new_password'] ) &&
+		! empty( $_POST['new_confirm_password'] )
+	) {
+		if ( $_POST['new_password'] !== $_POST['new_confirm_password'] ) {
+			$password_issue_label = 'Vos mots de passe ne correspondent pas.';
+		} elseif ( ! password_is_secure_enough( $_POST['new_password'] ) ) {
+			$password_issue_label = 'Votre mot de passe n\'est pas assez sécurisé.<br /><br />
+			Il doit comporter :<br /><br />
+			<ul>
+				<li>Au moins 8 caractères.</li>
+				<li>Au moins 1 lettre minuscule.</li>
+				<li>Au moins 1 lettre majuscule.</li>
+				<li>Au moins 1 chiffre.</li>
+			</ul>';
+		} else {
+			$password = md5( $_POST['new_password'] );
+		}
+	}
+
+	$submitted_args = remove_falsy_values(
+		array(
+			'profile_url' => isset( $_POST['profile_url'] ) ? addslashes( $_POST['profile_url'] ) : null,
+			'first_name'  => isset( $_POST['first_name'] ) ? addslashes( $_POST['first_name'] ) : null,
+			'last_name'   => isset( $_POST['last_name'] ) ? addslashes( $_POST['last_name'] ) : null,
+			'email'       => isset( $_POST['email'] ) ? addslashes( $_POST['email'] ) : null,
+			'password'    => $password,
+		)
+	);
+
+	Database::update_user(
+		$user->get_id(),
+		$submitted_args
+	);
+	refresh_user();
+	$user = get_user();
+
+	if ( $password_issue_label === null ) {
+		$save_label = array(
+			'type'  => 'success',
+			'label' => 'Vos données ont bien été mises à jour.',
+		);
+	} else {
+		$save_label = array(
+			'type'  => 'warning',
+			'label' => 'Vos données ont bien été mises à jour, mais votre mot de passe n\'a pas été modifié.',
+		);
+	}
+}
+
 
 ?>
 
@@ -23,12 +96,34 @@ $user = get_user();
   }
   ```
 -->
-<form>
+<form method="POST" action="account.php">
 	<div class="space-y-12">
 		<div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
 			<h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">Profil</h2>
 			<p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-300">Ces informations seront partagées publiquement. Soyez donc
 				prudent avec ce que vous souhaitez partager.</p>
+
+			<?php
+
+			if ( $save_label !== null ) {
+				?>
+				<hr class="my-6 border-gray-200 dark:border-gray-700" />
+				<?php
+				if ( $save_label['type'] === 'success' ) {
+					AlertManager::display_success( $save_label['label'] );
+				} else {
+					AlertManager::display_warning( $save_label['label'] );
+				}
+			}
+
+			if ( $password_issue_label !== null ) {
+				?>
+				<hr class="my-6 border-gray-200 dark:border-gray-700" />
+				<?php
+				AlertManager::display_error( $password_issue_label );
+			}
+
+			?>
 
 			<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 				<div class="sm:col-span-4">
@@ -54,11 +149,14 @@ $user = get_user();
 								clip-rule="evenodd" />
 						</svg>
 
-          <div class="flex-1">
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Changer d'image</label>
-            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
-          </div>
+						<div class="flex-1">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Changer d'image</label>
+							<input
+							name="profile_url"
+							class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input"
+							type="file">
+							<p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+						</div>
 			
 					</div>
 				</div>
@@ -77,6 +175,7 @@ $user = get_user();
 					<label for="first-name" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Prénom</label>
 					<div class="mt-2">
 						<input type="text" name="first_name" id="first-name" autocomplete="given-name"
+							  value="<?php echo $user->get_firstname(); ?>"
 							class="block w-full rounded-md bg-gray-50 border-gray-300 py-1.5 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>
@@ -85,6 +184,7 @@ $user = get_user();
 					<label for="last-name" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom</label>
 					<div class="mt-2">
 						<input type="text" name="last_name" id="last-name" autocomplete="family-name"
+							value="<?php echo $user->get_lastname(); ?>"
 							class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>
@@ -93,6 +193,7 @@ $user = get_user();
 					<label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Email</label>
 					<div class="mt-2">
 						<input id="email" name="email" type="email" autocomplete="email"
+						value="<?php echo $user->get_email(); ?>"
 							class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>
@@ -107,7 +208,7 @@ $user = get_user();
 			<div class="sm:col-span-4 mt-10 ">
 				<label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nouveau mot de passe</label>
 				<div class="mt-2">
-					<input id="password" name="new_password" type="password" autocomplete="off"
+					<input id="new_password" name="new_password" type="password" autocomplete="off"
 						class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 				</div>
 			</div>
@@ -115,7 +216,7 @@ $user = get_user();
 			<div class="sm:col-span-4 mt-4">
 				<label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Confirmation</label>
 				<div class="mt-2">
-					<input id="new_confirm_password" name="password" type="password" autocomplete="off"
+					<input id="new_confirm_password" name="new_confirm_password" type="password" autocomplete="off"
 						class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 				</div>
 			</div>

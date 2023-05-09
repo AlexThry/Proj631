@@ -25,17 +25,20 @@ function generate_random_string( $length = 10 ) {
 	return substr( str_shuffle( str_repeat( $x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil( $length / strlen( $x ) ) ) ), 1, $length );
 }
 
-
 /**
- * Returns the current user or false if theres none.
+ * Remove falsy values from an array.
  *
- * @return bool|User
+ * @param array $array Array to filter.
+ * @return array Filtered array.
  */
-function get_user() {
-	if ( ! isset( $_SESSION['current_user'] ) ) {
-		return false;
+function remove_falsy_values( $array ): array {
+	foreach ( $array as $key => $value ) {
+		if ( ! $value ) {
+			unset( $array[ $key ] );
+		}
 	}
-	return $_SESSION['current_user'];
+
+	return $array;
 }
 
 /**

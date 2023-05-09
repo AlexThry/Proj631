@@ -1,6 +1,21 @@
 <?php
 
 /**
+ * Check if password is secure enough.
+ * To be secure, a password must:
+ *  - contains at least 8 characters
+ *  - contains at least 1 lowercase letter
+ *  - contains at least 1 uppercase letter
+ *  - contains at least 1 number
+ *
+ * @param string $password Password to check.
+ * @return boolean
+ */
+function password_is_secure_enough( $password ): bool {
+	return preg_match( '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $password );
+}
+
+/**
  * Comute connection.
  *
  * @param string $username Username.
@@ -45,7 +60,7 @@ function connect_user( $username, $password ) {
 		return 'Mot de passe incorrect.';
 	}
 
-	$_SESSION['current_user'] = new User( (int) $result['id'], $result['user_name'], $result['first_name'], $result['last_name'], $result['password'] );
+	$_SESSION['current_user'] = new User( (int) $result['id'], $result['user_name'], $result['first_name'], $result['last_name'], $result['password'], $result['email'] );
 
 	return true;
 }
@@ -80,17 +95,21 @@ function subscribe_user( $username, $password, $confirm_password ) {
 		}
 	}
 
-	if ( $password === $confirm_password ) {
-		$date          = date( 'Y-m-d' );
-		$hash_password = md5( $password );
-		$sql           = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $username . "','" . $hash_password . "','" . $date . "')";
-
-		if ( mysqli_query( $conn, $sql ) ) {
-			return true;
-		} else {
-			return "Erreur lors de l'inscription.";
-		}
-	} else {
+	if ( $password !== $confirm_password ) {
 		return 'Les mots de passe ne correspondent pas.';
+	}
+
+	if ( ! password_is_secure_enough( $password ) ) {
+		return 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.';
+	}
+
+	$date          = date( 'Y-m-d' );
+	$hash_password = md5( $password );
+	$sql           = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $username . "','" . $hash_password . "','" . $date . "')";
+
+	if ( mysqli_query( $conn, $sql ) ) {
+		return true;
+	} else {
+		return "Erreur lors de l'inscription.";
 	}
 }
