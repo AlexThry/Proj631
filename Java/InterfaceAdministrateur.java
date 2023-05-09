@@ -69,7 +69,7 @@ public class InterfaceAdministrateur {
         JLabel genreListLabel = new JLabel("Sélectionnez un genre:");
         genrePanel.add(genreListLabel);
 
-        ArrayList<String> genres = connectionDatabase.selectGenre("SELECT label FROM genre;",connect);
+        ArrayList<String> genres = connectionDatabase.selectList("SELECT label FROM genre;",connect);
         JComboBox genreComboBox = new JComboBox();
         for(String mot:genres) {
             genreComboBox.addItem(mot);
