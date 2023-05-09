@@ -1,6 +1,7 @@
 package Java;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class ConnectionDatabase {
 
@@ -22,17 +23,33 @@ public class ConnectionDatabase {
         return null;
     }
 
-    public void makeQuery(String query, Connection conn){
+    public void insert(String query, Connection conn){
         try {
             //étape 3: créer l'objet statement
             Statement stmt = conn.createStatement();
-            ResultSet res = stmt.executeQuery(query);
-            //étape 4: exécuter la requête
-            while (res.next())
-                System.out.println(res.getString(1) + "  " + res.getString(2));
+            stmt.executeUpdate(query);
+            System.out.println("la requète "+query+" est valide");
         }catch (Exception e){
             System.out.println(e);
         }
+    }
+    public ArrayList<String> selectGenre(String query, Connection conn){
+        ArrayList<String> tab= new ArrayList<String>();
+        // créer l'objet statement
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            int i =0;
+            while(res.next()){
+                //Récupérer par nom de colonne
+                tab.add(res.getString("label"));
+                i+=1;
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return tab;
+
     }
     public void closeConnect(Connection conn){
         try{
