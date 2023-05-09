@@ -35,7 +35,7 @@ $book = Database::get_single_book( $book_id );
 				<dl class="flex items-center space-x-6">
 					<div>
 						<dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Catégories</dt>
-						<dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400">Roman, Nouvelle, SF</dd>
+						<dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"><?php echo join(", ",$book['genres'])?></dd>
 					</div>
 					<div>
 						<dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Auteur</dt>
