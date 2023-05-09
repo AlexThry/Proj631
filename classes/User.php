@@ -11,6 +11,7 @@ if ( ! class_exists( 'User' ) ) {
 		private $lastname;
 		private $email;
 		private $password;
+		private $profile_url;
 
 		/**
 		 * Constructor
@@ -21,13 +22,14 @@ if ( ! class_exists( 'User' ) ) {
 		 * @param string $lastname User lastname.
 		 * @param string $password User password.
 		 */
-		public function __construct( $id, $username, $firstname, $lastname, $password, $email ) {
-			$this->id        = $id;
-			$this->username  = $username;
-			$this->firstname = $firstname;
-			$this->lastname  = $lastname;
-			$this->password  = $password;
-			$this->email  = $email;
+		public function __construct( $id, $username, $firstname, $lastname, $password, $email, $profile_url ) {
+			$this->id          = $id;
+			$this->username    = $username;
+			$this->firstname   = $firstname;
+			$this->lastname    = $lastname;
+			$this->password    = $password;
+			$this->email       = $email;
+			$this->profile_url = $profile_url;
 		}
 
 		/**
@@ -73,6 +75,15 @@ if ( ! class_exists( 'User' ) ) {
 		 */
 		public function get_password() {
 			return $this->password;
+		}
+
+		/**
+		 * Returns the profile_url's profile_url
+		 *
+		 * @return string
+		 */
+		public function get_profile_url() {
+			return $this->profile_url;
 		}
 
 		/**

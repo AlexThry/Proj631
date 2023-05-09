@@ -31,5 +31,5 @@ function refresh_user(): void {
 		throw new Exception( 'User not found' );
 	}
 
-	$_SESSION['current_user'] = new User( $id, $user['user_name'], $user['first_name'], $user['last_name'], $user['password'], $user['email'] );
+	$_SESSION['current_user'] = new User( $id, $user['user_name'], $user['first_name'], $user['last_name'], $user['password'], $user['email'], $user['profile_url'] );
 }
