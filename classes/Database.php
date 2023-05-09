@@ -27,6 +27,29 @@ if ( ! class_exists( 'Database' ) ) {
 		}
 
 		/**
+		 * Get reviews by book.
+		 *
+		 * @param int $id_book Book id.
+		 * @return array
+		 */
+		private static function get_reviews_by_book( $id_book ):array {
+			global $conn;
+			$sql     = "SELECT * FROM review WHERE id_book = $id_book";
+			$res     = mysqli_query( $conn, $sql );
+			$reviews = array();
+
+			foreach ( $res as $line ) {
+				$review                  = array();
+				$review['id_user']       = $line['id_user'];
+				$review['content']       = $line['content'];
+				$review['score']         = $line['score'];
+				$review['parution_date'] = $line['parution_date'];
+				$reviews[]  			 = $review;
+			}
+			return $reviews;
+		}
+
+		/**
 		 * Get a single book.
 		 *
 		 * @param int $book_id Book id.
@@ -69,8 +92,16 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$book['genres'] = $genres;
 
-			
+			$reviews = self::get_reviews_by_book( $book_id );
+			$reviews_size = sizeof($reviews);
 
+			if ($reviews_size > 0) {
+				$book['score'] = $reviews[0]['score'];
+				$book['nb_reviews'] = $reviews_size;
+			} else {
+				$book['score'] = "Aucune note";
+				$book['nb_reviews'] = "Aucun ";
+			}		
 
 			return $book;
 		}
@@ -188,24 +219,6 @@ if ( ! class_exists( 'Database' ) ) {
 		 */
 		public static function get_sorted_books_length( $args ): int {
 			return count( self::get_sorted_books( $args ) );
-		}
-
-		public static function get_reviews_by_book( $id_book ):array {
-			global $conn;
-			$sql     = "SELECT * FROM review WHERE id_book = $id_book";
-			$res     = mysqli_query( $conn, $sql );
-			$reviews = array();
-
-			foreach ( $res as $line ) {
-				$review                  = array();
-				$review['id_user']       = $line['id_user'];
-				$review['content']       = $line['content'];
-				$review['score']         = $line['score'];
-				$review['parution_date'] = $line['parution_date'];
-				$reviews[ $line['id'] ]  = $review;
-			}
-
-			return $reviews;
 		}
 
 		public static function get_users():array {
