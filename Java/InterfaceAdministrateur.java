@@ -188,6 +188,8 @@ public class InterfaceAdministrateur {
                     connectionDatabase.insert(sql,connect);
                     textArea.append("Genre ajouté: " + genre + "\n");
                     genreTextField.setText("");
+                    createAndShowGUI();
+                    frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -246,6 +248,8 @@ public class InterfaceAdministrateur {
                     // Supprimez le genre sélectionné de vos données et mettez à jour le menu déroulant des genres
                     connectionDatabase.delete("DELETE FROM genre WHERE label = '"+selectedGenre+"';",connect);
                     textArea.append("Genre supprimé: " + selectedGenre + "\n");
+                    createAndShowGUI();
+                    frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
