@@ -102,30 +102,6 @@ if ( ! class_exists( 'Database' ) ) {
 		}
 
 		/**
-		 * Get all books by genre
-		 *
-		 * @param array $genre Genre.
-		 * @return array $books Books.
-		 */
-		public static function get_books_by_genre($genre):array {
-			global $conn;
-			$sql   = "SELECT * FROM book WHERE id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'));";
-			$res   = mysqli_query( $conn, $sql );
-			$books = array();
-			foreach ( $res as $line ) {
-				$book                  = array();
-				$book['id']            = $line['id'];
-				$book['title']         = $line['title'];
-				$book['author']        = $line['author'];
-				$book['description']   = $line['description'];
-				$book['link']          = $line['link'];
-				$book['parution_date'] = $line['parution_date'];
-				$books[ $line['id'] ]  = $book;
-			}
-			return $books;
-		}
-
-		/**
 		 * Filter books according to the $search parameter.
 		 *
 		 * @param array  $books Books to filter.
@@ -150,7 +126,7 @@ if ( ! class_exists( 'Database' ) ) {
 		 *                - genre : string (a specific genre) (default: null)
 		 *                - start : int (default: 0)
 		 *                - limit : int (default: null)
-		 *                - sort : string (default: 'parution_date'). Possible values are 'title', 'author', 'parution_date', 'genre'.
+		 *                - sort : string (default: 'parution_date'). Possible values are 'title', 'author', 'parution_date', 'genre', 'score'.
 		 *                - order : string (default: 'ASC'). Possible values are 'ASC' and 'DESC'.
 		 *              All parameters are optionnal.
 		 * @return array $books Books matching the query.
@@ -165,12 +141,13 @@ if ( ! class_exists( 'Database' ) ) {
 			$order  = isset( $args['order'] ) && 'DESC' === $args['order'] ? $args['order'] : 'ASC';
 			$search = isset( $args['search'] ) ? $args['search'] : null;
 
-			$sql = 'SELECT * FROM book';
+			$sql = 'SELECT book.*, avg(score) "score" FROM book LEFT JOIN review ON review.id_book = book.id';
 
 			if ( isset( $genre ) ) {
 				$sql .= " WHERE id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'))";
 			}
 
+			$sql .= " GROUP BY book.id ";
 			$sql .= ' ORDER BY ' . $sort . ' ' . $order . ( isset( $limit ) ? ' LIMIT ' . $limit . ' OFFSET ' . $start : '' ) . ';';
 
 			$res = mysqli_query( $conn, $sql );
@@ -184,6 +161,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$book['description']   = $line['description'];
 				$book['link']          = $line['link'];
 				$book['parution_date'] = $line['parution_date'];
+				$book['score']          = $line['score'];
 				$books[ $line['id'] ]  = $book;
 			}
 

@@ -161,6 +161,7 @@ function display_pagination( $total_books, $genre, $start, $limit, $sort, $order
 					'author'        => 'Auteur',
 					'parution_date' => 'Date de Parution',
 					'genre'         => 'Genre',
+					'score'         => 'Note',
 				);
 				?>
 				<button type="button" data-dropdown-toggle="dropdown-sort" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800"><?php echo isset( $sort ) ? $sort_variants[ $sort ] : 'Trier'; ?></button>
@@ -250,7 +251,7 @@ function display_pagination( $total_books, $genre, $start, $limit, $sort, $order
 						<li>
 							<a href="<?php echo $no_limit_url; ?>" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Pas de limite</a>
 						</li>
-						
+
 						<?php
 
 						for ( $i = 1; $i < 11; $i++ ) :
