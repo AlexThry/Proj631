@@ -46,10 +46,10 @@ if ( ! empty( $_POST ) && $user !== false ) {
 
 	$submitted_args = remove_falsy_values(
 		array(
-			'profile_url' => addslashes( $_POST['profile_url'] ),
-			'first_name'  => addslashes( $_POST['first_name'] ),
-			'last_name'   => addslashes( $_POST['last_name'] ),
-			'email'       => addslashes( $_POST['email'] ),
+			'profile_url' => isset( $_POST['profile_url'] ) ? addslashes( $_POST['profile_url'] ) : null,
+			'first_name'  => isset( $_POST['first_name'] ) ? addslashes( $_POST['first_name'] ) : null,
+			'last_name'   => isset( $_POST['last_name'] ) ? addslashes( $_POST['last_name'] ) : null,
+			'email'       => isset( $_POST['email'] ) ? addslashes( $_POST['email'] ) : null,
 			'password'    => $password,
 		)
 	);
@@ -105,13 +105,13 @@ if ( ! empty( $_POST ) && $user !== false ) {
 
 			<?php
 
-			if( $save_label !== null ) {
+			if ( $save_label !== null ) {
 				?>
 				<hr class="my-6 border-gray-200 dark:border-gray-700" />
 				<?php
-				if( $save_label['type'] === 'success' ){
+				if ( $save_label['type'] === 'success' ) {
 					AlertManager::display_success( $save_label['label'] );
-				}else{
+				} else {
 					AlertManager::display_warning( $save_label['label'] );
 				}
 			}
@@ -151,7 +151,10 @@ if ( ! empty( $_POST ) && $user !== false ) {
 
 						<div class="flex-1">
 							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Changer d'image</label>
-							<input name="profile_url" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
+							<input
+							name="profile_url"
+							class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input"
+							type="file">
 							<p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
 						</div>
 			
