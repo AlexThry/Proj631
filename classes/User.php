@@ -86,7 +86,7 @@ if ( ! class_exists( 'User' ) ) {
 		/**
 		 * Returns the list of books the user wants to read and has already read
 		 *
-		 * @return array(Book)
+		 * @return array
 		 */
 		public function books(): array {
 			return Database::get_user_books( $this->id );
@@ -95,7 +95,7 @@ if ( ! class_exists( 'User' ) ) {
 		/**
 		 * Returns the list of books the user wants to read
 		 *
-		 * @return array(Book)
+		 * @return array
 		 */
 		public function wishlist(): array {
 			return Database::get_user_wishlist( $this->id );

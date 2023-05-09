@@ -15,6 +15,7 @@ if ( ! class_exists( 'Database' ) ) {
 
 		public static function connect_db() {
 			global $conn;
+
 			$conn = new mysqli( 'localhost', DB_USERNAME, DB_PASSWORD );
 
 			if ( ! $conn ) {
@@ -34,6 +35,7 @@ if ( ! class_exists( 'Database' ) ) {
 		 */
 		private static function get_reviews_by_book( $id_book ):array {
 			global $conn;
+
 			$sql     = "SELECT * FROM review WHERE id_book = $id_book";
 			$res     = mysqli_query( $conn, $sql );
 			$reviews = array();
@@ -108,6 +110,7 @@ if ( ! class_exists( 'Database' ) ) {
 
 		public static function get_books():array {
 			global $conn;
+
 			$sql   = 'SELECT * FROM book;';
 			$res   = mysqli_query( $conn, $sql );
 			$books = array();
@@ -223,6 +226,7 @@ if ( ! class_exists( 'Database' ) ) {
 
 		public static function get_users():array {
 			global $conn;
+
 			$sql   = 'SELECT * FROM user';
 			$res   = $conn->query( $sql );
 			$users = array();
@@ -237,23 +241,30 @@ if ( ! class_exists( 'Database' ) ) {
 		}
 
 		/**
-		 * Returns the list of books a user wants to read and has already read
+		 * ReturnIs the list of books a user wants to read and has already read
 		 *
 		 * @param int $user_id The user's id.
-		 * @return array(Book)
+		 * @return array
 		 */
 		public static function get_user_books( $user_id ): array {
-			$query = "SELECT b.id, title, author, parution_date, link FROM book b
-                JOIN has_read hr ON hr.id_user = $user_id
-                UNION
-                SELECT b.id, title, author, parution_date, link FROM book b
-                JOIN wants_to_read wtr ON wtr.id_user = $user_id";
-
-			// TODO : check for query errors + XSS attack
 			global $conn;
+			
+			$sql = "SELECT b.id, b.title, b.author, b.parution_date, b.link, COALESCE(r.score, 0) AS score
+					FROM book b
+					JOIN has_read hr ON hr.id_user = 2 AND hr.id_book = b.id
+					LEFT JOIN review r ON r.id_book = b.id;";
+			
+			$res   = $conn->query( $sql );
 			$books = array();
-			foreach ( $conn->query( $query ) as $line ) {
-				$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['link'] );
+			foreach ( $res as $line ) {
+				$book                   = array();
+				$book['id']     		= $line['id'];
+				$book['author']      	= $line['author'];
+				$book['parution_date']  = $line['parution_date'];
+				$book['title'] 			= $line['title'];
+				$book['link'] 			= $line['link'];
+				$book['score']          = $line['score'];
+				$books[]  				= $book;
 			}
 			return $books;
 		}
@@ -262,17 +273,27 @@ if ( ! class_exists( 'Database' ) ) {
 		 * Returns the list of books a user wants to read
 		 *
 		 * @param int $user_id The user's id.
-		 * @return array(Book)
+		 * @return array
 		 */
 		public static function get_user_wishlist( $user_id ): array {
-			$query = "SELECT b.id, title, author, parution_date, link FROM book b
-                JOIN wants_to_read wtr ON wtr.id_user = $user_id";
-
-			// TODO : check for query errors + XSS attack
 			global $conn;
+
+			$sql = "SELECT b.id, b.title, b.author, b.parution_date, b.link, COALESCE(r.score, 0) AS score
+					FROM book b
+					JOIN wants_to_read wr ON wr.id_user = 2 AND wr.id_book = b.id
+					LEFT JOIN review r ON r.id_book = b.id;";
+
+			$res   = $conn->query( $sql );
 			$books = array();
-			foreach ( $conn->query( $query ) as $line ) {
-				$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['link'] );
+			foreach ( $res as $line ) {
+				$book                   = array();
+				$book['id']     		= $line['id'];
+				$book['author']      	= $line['author'];
+				$book['parution_date']  = $line['parution_date'];
+				$book['title'] 			= $line['title'];
+				$book['link'] 			= $line['link'];
+				$book['score']          = $line['score'];
+				$books[]  				= $book;
 			}
 			return $books;
 		}

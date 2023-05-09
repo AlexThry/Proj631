@@ -67,7 +67,7 @@ if ( ! class_exists( 'Component' ) ) {
 				<div class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
 					<?php
 					foreach ( $books as $book ) :
-						self::display_single_book( $book->get_title(), $book->get_link(), $book->get_author(), $book->get_id(), $book->get_score() );
+						self::display_single_book( $book['title'], $book['link'], $book['author'], $book['id'], $book['score'] );
 					endforeach;
 					?>
 				 </div>
