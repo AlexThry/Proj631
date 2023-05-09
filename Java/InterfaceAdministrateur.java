@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class InterfaceAdministrateur {
     public static void main(String[] args) {
@@ -67,8 +69,11 @@ public class InterfaceAdministrateur {
         JLabel genreListLabel = new JLabel("Sélectionnez un genre:");
         genrePanel.add(genreListLabel);
 
-        String[] genres = new String[0];
-        JComboBox<String> genreComboBox = new JComboBox<>(genres);
+        ArrayList<String> genres = connectionDatabase.selectList("SELECT label FROM genre;",connect);
+        JComboBox genreComboBox = new JComboBox();
+        for(String mot:genres) {
+            genreComboBox.addItem(mot);
+        }
         genrePanel.add(genreComboBox);
 
         JButton removeGenreButton = new JButton("Supprimer genre");
@@ -93,8 +98,8 @@ public class InterfaceAdministrateur {
         JLabel bookGenreLabel = new JLabel("Genre:");
         bookPanel.add(bookGenreLabel);
 
-        JTextField bookGenreTextField = new JTextField(15);
-        bookPanel.add(bookGenreTextField);
+        JComboBox bookGenreComboBox = new JComboBox();
+        bookPanel.add(bookGenreComboBox);
 
         JLabel publicationDateLabel = new JLabel("Date de parution (JJ/MM/AAAA):");
         bookPanel.add(publicationDateLabel);
@@ -166,6 +171,9 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 String genre = genreTextField.getText();
                 if (!genre.isEmpty()) {
+                    String sql = "INSERT INTO genre (label) " +
+                            "VALUES ('"+genre+"');";
+                    connectionDatabase.insert(sql,connect);
                     textArea.append("Genre ajouté: " + genre + "\n");
                     genreTextField.setText("");
                 } else {
@@ -179,13 +187,13 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 String book = bookTextField.getText();
                 String author = authorTextField.getText();
-                String genre = bookGenreTextField.getText();
+                String genre = (String) bookGenreComboBox.getSelectedItem();
                 String publicationDate = publicationDateTextField.getText();
                 if (!book.isEmpty() && !author.isEmpty() && !genre.isEmpty() && !publicationDate.isEmpty()) {
                     textArea.append("Livre ajouté: " + book + " | Auteur: " + author + " | Genre: " + genre + " | Date de parution: " + publicationDate + "\n");
                     bookTextField.setText("");
                     authorTextField.setText("");
-                    bookGenreTextField.setText("");
+                    bookGenreComboBox.setSelectedIndex(0);
                     publicationDateTextField.setText("");
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer toutes les informations requises (titre, auteur, genre et date de parution).", "Erreur", JOptionPane.ERROR_MESSAGE);

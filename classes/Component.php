@@ -36,7 +36,7 @@ if ( ! class_exists( 'Component' ) ) {
 		 * @param Book $book The book to display.
 		 * @return void
 		 */
-		public static function display_single_book( $title, $link, $author, $id ) : void {
+		public static function display_single_book( $title, $link, $author, $id, $score ) : void {
 			?>
 			<a href="book.php?id=<?php echo htmlentities( $id ); ?>" class="cursor-pointer hover:scale-90 transition ease duration-300">
 				<img class="h-auto max-w-full rounded-lg" src="<?php echo addslashes( $link ); ?>" alt="<?php echo addslashes( $title ); ?>">
