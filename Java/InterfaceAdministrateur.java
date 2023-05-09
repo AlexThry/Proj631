@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class InterfaceAdministrateur {
     public static void main(String[] args) {
@@ -67,8 +69,11 @@ public class InterfaceAdministrateur {
         JLabel genreListLabel = new JLabel("Sélectionnez un genre:");
         genrePanel.add(genreListLabel);
 
-        String[] genres = new String[0];
-        JComboBox<String> genreComboBox = new JComboBox<>(genres);
+        ArrayList<String> genres = connectionDatabase.selectGenre("SELECT label FROM genre;",connect);
+        JComboBox genreComboBox = new JComboBox();
+        for(String mot:genres) {
+            genreComboBox.addItem(mot);
+        }
         genrePanel.add(genreComboBox);
 
         JButton removeGenreButton = new JButton("Supprimer genre");
@@ -93,7 +98,7 @@ public class InterfaceAdministrateur {
         JLabel bookGenreLabel = new JLabel("Genre:");
         bookPanel.add(bookGenreLabel);
 
-        JComboBox<String> bookGenreComboBox = new JComboBox<>(genres);
+        JComboBox bookGenreComboBox = new JComboBox();
         bookPanel.add(bookGenreComboBox);
 
         JLabel publicationDateLabel = new JLabel("Date de parution (JJ/MM/AAAA):");
@@ -166,6 +171,9 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 String genre = genreTextField.getText();
                 if (!genre.isEmpty()) {
+                    String sql = "INSERT INTO genre (label) " +
+                            "VALUES ('"+genre+"');";
+                    connectionDatabase.insert(sql,connect);
                     textArea.append("Genre ajouté: " + genre + "\n");
                     genreTextField.setText("");
                 } else {
