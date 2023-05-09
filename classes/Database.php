@@ -107,7 +107,7 @@ if ( ! class_exists( 'Database' ) ) {
 		 * @param array $genre Genre.
 		 * @return array $books Books.
 		 */
-		public static function get_books_by_genre( $genre, ):array {
+		public static function get_books_by_genre($genre):array {
 			global $conn;
 			$sql   = "SELECT * FROM book WHERE id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'));";
 			$res   = mysqli_query( $conn, $sql );
