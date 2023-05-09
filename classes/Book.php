@@ -11,6 +11,7 @@ if ( ! class_exists( 'Book' ) ) {
 		private $parution_date;
 		private $title;
 		private $link;
+		private $score;
 
 		public function __construct( $id, $author, $parution_date, $title, $link ) {
 			$this->id            = $id;
@@ -18,6 +19,7 @@ if ( ! class_exists( 'Book' ) ) {
 			$this->parution_date = $parution_date;
 			$this->title         = $title;
 			$this->link          = $link;
+			$this->score         = $score;
 		}
 
 		public function get_id() {
@@ -38,6 +40,10 @@ if ( ! class_exists( 'Book' ) ) {
 
 		public function get_link() {
 			return $this->link;
+		}
+
+		public function get_score() {
+			return $this->score;
 		}
 	}
 }

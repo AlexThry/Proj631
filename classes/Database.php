@@ -149,7 +149,7 @@ if ( ! class_exists( 'Database' ) ) {
 			$genre  = isset( $args['genre'] ) && ! empty( $args['genre'] ) ? $args['genre'] : null;
 			$start  = isset( $args['start'] ) ? $args['start'] : 0;
 			$limit  = isset( $args['limit'] ) ? $args['limit'] : null;
-			$sort   = isset( $args['sort'] ) ? $args['sort'] : 'parution_date';
+			$sort   = isset( $args['sort'] ) ? $args['sort'] : 'parution_date, score';
 			$order  = isset( $args['order'] ) && 'DESC' === $args['order'] ? $args['order'] : 'ASC';
 			$search = isset( $args['search'] ) ? $args['search'] : null;
 
