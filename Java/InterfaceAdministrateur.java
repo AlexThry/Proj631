@@ -70,7 +70,10 @@ public class InterfaceAdministrateur {
         genrePanel.add(genreListLabel);
 
         ArrayList<String> genres = connectionDatabase.selectGenre("SELECT label FROM genre;",connect);
-        JComboBox<ArrayList<String>> genreComboBox = new JComboBox<>(genres);
+        JComboBox genreComboBox = new JComboBox();
+        for(String mot:genres) {
+            genreComboBox.addItem(mot);
+        }
         genrePanel.add(genreComboBox);
 
         JButton removeGenreButton = new JButton("Supprimer genre");
@@ -95,7 +98,7 @@ public class InterfaceAdministrateur {
         JLabel bookGenreLabel = new JLabel("Genre:");
         bookPanel.add(bookGenreLabel);
 
-        JComboBox<String> bookGenreComboBox = new JComboBox<>(genres);
+        JComboBox bookGenreComboBox = new JComboBox();
         bookPanel.add(bookGenreComboBox);
 
         JLabel publicationDateLabel = new JLabel("Date de parution (JJ/MM/AAAA):");
