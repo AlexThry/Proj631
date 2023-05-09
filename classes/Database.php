@@ -299,14 +299,26 @@ if ( ! class_exists( 'Database' ) ) {
 		}
 
 		public static function get_review( $user_id, $book_id ) {
-			$query = "SELECT * FROM review
+			global $conn;
+			
+			$sql = "SELECT * FROM review
                 WHERE id_user = $user_id
                 AND id_book = $book_id";
+			
+						
+			$res = $conn->query( $sql );
+			$reviews = array();
+			foreach ( $res as $line ) {
+				$review                 = array();
+				$review['id_user']     	= $user_id;
+				$review['id_book']      = $book_id;
+				$review['content']  	= $line['content'];
+				$review['score'] 		= $line['score'];
+				$review['parution_date']= $line['parution_date'];
+				$reviews[]  			= $review;
+			}
 
-			// TODO : check for query errors + XSS attack
-			global $conn;
-			$res = mysqli_fetch_assoc( $conn->query( $query ) );
-			return ( $res === null ) ? null : new Review( $user_id, $book_id, $res['content'], (int) $res['score'], $res['parution_date'] );
+			return ( $reviews === null ) ? null : $reviews;
 		}
 
 		/**

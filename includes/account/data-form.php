@@ -55,7 +55,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
 	);
 
 	Database::update_user(
-		$user->get_id(),
+		$user['id'],
 		$submitted_args
 	);
 	refresh_user();
@@ -127,13 +127,13 @@ if ( ! empty( $_POST ) && $user !== false ) {
 
 			<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 				<div class="sm:col-span-4">
-					<label for="username" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom
+					<label for="user_name" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom
 						d'utilisateur</label>
 					<div class="mt-2">
 						<div
 							class="flex rounded-md focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-							<input type="text" name="user_name" id="username" autocomplete="username" disabled
-								value="<?php echo $user->get_username(); ?>"
+							<input type="text" name="user_name" id="user_name" autocomplete="user_name" disabled
+								value="<?php echo $user['user_name']; ?>"
 								class="pl-3 text-gray-500 sm:text-sm block flex-1 rounded bg-gray-50 border-gray-300 py-1.5 pl-1 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 								placeholder="janesmith">
 						</div>
@@ -175,7 +175,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
 					<label for="first-name" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Prénom</label>
 					<div class="mt-2">
 						<input type="text" name="first_name" id="first-name" autocomplete="given-name"
-							  value="<?php echo $user->get_firstname(); ?>"
+							  value="<?php echo $user['first_name']; ?>"
 							class="block w-full rounded-md bg-gray-50 border-gray-300 py-1.5 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>
@@ -184,7 +184,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
 					<label for="last-name" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom</label>
 					<div class="mt-2">
 						<input type="text" name="last_name" id="last-name" autocomplete="family-name"
-							value="<?php echo $user->get_lastname(); ?>"
+							value="<?php echo $user['last_name']; ?>"
 							class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>
@@ -193,7 +193,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
 					<label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Email</label>
 					<div class="mt-2">
 						<input id="email" name="email" type="email" autocomplete="email"
-						value="<?php echo $user->get_email(); ?>"
+						value="<?php echo $user['email']; ?>"
 							class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>

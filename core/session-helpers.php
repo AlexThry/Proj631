@@ -25,11 +25,21 @@ function refresh_user(): void {
 		return;
 	}
 
-	$id   = $session_user->get_id();
+	$id   = $session_user['id'];
 	$user = Database::get_user_by_id( $id );
 	if ( ! $user ) {
 		throw new Exception( 'User not found' );
 	}
 
-	$_SESSION['current_user'] = new User( $id, $user['user_name'], $user['first_name'], $user['last_name'], $user['password'], $user['email'] );
+	$new_user = array(
+		'id' => $id,
+		'user_name' => $user['user_name'],
+		'first_name' => $user['first_name'],
+		'last_name' => $user['last_name'],
+		'password' => $user['password'],
+		'email' => $user['email']
+	);
+	var_dump($new_user);
+
+	$_SESSION['current_user'] = $new_user;
 }
