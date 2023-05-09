@@ -48,6 +48,9 @@ public class InterfaceAdministrateur {
         JTabbedPane tabbedPane = new JTabbedPane();
         contentPane.add(tabbedPane, BorderLayout.CENTER);
 
+        JButton UpdateDb = new JButton("Update DB");
+        contentPane.add(UpdateDb,BorderLayout.NORTH);
+
         // Panel pour gérer les genres et les livres
         JPanel booksAndGenresPanel = new JPanel();
         booksAndGenresPanel.setLayout(new GridLayout(2, 1));
