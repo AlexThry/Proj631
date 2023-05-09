@@ -99,6 +99,9 @@ public class InterfaceAdministrateur {
         bookPanel.add(bookGenreLabel);
 
         JComboBox bookGenreComboBox = new JComboBox();
+        for(String mot:genres) {
+            bookGenreComboBox.addItem(mot);
+        }
         bookPanel.add(bookGenreComboBox);
 
         JLabel publicationDateLabel = new JLabel("Date de parution (JJ/MM/AAAA):");
