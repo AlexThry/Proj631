@@ -93,8 +93,8 @@ public class InterfaceAdministrateur {
         JLabel bookGenreLabel = new JLabel("Genre:");
         bookPanel.add(bookGenreLabel);
 
-        JTextField bookGenreTextField = new JTextField(15);
-        bookPanel.add(bookGenreTextField);
+        JComboBox<String> bookGenreComboBox = new JComboBox<>(genres);
+        bookPanel.add(bookGenreComboBox);
 
         JLabel publicationDateLabel = new JLabel("Date de parution (JJ/MM/AAAA):");
         bookPanel.add(publicationDateLabel);
@@ -179,13 +179,13 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 String book = bookTextField.getText();
                 String author = authorTextField.getText();
-                String genre = bookGenreTextField.getText();
+                String genre = (String) bookGenreComboBox.getSelectedItem();
                 String publicationDate = publicationDateTextField.getText();
                 if (!book.isEmpty() && !author.isEmpty() && !genre.isEmpty() && !publicationDate.isEmpty()) {
                     textArea.append("Livre ajouté: " + book + " | Auteur: " + author + " | Genre: " + genre + " | Date de parution: " + publicationDate + "\n");
                     bookTextField.setText("");
                     authorTextField.setText("");
-                    bookGenreTextField.setText("");
+                    bookGenreComboBox.setSelectedIndex(0);
                     publicationDateTextField.setText("");
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer toutes les informations requises (titre, auteur, genre et date de parution).", "Erreur", JOptionPane.ERROR_MESSAGE);
