@@ -55,11 +55,23 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$book = $books[0];
 
+			$sql   = 'SELECT label FROM has_genre hg INNER JOIN genre g ON hg.id_genre = g.id WHERE id_book = ' . $book_id . ';';
+			$res   = mysqli_query( $conn, $sql );
 			$genres = array();
 
-			// récupérer les genres ...
+			foreach ( $res as $line ) {
+				$genres[]           = $line['label'];
+			}
+
+			if ( count( $genres ) == 0 ) {
+				throw new Exception( 'Le livre n\'a pas de genre précisé.' );
+			}
 
 			$book['genres'] = $genres;
+
+			
+
+
 			return $book;
 		}
 
