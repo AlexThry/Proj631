@@ -69,7 +69,7 @@ public class InterfaceAdministrateur {
         JLabel genreListLabel = new JLabel("Sélectionnez un genre:");
         genrePanel.add(genreListLabel);
 
-        ArrayList<String> genres = connectionDatabase.selectList("SELECT label FROM genre;",connect);
+        ArrayList<String> genres = connectionDatabase.selectList("SELECT label FROM genre;",connect,"label");
         JComboBox genreComboBox = new JComboBox();
         for(String mot:genres) {
             genreComboBox.addItem(mot);
@@ -161,13 +161,14 @@ public class InterfaceAdministrateur {
         contentPane.add(reviewsScrollPane, BorderLayout.SOUTH);
 
         JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
-        ArrayList<String> livres = connectionDatabase.selectList("SELECT title,auhthor FROM book;",connect);
+        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookListComboBox = new JComboBox();
         for(String mot:livres) {
-            genreComboBox.addItem(mot);
+            bookListComboBox.addItem(mot);
         }
         bookPanel.add(bookListLabel);
 
-        JComboBox bookListComboBox = new JComboBox();
+
 
         bookPanel.add(bookListComboBox);
 

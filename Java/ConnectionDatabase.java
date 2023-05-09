@@ -33,7 +33,7 @@ public class ConnectionDatabase {
             System.out.println(e);
         }
     }
-    public ArrayList<String> selectList(String query, Connection conn){
+    public ArrayList<String> selectList(String query, Connection conn, String colonne){
         ArrayList<String> tab= new ArrayList<String>();
         // créer l'objet statement
         try{
@@ -42,7 +42,7 @@ public class ConnectionDatabase {
             int i =0;
             while(res.next()){
                 //Récupérer par nom de colonne
-                tab.add(res.getString("label"));
+                tab.add(res.getString(colonne));
                 i+=1;
             }
         }catch (Exception e){
