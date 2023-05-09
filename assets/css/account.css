@@ -1,0 +1,91 @@
+/* Page display */
+
+.content {
+    margin: 40px;
+}
+
+.infos {
+    display: flex;
+    flex-direction: row;
+    margin-top: 50px;
+    gap: 50px;
+}
+
+article {
+    flex: 1; /* Prends le reste de l'espace */
+    padding: 100px;
+}
+
+#books_container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5%;
+}
+
+aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: fit-content;
+    gap: 12px;
+    padding: 20px 30px;
+}
+
+aside a {
+    white-space: nowrap; /* Empêche le texte de sauter une ligne */
+}
+
+/* Book display */
+
+.book {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.book * {
+    width: 10em;
+}
+
+.book p {
+    text-align: center;
+}
+
+.separator_container::after { /* Séparateur entre les lignes */
+    content: "";
+    display: block;
+    width: 150%;
+    background-color: var(--border);
+    padding: 3px 0;
+    margin: 40% 0;
+    border-radius: 10px;
+    transform: translateX(-17%);
+}
+
+.score {
+    margin-top: 15px;
+}
+
+.no-book-message {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Boutons specifications */
+
+.btn-secondary {
+    border-radius: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 15px 30px;
+}
+
+@media screen and (max-width: 768px) {
+    .infos {
+        flex-direction: column;
+    }
+}
