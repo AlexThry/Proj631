@@ -161,9 +161,14 @@ public class InterfaceAdministrateur {
         contentPane.add(reviewsScrollPane, BorderLayout.SOUTH);
 
         JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
+        ArrayList<String> livres = connectionDatabase.selectList("SELECT title,auhthor FROM book;",connect);
+        for(String mot:livres) {
+            genreComboBox.addItem(mot);
+        }
         bookPanel.add(bookListLabel);
 
-        JComboBox<String> bookListComboBox = new JComboBox<>(bookTitles);
+        JComboBox bookListComboBox = new JComboBox();
+
         bookPanel.add(bookListComboBox);
 
         JButton removeBookButton = new JButton("Supprimer livre");
