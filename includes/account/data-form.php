@@ -1,15 +1,56 @@
 <?php
 
-$user = get_user();
+$user                 = get_user();
+$password_issue_label = null;
+$save_label           = null;
+
+if ( ! $user ) {
+	die();
+}
 
 if ( ! empty( $_POST ) && $user !== false ) {
+	$password = '';
+
+	if (
+		! empty( $_POST['new_password'] ) &&
+		empty( $_POST['new_confirm_password'] ) ||
+		empty( $_POST['new_password'] ) &&
+		! empty( $_POST['new_confirm_password'] )
+	) {
+		$password_issue_label = 'Si vous modifiez votre mot de passe, vous devez renseigner les deux champs simultanément.';
+	}
+
+	if (
+		key_exists( 'new_password', $_POST ) &&
+		key_exists( 'new_confirm_password', $_POST ) &&
+		isset( $_POST['new_password'] ) &&
+		isset( $_POST['new_confirm_password'] ) &&
+		! empty( $_POST['new_password'] ) &&
+		! empty( $_POST['new_confirm_password'] )
+	) {
+		if ( $_POST['new_password'] !== $_POST['new_confirm_password'] ) {
+			$password_issue_label = 'Vos mots de passe ne correspondent pas.';
+		} elseif ( ! password_is_secure_enough( $_POST['new_password'] ) ) {
+			$password_issue_label = 'Votre mot de passe n\'est pas assez sécurisé.<br /><br />
+			Il doit comporter :<br /><br />
+			<ul>
+				<li>Au moins 8 caractères.</li>
+				<li>Au moins 1 lettre minuscule.</li>
+				<li>Au moins 1 lettre majuscule.</li>
+				<li>Au moins 1 chiffre.</li>
+			</ul>';
+		} else {
+			$password = md5( $_POST['new_password'] );
+		}
+	}
+
 	$submitted_args = remove_falsy_values(
 		array(
-			'profile_url' => $_POST['profile_url'],
-			'first_name'  => $_POST['first_name'],
-			'last_name'   => $_POST['last_name'],
-			'email'       => $_POST['email'],
-			'password'    => $_POST['password'],
+			'profile_url' => addslashes( $_POST['profile_url'] ),
+			'first_name'  => addslashes( $_POST['first_name'] ),
+			'last_name'   => addslashes( $_POST['last_name'] ),
+			'email'       => addslashes( $_POST['email'] ),
+			'password'    => $password,
 		)
 	);
 
@@ -19,6 +60,18 @@ if ( ! empty( $_POST ) && $user !== false ) {
 	);
 	refresh_user();
 	$user = get_user();
+
+	if ( $password_issue_label === null ) {
+		$save_label = array(
+			'type'  => 'success',
+			'label' => 'Vos données ont bien été mises à jour.',
+		);
+	} else {
+		$save_label = array(
+			'type'  => 'warning',
+			'label' => 'Vos données ont bien été mises à jour, mais votre mot de passe n\'a pas été modifié.',
+		);
+	}
 }
 
 
@@ -49,6 +102,28 @@ if ( ! empty( $_POST ) && $user !== false ) {
 			<h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">Profil</h2>
 			<p class="mt-1 text-sm leading-6 text-gray-600 dark:text-gray-300">Ces informations seront partagées publiquement. Soyez donc
 				prudent avec ce que vous souhaitez partager.</p>
+
+			<?php
+
+			if( $save_label !== null ) {
+				?>
+				<hr class="my-6 border-gray-200 dark:border-gray-700" />
+				<?php
+				if( $save_label['type'] === 'success' ){
+					AlertManager::display_success( $save_label['label'] );
+				}else{
+					AlertManager::display_warning( $save_label['label'] );
+				}
+			}
+
+			if ( $password_issue_label !== null ) {
+				?>
+				<hr class="my-6 border-gray-200 dark:border-gray-700" />
+				<?php
+				AlertManager::display_error( $password_issue_label );
+			}
+
+			?>
 
 			<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 				<div class="sm:col-span-4">
@@ -130,7 +205,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
 			<div class="sm:col-span-4 mt-10 ">
 				<label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nouveau mot de passe</label>
 				<div class="mt-2">
-					<input id="password" name="new_password" type="password" autocomplete="off"
+					<input id="new_password" name="new_password" type="password" autocomplete="off"
 						class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 				</div>
 			</div>
@@ -138,7 +213,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
 			<div class="sm:col-span-4 mt-4">
 				<label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Confirmation</label>
 				<div class="mt-2">
-					<input id="new_confirm_password" name="password" type="password" autocomplete="off"
+					<input id="new_confirm_password" name="new_confirm_password" type="password" autocomplete="off"
 						class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 				</div>
 			</div>

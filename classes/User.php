@@ -21,12 +21,13 @@ if ( ! class_exists( 'User' ) ) {
 		 * @param string $lastname User lastname.
 		 * @param string $password User password.
 		 */
-		public function __construct( $id, $username, $firstname, $lastname, $password ) {
+		public function __construct( $id, $username, $firstname, $lastname, $password, $email ) {
 			$this->id        = $id;
 			$this->username  = $username;
 			$this->firstname = $firstname;
 			$this->lastname  = $lastname;
 			$this->password  = $password;
+			$this->email  = $email;
 		}
 
 		/**

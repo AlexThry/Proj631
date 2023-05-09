@@ -3,6 +3,21 @@
 require_once 'classes/Readable.php';
 
 /**
+ * Check if password is secure enough.
+ * To be secure, a password must:
+ *  - contains at least 8 characters
+ *  - contains at least 1 lowercase letter
+ *  - contains at least 1 uppercase letter
+ *  - contains at least 1 number
+ *
+ * @param [type] $mdp
+ * @return boolean
+ */
+function password_is_secure_enough( $password ): bool {
+	return preg_match( '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $password );
+}
+
+/**
  * Displays a value field for html inputs
  * Only if the input is in $_POST or $_GET
  */

@@ -45,7 +45,7 @@ function connect_user( $username, $password ) {
 		return 'Mot de passe incorrect.';
 	}
 
-	$_SESSION['current_user'] = new User( (int) $result['id'], $result['user_name'], $result['first_name'], $result['last_name'], $result['password'] );
+	$_SESSION['current_user'] = new User( (int) $result['id'], $result['user_name'], $result['first_name'], $result['last_name'], $result['password'], $result['email'] );
 
 	return true;
 }
