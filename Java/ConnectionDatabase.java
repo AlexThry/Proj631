@@ -33,7 +33,7 @@ public class ConnectionDatabase {
             System.out.println(e);
         }
     }
-    public ArrayList<String> selectGenre(String query, Connection conn){
+    public ArrayList<String> selectList(String query, Connection conn){
         ArrayList<String> tab= new ArrayList<String>();
         // créer l'objet statement
         try{
