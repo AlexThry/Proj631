@@ -274,6 +274,62 @@ if ( ! class_exists( 'Database' ) ) {
 			$res = mysqli_fetch_assoc( $conn->query( $query ) );
 			return ( $res === null ) ? null : new Review( $user_id, $book_id, $res['content'], (int) $res['score'], $res['parution_date'] );
 		}
+
+		/**
+		 * Get user by id.
+		 *
+		 * @param int $user_id The user's id.
+		 * @return array|null The user's data.
+		 */
+		public static function get_user_by_id( $user_id ) {
+			global $conn;
+			$sql = "SELECT * FROM user WHERE id='" . $user_id . "'";
+			$res   = $conn->query( $sql );
+			$users = array();
+			foreach ( $res as $line ) {
+				$users[] = array(
+					'id'            => $line['id'],
+					'user_name'     => $line['user_name'],
+					'first_name'    => $line['first_name'],
+					'last_name'     => $line['last_name'],
+					'email'         => $line['email'],
+					'profile_url'   => $line['profile_url'],
+					'password'      => $line['password'],
+					'creation_date' => $line['creation_date'],
+				);
+			}
+
+			if ( count( $users ) > 2 ) {
+				throw new Exception( 'Several users found' );
+			}
+
+			return isset( $users ) ? $users[0] : null;
+		}
+
+		/**
+		 * Update user's informations.
+		 *
+		 * @param int   $user_id
+		 * @param array $args
+		 * @return void
+		 */
+		public static function update_user( $user_id, $args ):void {
+			global $conn;
+
+			$user_keys  = array( 'user_name', 'password', 'profile_url', 'first_name', 'last_name', 'email' );
+			$sql_values = array();
+
+			foreach ( $user_keys as $user_key ) {
+				if ( isset( $args[ $user_key ] ) ) {
+					array_push( $sql_values, $user_key . " = '" . $args[ $user_key ] . "'" );
+				}
+			}
+
+			$sql_set_line = join( ', ', $sql_values );
+
+			$sql = 'UPDATE user SET ' . $sql_set_line . ' WHERE id=' . $user_id . ';';
+			$conn->query( $sql );
+		}
 	}
 
 }

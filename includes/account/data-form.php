@@ -2,6 +2,26 @@
 
 $user = get_user();
 
+if ( ! empty( $_POST ) && $user !== false ) {
+	$submitted_args = remove_falsy_values(
+		array(
+			'profile_url' => $_POST['profile_url'],
+			'first_name'  => $_POST['first_name'],
+			'last_name'   => $_POST['last_name'],
+			'email'       => $_POST['email'],
+			'password'    => $_POST['password'],
+		)
+	);
+
+	Database::update_user(
+		$user->get_id(),
+		$submitted_args
+	);
+	refresh_user();
+	$user = get_user();
+}
+
+
 ?>
 
 <div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-700"> 
@@ -23,7 +43,7 @@ $user = get_user();
   }
   ```
 -->
-<form>
+<form method="POST" action="account.php">
 	<div class="space-y-12">
 		<div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
 			<h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">Profil</h2>
@@ -54,11 +74,11 @@ $user = get_user();
 								clip-rule="evenodd" />
 						</svg>
 
-          <div class="flex-1">
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Changer d'image</label>
-            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
-          </div>
+						<div class="flex-1">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Changer d'image</label>
+							<input name="profile_url" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
+							<p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+						</div>
 			
 					</div>
 				</div>
@@ -77,6 +97,7 @@ $user = get_user();
 					<label for="first-name" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Prénom</label>
 					<div class="mt-2">
 						<input type="text" name="first_name" id="first-name" autocomplete="given-name"
+							  value="<?php echo $user->get_firstname(); ?>"
 							class="block w-full rounded-md bg-gray-50 border-gray-300 py-1.5 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>
@@ -85,6 +106,7 @@ $user = get_user();
 					<label for="last-name" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom</label>
 					<div class="mt-2">
 						<input type="text" name="last_name" id="last-name" autocomplete="family-name"
+							value="<?php echo $user->get_lastname(); ?>"
 							class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>
@@ -93,6 +115,7 @@ $user = get_user();
 					<label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Email</label>
 					<div class="mt-2">
 						<input id="email" name="email" type="email" autocomplete="email"
+						value="<?php echo $user->get_email(); ?>"
 							class="block w-full rounded-md py-1.5 bg-gray-50 border-gray-300 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 					</div>
 				</div>

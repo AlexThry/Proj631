@@ -42,6 +42,7 @@ if ( ! class_exists( 'Readable' ) ) {
 			require_once 'classes/Review.php';
 
 			require_once 'core/connection-helpers.php';
+			require_once 'core/session-helpers.php';
 		}
 
 	}
