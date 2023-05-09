@@ -51,6 +51,15 @@ public class ConnectionDatabase {
         return tab;
 
     }
+    public void delete(String query, Connection conn){
+        try{
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(query);
+        System.out.println("Suppression...");}
+        catch (Exception e){
+            System.out.println(e);
+        }
+    }
     public void closeConnect(Connection conn){
         try{
             //étape 5: fermez l'objet de connexion

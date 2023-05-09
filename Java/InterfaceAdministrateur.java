@@ -192,7 +192,7 @@ public class InterfaceAdministrateur {
                 String author = authorTextField.getText();
                 String genre = (String) bookGenreComboBox.getSelectedItem();
                 String publicationDate = publicationDateTextField.getText();
-                if (!book.isEmpty() && !author.isEmpty() && !genre.isEmpty() && !publicationDate.isEmpty()) {
+                if (!book.isEmpty() && !author.isEmpty()  && !publicationDate.isEmpty()) {
                     textArea.append("Livre ajouté: " + book + " | Auteur: " + author + " | Genre: " + genre + " | Date de parution: " + publicationDate + "\n");
                     bookTextField.setText("");
                     authorTextField.setText("");
@@ -235,6 +235,7 @@ public class InterfaceAdministrateur {
                 String selectedGenre = (String) genreComboBox.getSelectedItem();
                 if (selectedGenre != null) {
                     // Supprimez le genre sélectionné de vos données et mettez à jour le menu déroulant des genres
+                    connectionDatabase.delete("DELETE FROM genre WHERE label = '"+selectedGenre+"';",connect);
                     textArea.append("Genre supprimé: " + selectedGenre + "\n");
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
