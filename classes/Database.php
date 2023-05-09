@@ -44,7 +44,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$book['title']         = $line['title'];
 				$book['author']        = $line['author'];
 				$book['description']   = $line['description'];
-				$book['link']          = $line['link'];
+				$book['image_url']          = $line['image_url'];
 				$book['parution_date'] = $line['parution_date'];
 				$books[]               = $book;
 			}
@@ -86,7 +86,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$book['title']         = $line['title'];
 				$book['author']        = $line['author'];
 				$book['description']   = $line['description'];
-				$book['link']          = $line['link'];
+				$book['image_url']          = $line['image_url'];
 				$book['parution_date'] = $line['parution_date'];
 				$books[ $line['id'] ]  = $book;
 			}
@@ -171,7 +171,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$book['title']         = $line['title'];
 				$book['author']        = $line['author'];
 				$book['description']   = $line['description'];
-				$book['link']          = $line['link'];
+				$book['image_url']          = $line['image_url'];
 				$book['parution_date'] = $line['parution_date'];
 				$book['score']          = $line['score'];
 				$books[ $line['id'] ]  = $book;
@@ -240,7 +240,7 @@ if ( ! class_exists( 'Database' ) ) {
 			global $conn;
 			$books = array();
 			foreach ( $conn->query( $query ) as $line ) {
-				$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['link'] );
+				$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['image_url'] );
 			}
 			return $books;
 		}
@@ -259,7 +259,7 @@ if ( ! class_exists( 'Database' ) ) {
 			global $conn;
 			$books = array();
 			foreach ( $conn->query( $query ) as $line ) {
-				$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['link'] );
+				$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['image_url'] );
 			}
 			return $books;
 		}
