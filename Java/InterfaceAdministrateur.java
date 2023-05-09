@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class InterfaceAdministrateur {
     public static void main(String[] args) {
@@ -17,9 +21,24 @@ public class InterfaceAdministrateur {
     }
 
     private static void createAndShowGUI() {
+        ConnectionDatabase connectionDatabase = new ConnectionDatabase();
+        Connection connect = connectionDatabase.connect();
         JFrame frame = new JFrame("Interface Administrateur");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setSize(800, 500);
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                try {
+                    connect.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }finally {
+                    frame.dispose();
+                }
+
+            }
+        });
 
         Container contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());

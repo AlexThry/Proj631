@@ -2,8 +2,10 @@ package Java;
 
 import java.sql.*;
 
-public abstract class ConnectionDatabase {
+public class ConnectionDatabase {
 
+    public ConnectionDatabase() {
+    }
 
     public Connection connect() {
         try {
