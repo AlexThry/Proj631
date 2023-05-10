@@ -69,7 +69,7 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$book['genres'] = $genres;
 
-			
+
 
 
 			return $book;
@@ -239,8 +239,11 @@ if ( ! class_exists( 'Database' ) ) {
 			// TODO : check for query errors + XSS attack
 			global $conn;
 			$books = array();
-			foreach ( $conn->query( $query ) as $line ) {
-				$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['image_url'] );
+			$res = $conn->query($query);
+			if($res) {
+				foreach ( $res as $line ) {
+					$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['image_url'] );
+				}
 			}
 			return $books;
 		}
@@ -258,8 +261,11 @@ if ( ! class_exists( 'Database' ) ) {
 			// TODO : check for query errors + XSS attack
 			global $conn;
 			$books = array();
-			foreach ( $conn->query( $query ) as $line ) {
-				$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['image_url'] );
+			$res = $conn->query($query);
+			if($res) {
+				foreach ( $res as $line ) {
+					$books[] = new Book( (int) $line['id'], $line['author'], $line['parution_date'], $line['title'], $line['image_url'] );
+				}
 			}
 			return $books;
 		}

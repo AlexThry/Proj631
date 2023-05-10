@@ -5,7 +5,7 @@
  *
  * @return bool|User
  */
-function get_user(): mixed {
+function get_user() {
 	if ( ! isset( $_SESSION['current_user'] ) ) {
 		return false;
 	}
