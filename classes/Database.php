@@ -375,6 +375,32 @@ if ( ! class_exists( 'Database' ) ) {
 			$conn->query( $sql );
 		}
 
+		public static function get_circles() {
+			global $conn;
+
+			// $sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id);";
+			$sql = "SELECT *
+			FROM circle
+			JOIN user ON circle.admin_id = user.id
+			WHERE circle.id IN (
+				SELECT circle_id
+				FROM user_in_circle);";
+
+			$res = $conn->query($sql);
+			$circles = array();
+			foreach ($res as $line) {
+				$circle                 = array();
+				$circle['admin_name']   = $line['user_name'];
+				$circle['title']     	= $line['title'];
+				$circle['description']  = $line['description'];
+				$circle['image_url']  	= $line['image_url'];
+				$circle['admin_id']  	= $line['admin_id'];
+				$circles[$line['id']]  			= $circle;
+			}
+
+			return ($circles === null) ? null : $circles;
+		}
+
 		public static function get_user_circles($user_id) {
 			global $conn;
 
