@@ -33,20 +33,16 @@ if ( ! class_exists( 'Database' ) ) {
 		 * @param int $id_book Book id.
 		 * @return array
 		 */
-		public static function get_reviews_by_book( $id_book ): array {
+		private static function get_reviews_by_book( $id_book ): array {
 			global $conn;
 
-			$sql     = "SELECT * FROM review JOIN user ON review.id_user = user.id WHERE id_book = $id_book";
+			$sql     = "SELECT * FROM review WHERE id_book = $id_book";
 			$res     = mysqli_query( $conn, $sql );
 			$reviews = array();
 
 			foreach ( $res as $line ) {
 				$review                  = array();
 				$review['id_user']       = $line['id_user'];
-				$review['user_name']      = $line['user_name'];
-				$review['user_first_name'] = $line['first_name'];
-				$review['user_last_name'] = $line['last_name'];
-				$review['profile_url']   = $line['profile_url'];
 				$review['content']       = $line['content'];
 				$review['score']         = $line['score'];
 				$review['parution_date'] = $line['parution_date'];
@@ -420,22 +416,22 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$res     = $conn->query( $sql );
 			$circles = array();
-			foreach ($res as $line) {
-				$circle                 = array();
-				$circle['admin_username']   = $line['user_name'];
-				$circle['admin_firstname']   = $line['first_name'];
-				$circle['admin_lastname']   = $line['last_name'];
-				$circle['title']     	= $line['title'];
-				$circle['description']  = $line['description'];
-				$circle['image_url']  	= $line['image_url'];
-				$circle['admin_id']  	= $line['admin_id'];
-				$circles[$line['id']]  			= $circle;
+			foreach ( $res as $line ) {
+				$circle                     = array();
+				$circle['admin_user_name']  = $line['user_name'];
+				$circle['admin_first_name'] = $line['first_name'];
+				$circle['admin_last_name']  = $line['last_name'];
+				$circle['title']            = $line['title'];
+				$circle['description']      = $line['description'];
+				$circle['image_url']        = $line['image_url'];
+				$circle['admin_id']         = $line['admin_id'];
+				$circles[ $line['id'] ]     = $circle;
 			}
 
 			return ( $circles === null ) ? null : $circles;
 		}
 
-		public static function create_circle($title, $description, $admin_id, $image_url=null) {
+		public static function create_circle( $title, $description, $admin_id, $image_url = null ) {
 			global $conn;
 			if ( $image_url ) {
 				$image_url = "'$image_url'";
