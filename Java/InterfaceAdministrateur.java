@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -122,6 +121,24 @@ public class InterfaceAdministrateur {
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
 
+        // Suppression de livre
+        JPanel bookDeletePanel = new JPanel();
+
+        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
+        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookListComboBox = new JComboBox();
+        for(String mot:livres) {
+            bookListComboBox.addItem(mot);
+        }
+        bookDeletePanel.add(bookListLabel);
+
+        bookDeletePanel.add(bookListComboBox);
+
+        JButton removeBookButton = new JButton("Supprimer livre");
+        bookDeletePanel.add(removeBookButton);
+
+        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
+
         // TODO : Sa sert à quoi ça Arthur ptn
         JTextArea textArea = new JTextArea(10, 50);
         textArea.setEditable(false);
@@ -174,23 +191,6 @@ public class InterfaceAdministrateur {
         JScrollPane reviewsScrollPane = new JScrollPane(reviewsTextArea);
         removeReviewPanel.add(reviewsScrollPane, BorderLayout.SOUTH);
 
-        // Suppression de livre
-        JPanel bookDeletePanel = new JPanel();
-
-        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
-        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
-        JComboBox bookListComboBox = new JComboBox();
-        for(String mot:livres) {
-            bookListComboBox.addItem(mot);
-        }
-        bookDeletePanel.add(bookListLabel);
-
-        bookDeletePanel.add(bookListComboBox);
-
-        JButton removeBookButton = new JButton("Supprimer livre");
-        bookDeletePanel.add(removeBookButton);
-
-        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
         addGenreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
