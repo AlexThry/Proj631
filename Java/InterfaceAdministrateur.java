@@ -241,8 +241,10 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 String username = userTextField.getText();
                 if (!username.isEmpty()) {
+                    connectionDatabase.delete("DELETE FROM user WHERE user_name = '"+username+"';",connect);
                     usersTextArea.append("Utilisateur supprimé: " + username + "\n");
                     userTextField.setText("");
+
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
