@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -27,7 +26,7 @@ public class InterfaceAdministrateur {
         Connection connect = connectionDatabase.connect();
         JFrame frame = new JFrame("Interface Administrateur");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.setSize(1000, 700);
+        frame.setSize(1200, 700);
 
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -122,12 +121,30 @@ public class InterfaceAdministrateur {
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
 
+        // Suppression de livre
+        JPanel bookDeletePanel = new JPanel();
+
+        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
+        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookListComboBox = new JComboBox();
+        for(String mot:livres) {
+            bookListComboBox.addItem(mot);
+        }
+        bookDeletePanel.add(bookListLabel);
+
+        bookDeletePanel.add(bookListComboBox);
+
+        JButton removeBookButton = new JButton("Supprimer livre");
+        bookDeletePanel.add(removeBookButton);
+
+        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
+
         // TODO : Sa sert à quoi ça Arthur ptn
         JTextArea textArea = new JTextArea(10, 50);
         textArea.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
-        contentPane.add(scrollPane, BorderLayout.SOUTH);
+        bookPanel.add(scrollPane, BorderLayout.SOUTH);
 
         // Panel pour gérer les utilisateurs
         JPanel usersPanel = new JPanel();
@@ -150,21 +167,31 @@ public class InterfaceAdministrateur {
         JScrollPane usersScrollPane = new JScrollPane(usersTextArea);
         usersPanel.add(usersScrollPane, BorderLayout.SOUTH);
 
+//panel pour supprimer les review
         JPanel removeReviewPanel = new JPanel();
         tabbedPane.addTab("Supprimer Avis", removeReviewPanel);
 
-        JLabel bookTitleLabel = new JLabel("Titre du livre:");
+
+        JLabel bookRemoveLabel = new JLabel("Filtre");
+        removeReviewPanel.add(bookRemoveLabel);
+        ArrayList<String> book = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookRemoveListComboBox = new JComboBox();
+        for(String mot:book) {
+            bookRemoveListComboBox.addItem(mot);
+        }
+        removeReviewPanel.add(bookRemoveListComboBox);
+
+        JLabel bookTitleLabel = new JLabel("Avis:");
         removeReviewPanel.add(bookTitleLabel);
 
-        String[] bookTitles = new String[0];
-        JComboBox<String> bookTitleComboBox = new JComboBox<>(bookTitles);
-        removeReviewPanel.add(bookTitleComboBox);
+        ArrayList<String[]> reviewContent = connectionDatabase.selectList3("SELECT review.content, user.user_name, book.title  FROM review JOIN user ON user.id=review.id_user JOIN book ON book.id=review.id_book;",connect,"content", "user_name","title");
 
-        JLabel reviewerNameLabel = new JLabel("Nom d'utilisateur:");
-        removeReviewPanel.add(reviewerNameLabel);
 
-        JTextField reviewerNameTextField = new JTextField(15);
-        removeReviewPanel.add(reviewerNameTextField);
+        JComboBox reviewListComboBox = new JComboBox();
+        for(String[] tab:reviewContent) {
+            reviewListComboBox.addItem(tab[0]+" : "+tab[1]+" : "+tab[2]);
+        }
+        removeReviewPanel.add(reviewListComboBox);
 
         JButton removeReviewButton = new JButton("Supprimer Avis");
         removeReviewPanel.add(removeReviewButton);
@@ -172,25 +199,29 @@ public class InterfaceAdministrateur {
         JTextArea reviewsTextArea = new JTextArea(10, 50);
         reviewsTextArea.setEditable(false);
         JScrollPane reviewsScrollPane = new JScrollPane(reviewsTextArea);
-        contentPane.add(reviewsScrollPane, BorderLayout.SOUTH);
+        removeReviewPanel.add(reviewsScrollPane, BorderLayout.SOUTH);
 
-        // Suppression de livre
-        JPanel bookDeletePanel = new JPanel();
+// Panel pour gérer les cercles
+        JPanel circlesPanel = new JPanel();
+        tabbedPane.addTab("Cercles", circlesPanel);
 
-        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
-        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
-        JComboBox bookListComboBox = new JComboBox();
-        for(String mot:livres) {
-            bookListComboBox.addItem(mot);
+        JLabel circleLabel = new JLabel("Nom du cercle:");
+        circlesPanel.add(circleLabel);
+        ArrayList<String> circles = connectionDatabase.selectList("SELECT title FROM circle;",connect,"title");
+        JComboBox circleListComboBox = new JComboBox();
+        for(String mot:circles) {
+            circleListComboBox.addItem(mot);
         }
-        bookDeletePanel.add(bookListLabel);
+        circlesPanel.add(circleListComboBox);
 
-        bookDeletePanel.add(bookListComboBox);
+        JButton removeCircleButton = new JButton("Supprimer cercle");
+        circlesPanel.add(removeCircleButton);
 
-        JButton removeBookButton = new JButton("Supprimer livre");
-        bookDeletePanel.add(removeBookButton);
+        JTextArea circlesTextArea = new JTextArea(10, 50);
+        circlesTextArea.setEditable(false);
+        JScrollPane circlesScrollPane = new JScrollPane(circlesTextArea);
+        circlesPanel.add(circlesScrollPane, BorderLayout.SOUTH);
 
-        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
         addGenreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -246,9 +277,26 @@ public class InterfaceAdministrateur {
                 if (!username.isEmpty()) {
                     connectionDatabase.delete("DELETE FROM user WHERE user_name = '"+username+"';",connect);
                     usersTextArea.append("Utilisateur supprimé: " + username + "\n");
+                    userListComboBox.removeAllItems();
+                    ArrayList<String> users = connectionDatabase.selectList("SELECT user_name FROM user;",connect,"user_name");
+                    for(String mot:users) {
+                        userListComboBox.addItem(mot);
+                    }
+
 
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        bookRemoveListComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String bookChoosen = (String) bookRemoveListComboBox.getSelectedItem();
+                reviewListComboBox.removeAllItems();
+                ArrayList<String[]> reviewContent = connectionDatabase.selectList3("SELECT review.content, user.user_name, book.title  FROM review JOIN user ON user.id=review.id_user JOIN book ON book.id=review.id_book WHERE book.title=\""+bookChoosen+"\";",connect,"content", "user_name","title");
+                for(String[] tab:reviewContent) {
+                    reviewListComboBox.addItem(tab[0]+" : "+tab[1]+" : "+tab[2]);
                 }
             }
         });
@@ -256,11 +304,29 @@ public class InterfaceAdministrateur {
         removeReviewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String bookTitle = (String) bookTitleComboBox.getSelectedItem();
-                String reviewerName = reviewerNameTextField.getText();
-                if (bookTitle != null && !reviewerName.isEmpty()) {
+                String bookReview = (String) reviewListComboBox.getSelectedItem();
+                String[] bookReviewSeparated = bookReview.split(" : ");
+                String bookTitle = bookReviewSeparated[2];
+                String reviewerName  = bookReviewSeparated[1];
+
+                System.out.println(bookReview);
+                if (bookReview != null ) {
+
+                    String sqlIdBook = "SELECT id FROM book  where title=\""+bookTitle+"\";";
+                    String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
+                    String sqlIdUser = "SELECT id FROM user  where user_name=\""+reviewerName+"\";";
+                    String idUser = connectionDatabase.selectList(sqlIdUser, connect,"id").get(0);
+                    connectionDatabase.delete("DELETE FROM review where id_user='"+idUser+"' AND id_book='"+idBook+"';",connect);
+
                     reviewsTextArea.append("Avis supprimé pour le livre \"" + bookTitle + "\" de l'utilisateur \"" + reviewerName + "\"\n");
-                    reviewerNameTextField.setText("");
+                    ArrayList<String> reviewContent = connectionDatabase.selectList("SELECT content FROM review;",connect,"content");
+                    ArrayList<String> reviewUser = connectionDatabase.selectList("SELECT user_name FROM user where user.id=(SELECT id_user FROM review);",connect,"user_name");
+                    ArrayList<String> reviewBook = connectionDatabase.selectList("SELECT title FROM book where book.id=(SELECT id_book FROM review);",connect,"title");
+                    reviewListComboBox.removeAllItems();
+                    for(int i = 0;i<reviewContent.size();i++) {
+                        reviewListComboBox.addItem(reviewContent.get(i)+" : "+reviewUser.get(i)+" : "+reviewBook.get(i));
+                    }
+
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre et entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -274,8 +340,10 @@ public class InterfaceAdministrateur {
                     // Supprimez le genre sélectionné de vos données et mettez à jour le menu déroulant des genres
                     connectionDatabase.delete("DELETE FROM genre WHERE label = '"+selectedGenre+"';",connect);
                     textArea.append("Genre supprimé: " + selectedGenre + "\n");
-                    createAndShowGUI();
-                    frame.dispose();
+                    genreComboBox.removeAllItems();
+                    for(String mot:genres) {
+                        genreComboBox.addItem(mot);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -306,6 +374,23 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 createAndShowGUI();
                 frame.dispose();
+            }
+        });
+
+        removeCircleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String circleName = (String) circleListComboBox.getSelectedItem();
+                if (!circleName.isEmpty()) {
+                    connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
+                    circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
+                    circleListComboBox.removeAllItems();
+                    for(String mot:circles) {
+                        circleListComboBox.addItem(mot);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom de cercle valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

@@ -53,6 +53,24 @@ public class ConnectionDatabase {
         return tab;
 
     }
+    public ArrayList<String[]> selectList3(String query, Connection conn, String colonne1, String colonne2, String colonne3){
+        ArrayList<String[]> tab= new ArrayList<String[]>();
+        // créer l'objet statement
+        try{
+            Statement stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            int i =0;
+            while(res.next()){
+                //Récupérer par nom de colonne
+                tab.add(new String[]{res.getString(colonne1), res.getString(colonne2), res.getString(colonne3)});
+                i+=1;
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return tab;
+
+    }
     public void delete(String query, Connection conn){
         try{
         Statement stmt = conn.createStatement();

@@ -56,7 +56,7 @@ form input {
 }
 
 .book-card .no-note {
-  display: none;
+  font-size: 13px;
 }
 
 .book-card > * {
