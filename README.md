@@ -9,6 +9,7 @@ Des trucs à faire :
  - Mettre à jour la base de données pour administer les cercles d'amis (un cercle d'amis est créer par un membre (on peut s'y abonner), il a un nom, il a une liste de livre)
  - Dans classes/Database.php get_single_book faire en sorte de pouvoir récupérer tous les avis avec les notes ainsi que le note moyenne
  - Dans Component::display_single_book, ajouter le livre dans la wishlist en cliquant sur le boutton, et le retirer en cliquant sur le toggle (tout en l'ajoutant dans "has_read")
+ - Dans book.php, faire la même chose qu'au dessus
 
 ## Architecture
 

@@ -297,6 +297,33 @@ if ( ! class_exists( 'Database' ) ) {
 			return $books;
 		}
 
+		/**
+		 * Returns whether a user wants to read a book or not
+		 * @param int $user_id The user's id.
+		 * @param int $book_id The book's id.
+		 * @return bool
+		 */
+		public static function user_wants_to_read( $user_id, $book_id ): bool {
+			global $conn;
+			$sql = "SELECT * FROM wants_to_read WHERE id_user = $user_id AND id_book = $book_id LIMIT 1";
+			$result = $conn->query($sql);
+			return mysqli_num_rows($result) > 0;
+		}
+
+
+		/**
+		 * Returns whether a user has read a book or not
+		 * @param int $user_id The user's id.
+		 * @param int $book_id The book's id.
+		 * @return bool
+		 */
+		public static function user_has_read( $user_id, $book_id ): bool {
+			global $conn;
+			$sql = "SELECT * FROM has_read WHERE id_user = $user_id AND id_book = $book_id LIMIT 1";
+			$result = $conn->query($sql);
+			return mysqli_num_rows($result) > 0;
+		}
+
 		public static function get_review( $user_id, $book_id ) {
 			global $conn;
 

@@ -54,33 +54,41 @@ if ( ! class_exists( 'Component' ) ) {
 
 				<div class="single-book-buttons height-full">
 					<div class="single-book-buttons">
-						<?php $active = true; ?>
-						<a href="<?php echo "change-my-books?book=$id&previous-url=".get_url() ?>" class="<?php echo $active ? 'disabled' : 'hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800'; ?> text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
-							<?php if ( $active ) : ?>
-								<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1"© viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+						<?php $has_read = Database::user_has_read(get_user()['id'], $id); ?>
+						<?php $wants_to_read = Database::user_wants_to_read(get_user()['id'], $id); ?>
+
+						<?php if ( $has_read ) : ?>
+							<a class="disabled text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
+								<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 								</svg>
-							<?php else : ?>
+								Lu
+							</a>
+							<!-- <a href="<?php echo "change-my-books?book=$id&previous-url=".get_url() ?>" class="hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800 text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
+
+							</a> -->
+						<?php endif; ?>
+
+						<?php if ( $wants_to_read && !$has_read ) : ?>
+							<a  class="disabled text-white bg-blue-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600">
 								<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
 								</svg>
-							<?php endif; ?>
-							Lu
-						</a>
+								En cours
+							</a>
+							<a href="<?php echo "change-my-books?book=$id&previous-url=".get_url() ?>" class="hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800 text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
+								Terminé
+							</a>
+						<?php endif; ?>
 
-						<?php $active = false; ?>
-						<a href="<?php echo "change-wishlist?book=$id&previous-url=".get_url() ?>" class="<?php echo $active ? 'disabled' : 'hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800'; ?> text-white bg-blue-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600">
-							<?php if ( $active ) : ?>
-								<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1"© viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-								</svg>
-							<?php else : ?>
+						<?php if ( !$wants_to_read && !$has_read ) : ?>
+							<a href="<?php echo "change-wishlist?book=$id&previous-url=".get_url() ?>" class="hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800 text-white bg-blue-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600">
 								<svg fill="none" stroke="currentColor" class="w-5 h-5 mr-2 -ml-1" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
 								</svg>
-							<?php endif; ?>
-							Wishlist
-						</a>
+								Ajouter
+							</a>
+						<?php endif; ?>
 					</div>
 				</div>
 
