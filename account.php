@@ -76,6 +76,13 @@ if ( ! get_user() ) {
 				case 'user_books':
 					// Premier tab: Mes livres --------------------------------------------------->
 					$books = Database::get_user_books( get_user()['id'] );
+
+					?>
+					<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-800">
+						<h1 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white" id="content">Vos livres terminés</h1>
+						<p class="mb-4 text-lg text-gray-600 dark:text-gray-400">Retrouvez toutes les oeuvres que vous avez lues. Ajoutez, modifiez ou supprimez des titres.</p>
+					</div>
+					<?php
 					Component::display_books( $books );
 					break;
 				case 'user_wishlist':
@@ -83,7 +90,7 @@ if ( ! get_user() ) {
 					$whishlist = Database::get_user_wishlist( get_user()['id'] );
 
 					?>
-					<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-800"> 
+					<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-800">
 						<h1 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white" id="content">Votre liste de lectures</h1>
 						<p class="mb-4 text-lg text-gray-600 dark:text-gray-400">Ajoutez, modifiez ou supprimez des titres à votre liste de lectures.</p>
 					</div>
@@ -102,7 +109,7 @@ if ( ! get_user() ) {
 			}
 
 			?>
-			
+
 			</div>
 			</div>
 		</article>

@@ -117,15 +117,14 @@ if ( ! class_exists( 'Component' ) ) {
 					?>
 				 </div>
 			<?php else : ?>
-				<div class='no-book-message'>
-				<h2>Aucun livre !</h2>
-				<p>
-					Vous voulez découvrir de nouvelles oeuvres ? C'est par ici ->
-					<a href=' . get_home_url() . '>découvrir +</a>
-				</p>
-			</div>
-				<?php
-			endif;
+				<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-800">
+					<h2 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white" id="content">Aucun livre !</h2>
+					<p class="mb-4 text-lg text-gray-600 dark:text-gray-400">
+						Vous voulez découvrir de nouvelles oeuvres ? C'est par ici ->
+						<a href='<?php echo get_home_url() ?>' class="dark:text-white">découvrir +</a>
+					</p>
+				</div>
+			<?php endif;
 		}
 	}
 }
