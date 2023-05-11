@@ -340,6 +340,8 @@ public class InterfaceAdministrateur {
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom de cercle valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
+                createAndShowGUI();
+                frame.dispose();
             }
         });
 
