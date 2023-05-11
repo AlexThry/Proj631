@@ -1,7 +1,7 @@
 <?php
 
-const DB_USERNAME = 'root';
-const DB_PASSWORD = '';
+const DB_USER_NAME = 'root';
+const DB_PASSWORD  = '';
 
 if ( ! class_exists( 'Database' ) ) {
 	/**
@@ -17,7 +17,7 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function connect_db() {
 			global $conn;
 
-			$conn = new mysqli( 'localhost', DB_USERNAME, DB_PASSWORD );
+			$conn = new mysqli( 'localhost', DB_USER_NAME, DB_PASSWORD );
 
 			if ( ! $conn ) {
 				echo 'Erreur de connexion à la bdd';
@@ -383,14 +383,42 @@ if ( ! class_exists( 'Database' ) ) {
 			global $conn;
 
 			// $sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id);";
+			$sql = 'SELECT *
+			FROM circle
+			JOIN user ON circle.admin_id = user.id;';
+
+			$res     = $conn->query( $sql );
+			$circles = array();
+			foreach ( $res as $line ) {
+				$circle                     = array();
+				$circle['id']               = $line['id'];
+				$circle['admin_user_name']  = $line['user_name'];
+				$circle['admin_first_name'] = $line['first_name'];
+				$circle['admin_last_name']  = $line['last_name'];
+				$circle['title']            = $line['title'];
+				$circle['description']      = $line['description'];
+				$circle['image_url']        = $line['image_url'];
+				$circle['admin_id']         = $line['admin_id'];
+				$circles[]                  = $circle;
+			}
+
+			return ( $circles === null ) ? null : $circles;
+		}
+
+		public static function get_user_circles( $user_id ) {
+			global $conn;
+
+			// $sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id);";
 			$sql = "SELECT *
 			FROM circle
 			JOIN user ON circle.admin_id = user.id
 			WHERE circle.id IN (
 				SELECT circle_id
-				FROM user_in_circle);";
+				FROM user_in_circle
+				WHERE user_id = $user_id
+			);";
 
-			$res = $conn->query($sql);
+			$res     = $conn->query( $sql );
 			$circles = array();
 			foreach ($res as $line) {
 				$circle                 = array();
@@ -404,52 +432,15 @@ if ( ! class_exists( 'Database' ) ) {
 				$circles[$line['id']]  			= $circle;
 			}
 
-			return ($circles === null) ? null : $circles;
+			return ( $circles === null ) ? null : $circles;
 		}
 
-		public static function get_user_circles($user_id) {
+		public static function create_circle($title, $description, $admin_id, $image_url=null) {
 			global $conn;
-
-			// $sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id);";
-			$sql = "SELECT *
-			FROM circle
-			JOIN user ON circle.admin_id = user.id
-			WHERE circle.id IN (
-				SELECT circle_id
-				FROM user_in_circle
-				WHERE user_id = $user_id
-			);";
-
-			$res = $conn->query($sql);
-			$circles = array();
-			foreach ($res as $line) {
-				$circle                 = array();
-				$circle['id']  			= $line['id'];
-				$circle['admin_username']   = $line['user_name'];
-				$circle['admin_firstname']   = $line['first_name'];
-				$circle['admin_lastname']   = $line['last_name'];
-				$circle['title']     	= $line['title'];
-				$circle['description']  = $line['description'];
-				$circle['image_url']  	= $line['image_url'];
-				$circle['admin_id']  	= $line['admin_id'];
-				$circles[]  			= $circle;
-			}
-
-			return ($circles === null) ? null : $circles;
-		}
-
-		/**
-		 * Get circle by id.
-		 *
-		 * @param int $circle_id The circle's id.
-		 * @return array|null The circle's data.
-		 */
-		public static function create_circle($title, $description, $admin_id, $image_url = null): void {
-			global $conn;
-			if ($image_url) {
+			if ( $image_url ) {
 				$image_url = "'$image_url'";
 			} else {
-				$image_url = "NULL";
+				$image_url = 'NULL';
 			}
 
 			$sql = "SELECT * FROM circle WHERE title = '$title';";
@@ -457,7 +448,7 @@ if ( ! class_exists( 'Database' ) ) {
 				throw new Exception("Le nom de cercle est déjà utilisé.");
 			}
 			$sql = "INSERT INTO circle (title, description, image_url, admin_id) VALUES ('$title', '$description', $image_url, $admin_id)";
-			$conn->query($sql);
+			$conn->query( $sql );
 		}
 
 
