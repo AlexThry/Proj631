@@ -443,7 +443,7 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$sql = "SELECT * FROM circle WHERE title = '$title';";
 			if (mysqli_query($conn, $sql)->num_rows > 0) {
-				throw new Exception("Circle already exists");
+				throw new Exception("Le nom de cercle est déjà utilisé.");
 			}
 			$sql = "INSERT INTO circle (title, description, image_url, admin_id) VALUES ('$title', '$description', $image_url, $admin_id)";
 			$conn->query($sql);
