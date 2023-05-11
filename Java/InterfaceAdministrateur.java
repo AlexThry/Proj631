@@ -156,15 +156,22 @@ public class InterfaceAdministrateur {
         JLabel bookTitleLabel = new JLabel("Titre du livre:");
         removeReviewPanel.add(bookTitleLabel);
 
-        String[] bookTitles = new String[0];
-        JComboBox<String> bookTitleComboBox = new JComboBox<>(bookTitles);
-        removeReviewPanel.add(bookTitleComboBox);
+        ArrayList<String> booktitle = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookList2ComboBox = new JComboBox();
+        for(String mot:booktitle) {
+            bookList2ComboBox.addItem(mot);
+        }
+        removeReviewPanel.add(bookList2ComboBox);
 
         JLabel reviewerNameLabel = new JLabel("Nom d'utilisateur:");
         removeReviewPanel.add(reviewerNameLabel);
 
-        JTextField reviewerNameTextField = new JTextField(15);
-        removeReviewPanel.add(reviewerNameTextField);
+        ArrayList<String> users2= connectionDatabase.selectList("SELECT user_name FROM user;",connect,"user_name");
+        JComboBox user2ListComboBox = new JComboBox();
+        for(String mot:users) {
+            user2ListComboBox.addItem(mot);
+        }
+        removeReviewPanel.add(user2ListComboBox);
 
         JButton removeReviewButton = new JButton("Supprimer Avis");
         removeReviewPanel.add(removeReviewButton);
@@ -246,6 +253,12 @@ public class InterfaceAdministrateur {
                 if (!username.isEmpty()) {
                     connectionDatabase.delete("DELETE FROM user WHERE user_name = '"+username+"';",connect);
                     usersTextArea.append("Utilisateur supprimé: " + username + "\n");
+                    userListComboBox.removeAllItems();
+                    ArrayList<String> users = connectionDatabase.selectList("SELECT user_name FROM user;",connect,"user_name");
+                    for(String mot:users) {
+                        userListComboBox.addItem(mot);
+                    }
+
 
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -256,11 +269,17 @@ public class InterfaceAdministrateur {
         removeReviewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String bookTitle = (String) bookTitleComboBox.getSelectedItem();
-                String reviewerName = reviewerNameTextField.getText();
+                String bookTitle = (String) bookList2ComboBox.getSelectedItem();
+                String reviewerName =(String) user2ListComboBox.getSelectedItem();
                 if (bookTitle != null && !reviewerName.isEmpty()) {
+                    String sqlIdBook = "SELECT id FROM book  where title=\""+bookTitle+"\";";
+                    String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
+                    String sqlIdUser = "SELECT id FROM user  where user_name=\""+reviewerName+"\";";
+                    String idUser = connectionDatabase.selectList(sqlIdUser, connect,"id").get(0);
+                    connectionDatabase.delete("DELETE FROM review where id_user='"+idUser+"' AND id_book='"+idBook+"';",connect);
+
                     reviewsTextArea.append("Avis supprimé pour le livre \"" + bookTitle + "\" de l'utilisateur \"" + reviewerName + "\"\n");
-                    reviewerNameTextField.setText("");
+
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre et entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
