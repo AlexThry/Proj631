@@ -52,7 +52,7 @@ public class InterfaceAdministrateur {
 
         // Panel pour gérer les genres et les livres
         JPanel booksAndGenresPanel = new JPanel();
-        booksAndGenresPanel.setSize(frame.getSize());
+        booksAndGenresPanel.setLayout(new BoxLayout(booksAndGenresPanel, BoxLayout.PAGE_AXIS));
         tabbedPane.addTab("Genres et Livres", booksAndGenresPanel);
 
         // Panel pour ajouter et supprimer un genre
@@ -145,7 +145,7 @@ public class InterfaceAdministrateur {
         JTextArea usersTextArea = new JTextArea(10, 50);
         usersTextArea.setEditable(false);
         JScrollPane usersScrollPane = new JScrollPane(usersTextArea);
-        contentPane.add(usersScrollPane, BorderLayout.SOUTH);
+        usersPanel.add(usersScrollPane, BorderLayout.SOUTH);
 
         JPanel removeReviewPanel = new JPanel();
         tabbedPane.addTab("Supprimer Avis", removeReviewPanel);
