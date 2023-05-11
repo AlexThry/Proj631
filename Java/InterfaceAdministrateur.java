@@ -27,7 +27,7 @@ public class InterfaceAdministrateur {
         Connection connect = connectionDatabase.connect();
         JFrame frame = new JFrame("Interface Administrateur");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.setSize(1000, 700);
+        frame.setSize(1200, 700);
 
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -127,7 +127,7 @@ public class InterfaceAdministrateur {
         textArea.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
-        contentPane.add(scrollPane, BorderLayout.SOUTH);
+        bookPanel.add(scrollPane, BorderLayout.SOUTH);
 
         // Panel pour gérer les utilisateurs
         JPanel usersPanel = new JPanel();
@@ -172,7 +172,7 @@ public class InterfaceAdministrateur {
         JTextArea reviewsTextArea = new JTextArea(10, 50);
         reviewsTextArea.setEditable(false);
         JScrollPane reviewsScrollPane = new JScrollPane(reviewsTextArea);
-        contentPane.add(reviewsScrollPane, BorderLayout.SOUTH);
+        removeReviewPanel.add(reviewsScrollPane, BorderLayout.SOUTH);
 
         // Suppression de livre
         JPanel bookDeletePanel = new JPanel();
