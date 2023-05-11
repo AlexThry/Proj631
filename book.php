@@ -9,8 +9,7 @@ if ( ! $book_id ) {
 	exit();
 }
 
-$book = Database::get_single_book( $book_id );
-
+$book = Database::get_single_book($book_id);
 ?>
 
 <main class="pt-4 pb-8 lg:pt-8 lg:pb-12 bg-white dark:bg-gray-900">
@@ -65,7 +64,7 @@ $book = Database::get_single_book( $book_id );
 				  <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Notes et Avis</h2>
 			</div>
 			<div class="flex items-center mb-3">
-				<?php echo Component::display_user_score( $book['score'] ); ?>
+				<?php echo Component::display_user_score($book['score']); ?>
 			</div>
 			<p class="text-sm font-medium text-gray-500 dark:text-gray-400">
 				<?php
@@ -106,11 +105,11 @@ $book = Database::get_single_book( $book_id );
 
 				$sum = $five_stars + $four_stars + $three_stars + $two_stars + $one_stars;
 				if ($sum !== 0){
-					$pourcent_five = ($five_stars / $sum) * 100;
-					$pourcent_four = ($four_stars / $sum) * 100;
-					$pourcent_three = ($three_stars / $sum) * 100;
-					$pourcent_two = ($two_stars / $sum) * 100;
-					$pourcent_one = ($one_stars / $sum) * 100;
+					$pourcent_five = round(($five_stars / $sum) * 100,1);
+					$pourcent_four = round(($four_stars / $sum) * 100,1);
+					$pourcent_three = round(($three_stars / $sum) * 100,1);
+					$pourcent_two = round(($two_stars / $sum) * 100,1);
+					$pourcent_one = round(($one_stars / $sum) * 100,1);
 				}
 
 			?>			
@@ -127,7 +126,7 @@ $book = Database::get_single_book( $book_id );
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">4 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
 					<?php if ($pourcent_four > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_four?> %"></div>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_four?>%"></div>
 					<?php } ?>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_four?> %</span>
@@ -136,7 +135,7 @@ $book = Database::get_single_book( $book_id );
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">3 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
 					<?php if ($pourcent_three > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_three?> %"></div>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_three?>%"></div>
 					<?php } ?>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_three?> %</span>
@@ -145,7 +144,7 @@ $book = Database::get_single_book( $book_id );
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">2 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
 					<?php if ($pourcent_two > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_two?> %"></div>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_two?>%"></div>
 					<?php } ?>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_two?> %</span>
@@ -154,7 +153,7 @@ $book = Database::get_single_book( $book_id );
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">1 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
 					<?php if ($pourcent_one > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_one?> %"></div>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_one?>%"></div>
 					<?php } ?>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_one?>%</span>
