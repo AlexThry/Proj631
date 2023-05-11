@@ -14,14 +14,16 @@ public class ConnectionDatabase {
             Class.forName("com.mysql.jdbc.Driver");
             //étape 2: créer l'objet de connexion
             Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/proj631?characterEncoding=utf8", "root", "");
+                    "jdbc:mysql://localhost:3306/proj631", "root", "");
             return conn;
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            System.out.println("ClassNotFoundException: " + ex.getMessage());
         }
-
         return null;
     }
+
 
     public void insert(String query, Connection conn){
         try {
