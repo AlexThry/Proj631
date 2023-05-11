@@ -356,11 +356,11 @@ public class InterfaceAdministrateur {
                 if (!circleName.isEmpty()) {
                     connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
                     circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
+                    createAndShowGUI();
+                    frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom de cercle valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
-                createAndShowGUI();
-                frame.dispose();
             }
         });
 
