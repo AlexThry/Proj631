@@ -52,7 +52,7 @@ public class InterfaceAdministrateur {
 
         // Panel pour gérer les genres et les livres
         JPanel booksAndGenresPanel = new JPanel();
-        booksAndGenresPanel.setSize(frame.getSize());
+        booksAndGenresPanel.setLayout(new BoxLayout(booksAndGenresPanel, BoxLayout.PAGE_AXIS));
         tabbedPane.addTab("Genres et Livres", booksAndGenresPanel);
 
         // Panel pour ajouter et supprimer un genre
@@ -135,9 +135,12 @@ public class InterfaceAdministrateur {
 
         JLabel userLabel = new JLabel("Nom d'utilisateur:");
         usersPanel.add(userLabel);
-
-        JTextField userTextField = new JTextField(15);
-        usersPanel.add(userTextField);
+        ArrayList<String> users = connectionDatabase.selectList("SELECT user_name FROM user;",connect,"user_name");
+        JComboBox userListComboBox = new JComboBox();
+        for(String mot:users) {
+            userListComboBox.addItem(mot);
+        }
+        usersPanel.add(userListComboBox);
 
         JButton removeUserButton = new JButton("Supprimer utilisateur");
         usersPanel.add(removeUserButton);
@@ -145,7 +148,7 @@ public class InterfaceAdministrateur {
         JTextArea usersTextArea = new JTextArea(10, 50);
         usersTextArea.setEditable(false);
         JScrollPane usersScrollPane = new JScrollPane(usersTextArea);
-        contentPane.add(usersScrollPane, BorderLayout.SOUTH);
+        usersPanel.add(usersScrollPane, BorderLayout.SOUTH);
 
         JPanel removeReviewPanel = new JPanel();
         tabbedPane.addTab("Supprimer Avis", removeReviewPanel);
@@ -239,10 +242,11 @@ public class InterfaceAdministrateur {
         removeUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = userTextField.getText();
+                String username = (String) userListComboBox.getSelectedItem();
                 if (!username.isEmpty()) {
+                    connectionDatabase.delete("DELETE FROM user WHERE user_name = '"+username+"';",connect);
                     usersTextArea.append("Utilisateur supprimé: " + username + "\n");
-                    userTextField.setText("");
+
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }

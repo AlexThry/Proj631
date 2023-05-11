@@ -92,6 +92,8 @@ if ( ! get_user() ) {
 					break;
 				case 'user_circles':
 					// Quatrième tab: Mon cercle (TODO) ----------------------------------------->
+					$circle = Database::get_user_circles( get_user()['id'] );
+					require_once 'includes/account/circle-form.php';
 					break;
 
 				default:
