@@ -173,14 +173,12 @@ public class InterfaceAdministrateur {
         JLabel bookTitleLabel = new JLabel("Avis:");
         removeReviewPanel.add(bookTitleLabel);
 
-        ArrayList<String> reviewContent = connectionDatabase.selectList("SELECT content FROM review;",connect,"content");
-        ArrayList<String> reviewUser = connectionDatabase.selectList("SELECT user_name FROM user where user.id=(SELECT id_user FROM review);",connect,"user_name");
-        ArrayList<String> reviewBook = connectionDatabase.selectList("SELECT title FROM book where book.id=(SELECT id_book FROM review);",connect,"title");
+        ArrayList<String[]> reviewContent = connectionDatabase.selectList3("SELECT review.content, user.user_name, book.title  FROM review JOIN user ON user.id=review.id_user JOIN book ON book.id=review.id_book;",connect,"content", "user_name","title");
 
 
         JComboBox reviewListComboBox = new JComboBox();
-        for(int i = 0;i<reviewContent.size();i++) {
-            reviewListComboBox.addItem(reviewContent.get(i)+" : "+reviewUser.get(i)+" : "+reviewBook.get(i));
+        for(String[] tab:reviewContent) {
+            reviewListComboBox.addItem(tab[0]+" : "+tab[1]+" : "+tab[2]);
         }
         removeReviewPanel.add(reviewListComboBox);
 
@@ -285,9 +283,13 @@ public class InterfaceAdministrateur {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String bookReview = (String) reviewListComboBox.getSelectedItem();
+                String[] bookReviewSeparated = bookReview.split(" : ");
+                String bookTitle = bookReviewSeparated[2];
+                String reviewerName  = bookReviewSeparated[1];
+
                 System.out.println(bookReview);
                 if (bookReview != null ) {
-                    /*
+
                     String sqlIdBook = "SELECT id FROM book  where title=\""+bookTitle+"\";";
                     String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
                     String sqlIdUser = "SELECT id FROM user  where user_name=\""+reviewerName+"\";";
@@ -295,7 +297,14 @@ public class InterfaceAdministrateur {
                     connectionDatabase.delete("DELETE FROM review where id_user='"+idUser+"' AND id_book='"+idBook+"';",connect);
 
                     reviewsTextArea.append("Avis supprimé pour le livre \"" + bookTitle + "\" de l'utilisateur \"" + reviewerName + "\"\n");
-*/
+                    ArrayList<String> reviewContent = connectionDatabase.selectList("SELECT content FROM review;",connect,"content");
+                    ArrayList<String> reviewUser = connectionDatabase.selectList("SELECT user_name FROM user where user.id=(SELECT id_user FROM review);",connect,"user_name");
+                    ArrayList<String> reviewBook = connectionDatabase.selectList("SELECT title FROM book where book.id=(SELECT id_book FROM review);",connect,"title");
+                    reviewListComboBox.removeAllItems();
+                    for(int i = 0;i<reviewContent.size();i++) {
+                        reviewListComboBox.addItem(reviewContent.get(i)+" : "+reviewUser.get(i)+" : "+reviewBook.get(i));
+                    }
+
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre et entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
