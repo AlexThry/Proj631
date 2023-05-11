@@ -107,9 +107,10 @@ function subscribe_user( $username, $password, $confirm_password ) {
 	$hash_password = md5( $password );
 	$sql           = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $username . "','" . $hash_password . "','" . $date . "')";
 
-	if ( mysqli_query( $conn, $sql ) ) {
-		return true;
-	} else {
-		return "Erreur lors de l'inscription.";
-	}
+	// Check if user already exists
+	$res = $conn->query("SELECT * FROM user WHERE user.user_name = \"$username\"");
+	if(mysqli_num_rows($res) >= 1) return "Ce compte existe déjà, insérez un autre nom d'utilisateur.";
+
+	// Launch query
+	return $conn->query($sql) ? true : $conn->error . "Erreur lors de l'inscription.";
 }
