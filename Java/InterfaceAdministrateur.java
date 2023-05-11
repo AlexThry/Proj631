@@ -113,11 +113,20 @@ public class InterfaceAdministrateur {
         JTextField publicationDateTextField = new JTextField(10);
         bookPanel.add(publicationDateTextField);
 
+
+        JLabel bookDescLabel = new JLabel("Description :");
+        bookPanel.add(bookDescLabel);
+
+        JTextField bookTitleField = new JTextField(15);
+        bookPanel.add(bookTitleField);
+
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
 
+        // TODO : Sa sert à quoi ça Arthur ptn
         JTextArea textArea = new JTextArea(10, 50);
         textArea.setEditable(false);
+
         JScrollPane scrollPane = new JScrollPane(textArea);
         contentPane.add(scrollPane, BorderLayout.SOUTH);
 
@@ -163,21 +172,23 @@ public class InterfaceAdministrateur {
         JScrollPane reviewsScrollPane = new JScrollPane(reviewsTextArea);
         contentPane.add(reviewsScrollPane, BorderLayout.SOUTH);
 
+        // Suppression de livre
+        JPanel bookDeletePanel = new JPanel();
+
         JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
         ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
         JComboBox bookListComboBox = new JComboBox();
         for(String mot:livres) {
             bookListComboBox.addItem(mot);
         }
-        bookPanel.add(bookListLabel);
+        bookDeletePanel.add(bookListLabel);
 
-
-
-        bookPanel.add(bookListComboBox);
+        bookDeletePanel.add(bookListComboBox);
 
         JButton removeBookButton = new JButton("Supprimer livre");
-        bookPanel.add(removeBookButton);
+        bookDeletePanel.add(removeBookButton);
 
+        booksAndGenresPanel.add(bookDeletePanel);
         addGenreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -209,6 +220,17 @@ public class InterfaceAdministrateur {
                     authorTextField.setText("");
                     bookGenreComboBox.setSelectedIndex(0);
                     publicationDateTextField.setText("");
+                    //on fait les requete pour ajouté le livre et l'associé à un genre
+                    String sqlAddBook = "INSERT INTO book (title , author, parution_date,image_url,description) VALUES(\"" +book+"\",\""+author+"\",\""+publicationDate+"\",'www.test.fr','description test');";
+                    connectionDatabase.insert(sqlAddBook,connect);
+                    String sqlIdBook = "SELECT id FROM book  where title='"+book+"'AND author='"+author+"';";
+                    String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
+                    String sqlIdGenre = "SELECT id FROM genre  where label='"+genre+"';";
+                    String idGenre = connectionDatabase.selectList(sqlIdGenre, connect,"id").get(0);
+                    String sqladdHasGenre = "INSERT INTO has_genre (id_book,id_genre) VALUES('"+idBook+"','"+idGenre+"');";
+                    connectionDatabase.insert(sqladdHasGenre,connect);
+                    createAndShowGUI();
+                    frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer toutes les informations requises (titre, auteur, genre et date de parution).", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }

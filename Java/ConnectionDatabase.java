@@ -14,7 +14,7 @@ public class ConnectionDatabase {
             Class.forName("com.mysql.jdbc.Driver");
             //étape 2: créer l'objet de connexion
             Connection conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/proj631", "root", "");
+                    "jdbc:mysql://localhost:3306/proj631?characterEncoding=utf8", "root", "");
             return conn;
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
