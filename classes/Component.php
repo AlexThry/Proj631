@@ -15,7 +15,7 @@ if ( ! class_exists( 'Component' ) ) {
 		 * @return void
 		 */
 		public static function user_score($score): void {
-			$has_no_score = $score == null;
+			$has_no_score = $score == 0;
 			$score = (!$has_no_score ? round($score, 1) : 0);
 			for ( $i = 0; $i < floor($score); $i++ ) {
 				?>

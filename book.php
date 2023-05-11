@@ -23,7 +23,7 @@ $book = Database::get_single_book( $book_id );
 
 				<div class="flex items-center mt-4 mb-3">
 					<svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Rating star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-					<p class="ml-2 text-sm font-bold text-gray-900 dark:text-white"><?php echo $book['score']; ?></p>
+					<p class="ml-2 text-sm font-bold text-gray-900 dark:text-white"><?php echo $book['score']===0 ? "Aucune note": $book['score']; ?></p>
 					<span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
 					<a href="#reviews" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white"><?php echo $book['nb_reviews']; ?> avis</a>
 				</div>
@@ -65,18 +65,18 @@ $book = Database::get_single_book( $book_id );
 				  <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Notes et Avis</h2>
 			</div>
 			<div class="flex items-center mb-3">
-				<svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>First star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-				<svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Second star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-				<svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Third star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-				<svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fourth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-				<svg aria-hidden="true" class="w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Fifth star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-				<p class="ml-2 text-sm font-medium text-gray-900 dark:text-white">4.95 out of 5</p>
+				<?php echo Component::user_score($book['score'])?>
 			</div>
-			<p class="text-sm font-medium text-gray-500 dark:text-gray-400">1,745 global ratings</p>
+			<p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+				<?php
+				$reviews_count = count(Database::get_reviews_by_book($book_id));
+				echo ($reviews_count === 1) ? $reviews_count . " note" : $reviews_count . " notes";
+				?>
+			</p>			
 			<div class="flex items-center mt-4">
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">5 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<div class="h-5 bg-yellow-400 rounded" style="width: 70%"></div>
+					<div class="h-5 bg-yellow-400 rounded" style="width: 30%"></div>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">70%</span>
 			</div>
@@ -340,56 +340,31 @@ $book = Database::get_single_book( $book_id );
 <aside aria-label="Vous aimerez peut-être aussi" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
   <div class="px-4 mx-auto max-w-screen-xl">
 	  <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Vous aimerez peut-être aussi</h2>
-	  <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-		  <article class="max-w-xs">
-			  <a href="#">
-				  <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png" class="mb-5 rounded-lg" alt="Image 1">
-			  </a>
-			  <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-				  <a href="#">Our first office</a>
-			  </h2>
-			  <p class="mb-4 font-light text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-			  <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-blue-600 dark:text-blue-500 hover:no-underline">
-				  Read in 2 minutes
-			  </a>
-		  </article>
-		  <article class="max-w-xs">
-			  <a href="#">
-				  <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-2.png" class="mb-5 rounded-lg" alt="Image 2">
-			  </a>
-			  <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-				  <a href="#">Enterprise design tips</a>
-			  </h2>
-			  <p class="mb-4 font-light text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-			  <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-blue-600 dark:text-blue-500 hover:no-underline">
-				  Read in 12 minutes
-			  </a>
-		  </article>
-		  <article class="max-w-xs">
-			  <a href="#">
-				  <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-3.png" class="mb-5 rounded-lg" alt="Image 3">
-			  </a>
-			  <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-				  <a href="#">We partnered with Google</a>
-			  </h2>
-			  <p class="mb-4 font-light text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-			  <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-blue-600 dark:text-blue-500 hover:no-underline">
-				  Read in 8 minutes
-			  </a>
-		  </article>
-		  <article class="max-w-xs">
-			  <a href="#">
-				  <img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-4.png" class="mb-5 rounded-lg" alt="Image 4">
-			  </a>
-			  <h2 class="mb-2 text-xl font-bold leading-tight text-gray-900 dark:text-white">
-				  <a href="#">Our first project with React</a>
-			  </h2>
-			  <p class="mb-4 font-light text-gray-500 dark:text-gray-400">Over the past year, Volosoft has undergone many changes! After months of preparation.</p>
-			  <a href="#" class="inline-flex items-center font-medium underline underline-offset-4 text-blue-600 dark:text-blue-500 hover:no-underline">
-				  Read in 4 minutes
-			  </a>
-		  </article>
-	  </div>
+		<?php 
+			$limite_books = 8;
+			$number_books = 0;
+			$genres = $book['genres'];
+			$associated_books = array();
+			
+			foreach ($genres as $genre) {
+				$books = Database::get_sorted_books(['genre' => $genre]);
+			
+				foreach ($books as $book) {
+					if ($book['id'] !== $book_id && $number_books < $limite_books) {
+						$associated_books[] = $book;
+						$number_books ++;
+					}
+					if (count($associated_books) >= $limite_books) {
+						break;
+					}
+				}
+			}
+			
+			if (count($associated_books) === 0) {
+				$associated_books = Database::get_sorted_books(['limit' => 4]);
+			}
+
+			Component::display_books($associated_books); ?>
   </div>
 </aside>
 

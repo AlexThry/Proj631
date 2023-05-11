@@ -35,7 +35,7 @@ if (!class_exists('Database')) {
 		 * @param int $id_book Book id.
 		 * @return array
 		 */
-		private static function get_reviews_by_book($id_book): array
+		public static function get_reviews_by_book($id_book): array
 		{
 			global $conn;
 
@@ -105,7 +105,7 @@ if (!class_exists('Database')) {
 				$book['score'] = $reviews[0]['score'];
 				$book['nb_reviews'] = $reviews_size;
 			} else {
-				$book['score'] = "Aucune note";
+				$book['score'] = 0;
 				$book['nb_reviews'] = "Aucun ";
 			}
 
@@ -183,6 +183,7 @@ if (!class_exists('Database')) {
 		 *              All parameters are optionnal.
 		 * @return array $books Books matching the query.
 		 */
+
 		public static function get_sorted_books($args): array
 		{
 			global $conn;
@@ -197,7 +198,7 @@ if (!class_exists('Database')) {
 			$sql = 'SELECT book.*, avg(score) "score" FROM book LEFT JOIN review ON review.id_book = book.id';
 
 			if (isset($genre)) {
-				$sql .= " WHERE id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'))";
+				$sql .= " WHERE book.id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'))";
 			}
 
 			$sql .= " GROUP BY book.id ";
@@ -220,6 +221,34 @@ if (!class_exists('Database')) {
 
 			return isset($search) ? self::search_books($books, $search) : $books;
 		}
+
+		public static function get_book_genre($genres)
+		{
+			global $conn;
+		
+			$book = array();
+			foreach ($genres as $genre) {
+				$sql = "SELECT * FROM book b INNER JOIN has_genre hg ON b.id = hg.id_book INNER JOIN genre g ON g.id = hg.id_genre WHERE g.label = '$genre'";
+				$res = mysqli_query($conn, $sql);
+				$num_rows = $res->num_rows;
+				if ($num_rows >= 4 && sizeof($book) === 0) {
+					$book = Database::get_sorted_books(['genre' => $genre, 'start' => 0, 'limit' => 4, 'sort' => 'genre', 'order' => 'ASC']);
+				} else {
+					$book = array_merge($book, Database::get_sorted_books(['genre' => $genre, 'start' => 0, 'limit' => 4 - sizeof($book), 'sort' => 'genre', 'order' => 'ASC']));
+				}
+			}
+		
+			if (sizeof($book) < 4) {
+				$sql = "SELECT label FROM genre WHERE label NOT IN ('" . implode("','", $genres) . "')";
+				$res = mysqli_query($conn, $sql);
+				$row = mysqli_fetch_assoc($res);
+				$otherGenre = $row['label'];
+				$book = array_merge($book, Database::get_sorted_books(['genre' => $otherGenre, 'start' => 0, 'limit' => 4 - sizeof($book), 'sort' => 'genre', 'order' => 'ASC']));
+			}
+		
+			return $book;
+		}
+		
 
 		/**
 		 * Get the number of books matching the query.
