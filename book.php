@@ -352,24 +352,24 @@ $book = Database::get_single_book( $book_id );
 			$number_books     = 0;
 			$genres           = $book['genres'];
 			$associated_books = array();
-
-		foreach ( $genres as $genre ) {
-			$books = Database::get_sorted_books( array( 'genre' => $genre ) );
-
-			foreach ( $books as $book ) {
-				if ( $book['id'] !== $book_id && $number_books < $limite_books ) {
-					$associated_books[] = $book;
-					$number_books ++;
-				}
-				if ( count( $associated_books ) >= $limite_books ) {
-					break;
+			
+			foreach ($genres as $genre) {
+				$books = Database::get_sorted_books(['genre' => $genre]);
+			
+				foreach ($books as $book) {
+					if ($book['id'] !== $book_id && $number_books < $limite_books) {
+						$associated_books[] = $book;
+						$number_books ++;
+					}
+					if (count($associated_books) >= $limite_books) {
+						break;
+					}
 				}
 			}
-		}
-
-		if ( count( $associated_books ) === 0 ) {
-			$associated_books = Database::get_sorted_books( array( 'limit' => 4 ) );
-		}
+			
+			if (count($associated_books) === 0) {
+				$associated_books = Database::get_sorted_books(['limit' => 4]);
+			}
 
 			Component::display_books( $associated_books );
 		?>
