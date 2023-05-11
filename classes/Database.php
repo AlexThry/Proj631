@@ -390,7 +390,9 @@ if ( ! class_exists( 'Database' ) ) {
 			$circles = array();
 			foreach ($res as $line) {
 				$circle                 = array();
-				$circle['admin_name']   = $line['user_name'];
+				$circle['admin_username']   = $line['user_name'];
+				$circle['admin_firstname']   = $line['first_name'];
+				$circle['admin_lastname']   = $line['last_name'];
 				$circle['title']     	= $line['title'];
 				$circle['description']  = $line['description'];
 				$circle['image_url']  	= $line['image_url'];
@@ -418,7 +420,9 @@ if ( ! class_exists( 'Database' ) ) {
 			$circles = array();
 			foreach ($res as $line) {
 				$circle                 = array();
-				$circle['admin_name']   = $line['user_name'];
+				$circle['admin_username']   = $line['user_name'];
+				$circle['admin_firstname']   = $line['first_name'];
+				$circle['admin_lastname']   = $line['last_name'];
 				$circle['title']     	= $line['title'];
 				$circle['description']  = $line['description'];
 				$circle['image_url']  	= $line['image_url'];
@@ -436,10 +440,15 @@ if ( ! class_exists( 'Database' ) ) {
 			} else {
 				$image_url = "NULL";
 			}
-			$sql = "INSERT INTO circle (title, description, " . $image_url . ", admin_id) VALUES ('$title', '$description', '$image_url', $admin_id)";
 
+			$sql = "SELECT * FROM circle WHERE title = '$title';";
+			if (mysqli_query($conn, $sql)->num_rows > 0) {
+				throw new Exception("Circle already exists");
+			}
+			$sql = "INSERT INTO circle (title, description, image_url, admin_id) VALUES ('$title', '$description', $image_url, $admin_id)";
 			$conn->query($sql);
 		}
+
 
 	}
 }
