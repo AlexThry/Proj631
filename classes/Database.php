@@ -248,10 +248,10 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function get_user_books( $user_id ): array {
 			global $conn;
 
-			$sql = 'SELECT b.id, b.title, b.author, b.parution_date, b.image_url, COALESCE(r.score, 0) AS score
+			$sql = "SELECT b.id, b.title, b.author, b.parution_date, b.image_url, COALESCE(r.score, 0) AS score
 					FROM book b
-					JOIN has_read hr ON hr.id_user = 2 AND hr.id_book = b.id
-					LEFT JOIN review r ON r.id_book = b.id;';
+					JOIN has_read hr ON hr.id_user = $user_id AND hr.id_book = b.id
+					LEFT JOIN review r ON r.id_book = b.id;";
 
 			$res   = $conn->query( $sql );
 			$books = array();
