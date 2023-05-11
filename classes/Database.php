@@ -55,6 +55,19 @@ if ( ! class_exists( 'Database' ) ) {
 			return $reviews;
 		}
 
+		private static function calculate_average_scores_by_book($id_book): float {
+			$reviews = self::get_reviews_by_book($id_book);
+			$score_total = 0;
+			$score_moy = 0;
+			$nb_score = sizeof($reviews);
+			foreach($reviews as $review){
+				$score_total += $review['score'];
+			}
+			$score_moy = round($score_total/$nb_score,1);
+			return $score_moy;
+		}
+
+
 		/**
 		 * Get a single book.
 		 *
@@ -100,12 +113,11 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$reviews      = self::get_reviews_by_book( $book_id );
 			$reviews_size = sizeof( $reviews );
-
+			$book['score']      = self::calculate_average_scores_by_book($book_id);
+			
 			if ( $reviews_size > 0 ) {
-				$book['score']      = $reviews[0]['score'];
 				$book['nb_reviews'] = $reviews_size;
 			} else {
-				$book['score'] = 0;
 				$book['nb_reviews'] = "Aucun ";
 			}
 
