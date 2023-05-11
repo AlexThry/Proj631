@@ -1,78 +1,78 @@
 <?php
 
-$user             = get_user();
-$password_issue_label = null;
+$user_id              = get_user()['id'];
 $save_label           = null;
 
-if ( ! $user ) {
+if ( ! $user_id ) {
 	die();
 }
 
-if ( ! empty( $_POST ) && $user !== false ) {
-	$password = '';
+if ( ! empty( $_POST ) && $user_id !== false ) {
 
 	if (
-		! empty( $_POST['new_password'] ) &&
-		empty( $_POST['new_confirm_password'] ) ||
-		empty( $_POST['new_password'] ) &&
-		! empty( $_POST['new_confirm_password'] )
+		! empty( $_POST['circle_name'] ) 
 	) {
-		$password_issue_label = 'Si vous modifiez votre mot de passe, vous devez renseigner les deux champs simultanément.';
+		$circle_label = 'Veuillez entrer un nom de cercle.';
 	}
 
 	if (
-		key_exists( 'new_password', $_POST ) &&
-		key_exists( 'new_confirm_password', $_POST ) &&
-		isset( $_POST['new_password'] ) &&
-		isset( $_POST['new_confirm_password'] ) &&
-		! empty( $_POST['new_password'] ) &&
-		! empty( $_POST['new_confirm_password'] )
+		key_exists( 'circle_name', $_POST ) &&
+		isset( $_POST['circle_name'] ) &&
+		! empty( $_POST['circle_name'] ) &&
+		key_exists( 'description', $_POST ) &&
+		isset( $_POST['description'] ) &&
+		! empty( $_POST['description'] ) 
 	) {
-		if ( $_POST['new_password'] !== $_POST['new_confirm_password'] ) {
-			$password_issue_label = 'Vos mots de passe ne correspondent pas.';
-		} elseif ( ! password_is_secure_enough( $_POST['new_password'] ) ) {
-			$password_issue_label = 'Votre mot de passe n\'est pas assez sécurisé.<br /><br />
-			Il doit comporter :<br /><br />
-			<ul>
-				<li>Au moins 8 caractères.</li>
-				<li>Au moins 1 lettre minuscule.</li>
-				<li>Au moins 1 lettre majuscule.</li>
-				<li>Au moins 1 chiffre.</li>
-			</ul>';
+		if ( key_exists( 'circle_url', $_POST ) && isset( $_POST['circle_url'] ) && ! empty( $_POST['circle_url'] ) ) {
+			$circle_name = $_POST['circle_name'];
+			$submitted_args = remove_falsy_values(
+				array(
+					'circle_name'    => isset( $_POST['circle_name'] ) ? addslashes( $_POST['circle_name'] ) : null,
+					'description'    => isset( $_POST['description'] ) ? addslashes( $_POST['description'] ) : null,
+					'circle_url'  	 => isset( $_POST['circle_url'] ) ? addslashes( $_POST['circle_url'] ) : null,
+					'admin_id'       => $user_id,
+				)
+			);
+			try {
+				Database::create_circle(
+					$submitted_args['circle_name'], 
+					$submitted_args['description'],
+					$submitted_args['admin_id'],
+					$submitted_args['circle_url']  
+				);
+			}
+			catch (Exception $e) {
+				$save_label = array(
+					'type'  => 'error',
+					'label' => 'Une erreur est survenue : ' . $e->getMessage(),
+				);
+			}
+
 		} else {
-			$password = md5( $_POST['new_password'] );
+			$circle_name = $_POST['circle_name'];
+			$submitted_args = remove_falsy_values(
+				array(
+					'circle_name'    => isset( $_POST['circle_name'] ) ? addslashes( $_POST['circle_name'] ) : null,
+					'description'    => isset( $_POST['description'] ) ? addslashes( $_POST['description'] ) : null,
+					'admin_id'       => $user_id,
+				)
+			);
+			try {
+				Database::create_circle(
+					$submitted_args['circle_name'], 
+					$submitted_args['description'],
+					$submitted_args['admin_id'],
+				);
+			} catch (Exception $e) {
+				$save_label = array(
+					'type'  => 'error',
+					'label' => 'Une erreur est survenue : ' . $e->getMessage(),
+				);
+			}
 		}
 	}
-
-	$submitted_args = remove_falsy_values(
-		array(
-			'profile_url' => isset( $_POST['profile_url'] ) ? addslashes( $_POST['profile_url'] ) : null,
-			'first_name'  => isset( $_POST['first_name'] ) ? addslashes( $_POST['first_name'] ) : null,
-			'last_name'   => isset( $_POST['last_name'] ) ? addslashes( $_POST['last_name'] ) : null,
-			'email'       => isset( $_POST['email'] ) ? addslashes( $_POST['email'] ) : null,
-			'password'    => $password,
-		)
-	);
-
-	Database::update_user(
-		$user['id'],
-		$submitted_args
-	);
-	refresh_user();
-	$user = get_user();
-
-	if ( $password_issue_label === null ) {
-		$save_label = array(
-			'type'  => 'success',
-			'label' => 'Vos données ont bien été mises à jour.',
-		);
-	} else {
-		$save_label = array(
-			'type'  => 'warning',
-			'label' => 'Vos données ont bien été mises à jour, mais votre mot de passe n\'a pas été modifié.',
-		);
-	}
 }
+	
 
 ?>
 
@@ -95,7 +95,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
   }
   ```
 -->
-<form method="POST" action="account.php">
+<form method="POST" action="account.php?tab=user_circles">
 	<div class="space-y-12">
 		<div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
 			<h2 class="text-base font-semibold leading-7 text-gray-900 dark:text-white">Cercles</h2>
@@ -113,13 +113,6 @@ if ( ! empty( $_POST ) && $user !== false ) {
 				} else {
 					AlertManager::display_warning( $save_label['label'] );
 				}
-			}
-
-			if ( $password_issue_label !== null ) {
-				?>
-				<hr class="my-6 border-gray-200 dark:border-gray-700" />
-				<?php
-				AlertManager::display_error( $password_issue_label );
 			}
 
 			?>
@@ -141,7 +134,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
 				<div class="col-span-full">
 					<label for="about" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Description</label>
 						<div class="mt-2">
-							<textarea id="about" name="about" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
+							<textarea id="description" name="description" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required></textarea>
 						</div>
 					<p class="mt-3 text-sm leading-6 text-gray-600">Décrivez une description de ce que vous voullez voir dans ce cercle.</p>
 				</div>
@@ -149,10 +142,10 @@ if ( ! empty( $_POST ) && $user !== false ) {
 				<div class="col-span-full">
 					<label for="photo" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Photo</label>
 					<div class="mt-2 flex items-center gap-x-3">
-						<img class="w-16 h-16 rounded-full" src="<?php echo ! empty( $profile_url ) ? $profile_url : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'; ?>" alt="Photo de profil" />
+						<img class="w-16 h-16 rounded-full" src="<?php echo ! empty( $circle_url ) ? $circle_url : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'; ?>" alt="Photo de profil" />
 
 						<div class="flex-1">
-							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Ajouter une image</label>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="circle_url">Ajouter une image</label>
 							<input
 							name="circle_url"
 							type="text" id="circle_url" autocomplete="off"
@@ -172,8 +165,7 @@ if ( ! empty( $_POST ) && $user !== false ) {
 
 
 	<div class="mt-6 flex items-center justify-end gap-x-6">
-		<a href="account.php" class="text-sm font-semibold leading-6 text-gray-900 dark:text-white">Annuler</a>
 		<button type="submit"
-			class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sauvegarder</button>
+			class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Créer</button>
 	</div>
 </form>
