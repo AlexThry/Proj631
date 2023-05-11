@@ -105,8 +105,8 @@ if ( ! class_exists( 'Database' ) ) {
 				$book['score']      = $reviews[0]['score'];
 				$book['nb_reviews'] = $reviews_size;
 			} else {
-				$book['score']      = 'Aucune note';
-				$book['nb_reviews'] = 'Aucun ';
+				$book['score'] = 0;
+				$book['nb_reviews'] = "Aucun ";
 			}
 
 			return $book;
@@ -192,8 +192,8 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$sql = 'SELECT book.*, avg(score) "score" FROM book LEFT JOIN review ON review.id_book = book.id';
 
-			if ( isset( $genre ) ) {
-				$sql .= " WHERE id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'))";
+			if (isset($genre)) {
+				$sql .= " WHERE book.id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'))";
 			}
 
 			$sql .= ' GROUP BY book.id ';

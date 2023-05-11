@@ -346,8 +346,9 @@ $book = Database::get_single_book( $book_id );
 
 <aside aria-label="Vous aimerez peut-être aussi" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
   <div class="px-4 mx-auto max-w-screen-xl">
-	  <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Vous aimerez peut-être aussi</h2>
+	  <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Dans le même thème, vous pourriez aussi aimer</h2>
 		<?php 
+
 			$limite_books = 8;
 			$number_books = 0;
 			$genres = $book['genres'];
@@ -365,10 +366,6 @@ $book = Database::get_single_book( $book_id );
 						break;
 					}
 				}
-			}
-			
-			if (count($associated_books) === 0) {
-				$associated_books = Database::get_sorted_books(['limit' => 4]);
 			}
 
 			Component::display_books($associated_books); ?>
