@@ -191,6 +191,27 @@ public class InterfaceAdministrateur {
         JScrollPane reviewsScrollPane = new JScrollPane(reviewsTextArea);
         removeReviewPanel.add(reviewsScrollPane, BorderLayout.SOUTH);
 
+// Panel pour gérer les cercles
+        JPanel circlesPanel = new JPanel();
+        tabbedPane.addTab("Cercles", circlesPanel);
+
+        JLabel circleLabel = new JLabel("Nom du cercle:");
+        circlesPanel.add(circleLabel);
+        ArrayList<String> circles = connectionDatabase.selectList("SELECT title FROM circle;",connect,"title");
+        JComboBox circleListComboBox = new JComboBox();
+        for(String mot:circles) {
+            circleListComboBox.addItem(mot);
+        }
+        circlesPanel.add(circleListComboBox);
+
+        JButton removeCircleButton = new JButton("Supprimer cercle");
+        circlesPanel.add(removeCircleButton);
+
+        JTextArea circlesTextArea = new JTextArea(10, 50);
+        circlesTextArea.setEditable(false);
+        JScrollPane circlesScrollPane = new JScrollPane(circlesTextArea);
+        circlesPanel.add(circlesScrollPane, BorderLayout.SOUTH);
+
         addGenreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -306,6 +327,19 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 createAndShowGUI();
                 frame.dispose();
+            }
+        });
+
+        removeCircleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String circleName = (String) circleListComboBox.getSelectedItem();
+                if (!circleName.isEmpty()) {
+                    connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
+                    circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom de cercle valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
