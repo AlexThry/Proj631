@@ -51,7 +51,7 @@ form input {
   width: 450px;
 }
 
-.book-card button.disabled{
+.book-card a.disabled{
   cursor: default;
 }
 

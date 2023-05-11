@@ -29,7 +29,7 @@ if ( ! class_exists( 'Component' ) ) {
 			}
 			$score_msg = ( $has_no_score ? "<span class='no-note'>Aucune note</span>" : $score . ' sur 5' );
 			?>
-			 <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"><?php echo $score_msg; ?></p> 
+			 <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400"><?php echo $score_msg; ?></p>
 			<?php
 		}
 
@@ -46,16 +46,16 @@ if ( ! class_exists( 'Component' ) ) {
 					<img class="h-auto max-w-full rounded-lg" src="<?php echo addslashes( $image_url ); ?>" alt="<?php echo addslashes( $title ); ?>">
 					<h3 class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200"><?php echo addslashes( $title ); ?></h3>
 					<span class="mt-1 text-gray-600 dark:text-gray-400"><?php echo addslashes( $author ); ?></span>
-	
+
 					<div class="flex items-center">
 						<?php self::display_user_score( $score ); ?>
 					</div>
 				</a>
-				
+
 				<div class="single-book-buttons height-full">
 					<div class="single-book-buttons">
 						<?php $active = true; ?>
-						<button type="button" class="<?php echo $active ? 'disabled' : 'hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800'; ?> text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
+						<a href="<?php echo "change-my-books?book=$id&previous-url=".get_url() ?>" class="<?php echo $active ? 'disabled' : 'hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800'; ?> text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
 							<?php if ( $active ) : ?>
 								<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1"© viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -66,10 +66,10 @@ if ( ! class_exists( 'Component' ) ) {
 								</svg>
 							<?php endif; ?>
 							Lu
-						</button>
-		
+						</a>
+
 						<?php $active = false; ?>
-						<button type="button" class="<?php echo $active ? 'disabled' : 'hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800'; ?> text-white bg-blue-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600">
+						<a href="<?php echo "change-wishlist?book=$id&previous-url=".get_url() ?>" class="<?php echo $active ? 'disabled' : 'hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:bg-blue-700 dark:focus:ring-blue-800'; ?> text-white bg-blue-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600">
 							<?php if ( $active ) : ?>
 								<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1"© viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -80,7 +80,7 @@ if ( ! class_exists( 'Component' ) ) {
 								</svg>
 							<?php endif; ?>
 							Wishlist
-						</button>
+						</a>
 					</div>
 				</div>
 
