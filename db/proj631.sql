@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: May 09, 2023 at 05:03 PM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 8.1.6
+-- Hôte : localhost
+-- Généré le : jeu. 11 mai 2023 à 08:33
+-- Version du serveur :  5.7.31
+-- Version de PHP : 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,26 +18,29 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `Proj631`
+-- Base de données : `proj631`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `book`
+-- Structure de la table `book`
 --
 
-CREATE TABLE `book` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `book`;
+CREATE TABLE IF NOT EXISTS `book` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(150) NOT NULL,
   `author` varchar(25) NOT NULL,
   `parution_date` date DEFAULT NULL,
   `image_url` longtext NOT NULL,
-  `description` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `description` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `book`
+-- Déchargement des données de la table `book`
 --
 
 INSERT INTO `book` (`id`, `title`, `author`, `parution_date`, `image_url`, `description`) VALUES
@@ -61,17 +64,19 @@ INSERT INTO `book` (`id`, `title`, `author`, `parution_date`, `image_url`, `desc
 -- --------------------------------------------------------
 
 --
--- Table structure for table `book_in_circle`
+-- Structure de la table `book_in_circle`
 --
 
-CREATE TABLE `book_in_circle` (
-  `id` bigint(11) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `book_in_circle`;
+CREATE TABLE IF NOT EXISTS `book_in_circle` (
+  `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `circle_id` int(11) NOT NULL,
-  `book_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `book_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `book_in_circle`
+-- Déchargement des données de la table `book_in_circle`
 --
 
 INSERT INTO `book_in_circle` (`id`, `circle_id`, `book_id`) VALUES
@@ -93,19 +98,21 @@ INSERT INTO `book_in_circle` (`id`, `circle_id`, `book_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `circle`
+-- Structure de la table `circle`
 --
 
-CREATE TABLE `circle` (
-  `id` bigint(11) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `circle`;
+CREATE TABLE IF NOT EXISTS `circle` (
+  `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `admin_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `description` longtext DEFAULT NULL,
-  `image_url` longtext DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `description` longtext,
+  `image_url` longtext,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `circle`
+-- Déchargement des données de la table `circle`
 --
 
 INSERT INTO `circle` (`id`, `admin_id`, `title`, `description`, `image_url`) VALUES
@@ -117,16 +124,19 @@ INSERT INTO `circle` (`id`, `admin_id`, `title`, `description`, `image_url`) VAL
 -- --------------------------------------------------------
 
 --
--- Table structure for table `genre`
+-- Structure de la table `genre`
 --
 
-CREATE TABLE `genre` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `label` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `genre`;
+CREATE TABLE IF NOT EXISTS `genre` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `label` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `genre`
+-- Déchargement des données de la table `genre`
 --
 
 INSERT INTO `genre` (`id`, `label`) VALUES
@@ -144,17 +154,20 @@ INSERT INTO `genre` (`id`, `label`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `has_genre`
+-- Structure de la table `has_genre`
 --
 
-CREATE TABLE `has_genre` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `has_genre`;
+CREATE TABLE IF NOT EXISTS `has_genre` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_book` bigint(20) NOT NULL,
-  `id_genre` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_genre` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `has_genre`
+-- Déchargement des données de la table `has_genre`
 --
 
 INSERT INTO `has_genre` (`id`, `id_book`, `id_genre`) VALUES
@@ -178,17 +191,20 @@ INSERT INTO `has_genre` (`id`, `id_book`, `id_genre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `has_read`
+-- Structure de la table `has_read`
 --
 
-CREATE TABLE `has_read` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `has_read`;
+CREATE TABLE IF NOT EXISTS `has_read` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_book` bigint(20) NOT NULL,
-  `id_user` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_user` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `has_read`
+-- Déchargement des données de la table `has_read`
 --
 
 INSERT INTO `has_read` (`id`, `id_book`, `id_user`) VALUES
@@ -211,20 +227,23 @@ INSERT INTO `has_read` (`id`, `id_book`, `id_user`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `review`
+-- Structure de la table `review`
 --
 
-CREATE TABLE `review` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `review`;
+CREATE TABLE IF NOT EXISTS `review` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parution_date` date NOT NULL,
   `content` longtext NOT NULL,
   `score` int(11) NOT NULL,
   `id_user` bigint(20) NOT NULL,
-  `id_book` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_book` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `review`
+-- Déchargement des données de la table `review`
 --
 
 INSERT INTO `review` (`id`, `parution_date`, `content`, `score`, `id_user`, `id_book`) VALUES
@@ -234,22 +253,26 @@ INSERT INTO `review` (`id`, `parution_date`, `content`, `score`, `id_user`, `id_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Structure de la table `user`
 --
 
-CREATE TABLE `user` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_name` varchar(25) NOT NULL,
   `password` varchar(256) NOT NULL,
   `creation_date` date NOT NULL,
-  `profile_url` longtext DEFAULT NULL,
+  `profile_url` longtext,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `email` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  UNIQUE KEY `user_name` (`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user`
+-- Déchargement des données de la table `user`
 --
 
 INSERT INTO `user` (`id`, `user_name`, `password`, `creation_date`, `profile_url`, `first_name`, `last_name`, `email`) VALUES
@@ -265,17 +288,19 @@ INSERT INTO `user` (`id`, `user_name`, `password`, `creation_date`, `profile_url
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_in_circle`
+-- Structure de la table `user_in_circle`
 --
 
-CREATE TABLE `user_in_circle` (
-  `id` bigint(11) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `user_in_circle`;
+CREATE TABLE IF NOT EXISTS `user_in_circle` (
+  `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `circle_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `user_in_circle`
+-- Déchargement des données de la table `user_in_circle`
 --
 
 INSERT INTO `user_in_circle` (`id`, `circle_id`, `user_id`) VALUES
@@ -291,17 +316,20 @@ INSERT INTO `user_in_circle` (`id`, `circle_id`, `user_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `wants_to_read`
+-- Structure de la table `wants_to_read`
 --
 
-CREATE TABLE `wants_to_read` (
-  `id` bigint(20) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `wants_to_read`;
+CREATE TABLE IF NOT EXISTS `wants_to_read` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `id_book` bigint(20) NOT NULL,
-  `id_user` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_user` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `wants_to_read`
+-- Déchargement des données de la table `wants_to_read`
 --
 
 INSERT INTO `wants_to_read` (`id`, `id_book`, `id_user`) VALUES
@@ -311,141 +339,6 @@ INSERT INTO `wants_to_read` (`id`, `id_book`, `id_user`) VALUES
 (6, 15, 1),
 (7, 15, 3),
 (8, 16, 3);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `book`
---
-ALTER TABLE `book`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- Indexes for table `book_in_circle`
---
-ALTER TABLE `book_in_circle`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `circle`
---
-ALTER TABLE `circle`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `genre`
---
-ALTER TABLE `genre`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- Indexes for table `has_genre`
---
-ALTER TABLE `has_genre`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- Indexes for table `has_read`
---
-ALTER TABLE `has_read`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- Indexes for table `review`
---
-ALTER TABLE `review`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- Indexes for table `user_in_circle`
---
-ALTER TABLE `user_in_circle`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `wants_to_read`
---
-ALTER TABLE `wants_to_read`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `book`
---
-ALTER TABLE `book`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
-
---
--- AUTO_INCREMENT for table `book_in_circle`
---
-ALTER TABLE `book_in_circle`
-  MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
---
--- AUTO_INCREMENT for table `circle`
---
-ALTER TABLE `circle`
-  MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `genre`
---
-ALTER TABLE `genre`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `has_genre`
---
-ALTER TABLE `has_genre`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT for table `has_read`
---
-ALTER TABLE `has_read`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
--- AUTO_INCREMENT for table `review`
---
-ALTER TABLE `review`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `user_in_circle`
---
-ALTER TABLE `user_in_circle`
-  MODIFY `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `wants_to_read`
---
-ALTER TABLE `wants_to_read`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -4,7 +4,6 @@
 
 Des trucs à faire :
 
- - Dans core/connection-helpers.php : `subscribe_user` faire en sorte de connecter l'utilisateur quand on cree son compte (en gérant les erreurs éventuelles)
  - Dans classes/Database.php faire une méthode pour récupérer le top 10 des livres
  - Dans classes/Database.php pour la méthode `get_sorted_books`: corriger bug quand on veux trier avec `genre` (il faut gérer la jointure de table dans ce cas) => visible si vous triez par genre sur le site
  - Mettre à jour la base de données pour administer les cercles d'amis (un cercle d'amis est créer par un membre (on peut s'y abonner), il a un nom, il a une liste de livre)
