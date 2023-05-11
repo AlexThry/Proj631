@@ -309,8 +309,10 @@ public class InterfaceAdministrateur {
                     // Supprimez le genre sélectionné de vos données et mettez à jour le menu déroulant des genres
                     connectionDatabase.delete("DELETE FROM genre WHERE label = '"+selectedGenre+"';",connect);
                     textArea.append("Genre supprimé: " + selectedGenre + "\n");
-                    createAndShowGUI();
-                    frame.dispose();
+                    genreComboBox.removeAllItems();
+                    for(String mot:genres) {
+                        genreComboBox.addItem(mot);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -351,8 +353,10 @@ public class InterfaceAdministrateur {
                 if (!circleName.isEmpty()) {
                     connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
                     circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
-                    createAndShowGUI();
-                    frame.dispose();
+                    circleListComboBox.removeAllItems();
+                    for(String mot:circles) {
+                        circleListComboBox.addItem(mot);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom de cercle valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
