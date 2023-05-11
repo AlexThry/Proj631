@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -27,7 +26,7 @@ public class InterfaceAdministrateur {
         Connection connect = connectionDatabase.connect();
         JFrame frame = new JFrame("Interface Administrateur");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.setSize(1000, 700);
+        frame.setSize(1200, 700);
 
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -122,12 +121,30 @@ public class InterfaceAdministrateur {
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
 
+        // Suppression de livre
+        JPanel bookDeletePanel = new JPanel();
+
+        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
+        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookListComboBox = new JComboBox();
+        for(String mot:livres) {
+            bookListComboBox.addItem(mot);
+        }
+        bookDeletePanel.add(bookListLabel);
+
+        bookDeletePanel.add(bookListComboBox);
+
+        JButton removeBookButton = new JButton("Supprimer livre");
+        bookDeletePanel.add(removeBookButton);
+
+        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
+
         // TODO : Sa sert à quoi ça Arthur ptn
         JTextArea textArea = new JTextArea(10, 50);
         textArea.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
-        contentPane.add(scrollPane, BorderLayout.SOUTH);
+        bookPanel.add(scrollPane, BorderLayout.SOUTH);
 
         // Panel pour gérer les utilisateurs
         JPanel usersPanel = new JPanel();
@@ -135,9 +152,12 @@ public class InterfaceAdministrateur {
 
         JLabel userLabel = new JLabel("Nom d'utilisateur:");
         usersPanel.add(userLabel);
-
-        JTextField userTextField = new JTextField(15);
-        usersPanel.add(userTextField);
+        ArrayList<String> users = connectionDatabase.selectList("SELECT user_name FROM user;",connect,"user_name");
+        JComboBox userListComboBox = new JComboBox();
+        for(String mot:users) {
+            userListComboBox.addItem(mot);
+        }
+        usersPanel.add(userListComboBox);
 
         JButton removeUserButton = new JButton("Supprimer utilisateur");
         usersPanel.add(removeUserButton);
@@ -169,25 +189,8 @@ public class InterfaceAdministrateur {
         JTextArea reviewsTextArea = new JTextArea(10, 50);
         reviewsTextArea.setEditable(false);
         JScrollPane reviewsScrollPane = new JScrollPane(reviewsTextArea);
-        contentPane.add(reviewsScrollPane, BorderLayout.SOUTH);
+        removeReviewPanel.add(reviewsScrollPane, BorderLayout.SOUTH);
 
-        // Suppression de livre
-        JPanel bookDeletePanel = new JPanel();
-
-        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
-        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
-        JComboBox bookListComboBox = new JComboBox();
-        for(String mot:livres) {
-            bookListComboBox.addItem(mot);
-        }
-        bookDeletePanel.add(bookListLabel);
-
-        bookDeletePanel.add(bookListComboBox);
-
-        JButton removeBookButton = new JButton("Supprimer livre");
-        bookDeletePanel.add(removeBookButton);
-
-        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
         addGenreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -239,11 +242,10 @@ public class InterfaceAdministrateur {
         removeUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = userTextField.getText();
+                String username = (String) userListComboBox.getSelectedItem();
                 if (!username.isEmpty()) {
                     connectionDatabase.delete("DELETE FROM user WHERE user_name = '"+username+"';",connect);
                     usersTextArea.append("Utilisateur supprimé: " + username + "\n");
-                    userTextField.setText("");
 
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
