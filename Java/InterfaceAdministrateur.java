@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -122,6 +121,24 @@ public class InterfaceAdministrateur {
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
 
+        // Suppression de livre
+        JPanel bookDeletePanel = new JPanel();
+
+        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
+        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookListComboBox = new JComboBox();
+        for(String mot:livres) {
+            bookListComboBox.addItem(mot);
+        }
+        bookDeletePanel.add(bookListLabel);
+
+        bookDeletePanel.add(bookListComboBox);
+
+        JButton removeBookButton = new JButton("Supprimer livre");
+        bookDeletePanel.add(removeBookButton);
+
+        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
+
         // TODO : Sa sert à quoi ça Arthur ptn
         JTextArea textArea = new JTextArea(10, 50);
         textArea.setEditable(false);
@@ -181,23 +198,27 @@ public class InterfaceAdministrateur {
         JScrollPane reviewsScrollPane = new JScrollPane(reviewsTextArea);
         removeReviewPanel.add(reviewsScrollPane, BorderLayout.SOUTH);
 
-        // Suppression de livre
-        JPanel bookDeletePanel = new JPanel();
+// Panel pour gérer les cercles
+        JPanel circlesPanel = new JPanel();
+        tabbedPane.addTab("Cercles", circlesPanel);
 
-        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
-        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
-        JComboBox bookListComboBox = new JComboBox();
-        for(String mot:livres) {
-            bookListComboBox.addItem(mot);
+        JLabel circleLabel = new JLabel("Nom du cercle:");
+        circlesPanel.add(circleLabel);
+        ArrayList<String> circles = connectionDatabase.selectList("SELECT title FROM circle;",connect,"title");
+        JComboBox circleListComboBox = new JComboBox();
+        for(String mot:circles) {
+            circleListComboBox.addItem(mot);
         }
-        bookDeletePanel.add(bookListLabel);
+        circlesPanel.add(circleListComboBox);
 
-        bookDeletePanel.add(bookListComboBox);
+        JButton removeCircleButton = new JButton("Supprimer cercle");
+        circlesPanel.add(removeCircleButton);
 
-        JButton removeBookButton = new JButton("Supprimer livre");
-        bookDeletePanel.add(removeBookButton);
+        JTextArea circlesTextArea = new JTextArea(10, 50);
+        circlesTextArea.setEditable(false);
+        JScrollPane circlesScrollPane = new JScrollPane(circlesTextArea);
+        circlesPanel.add(circlesScrollPane, BorderLayout.SOUTH);
 
-        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
         addGenreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -325,6 +346,19 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 createAndShowGUI();
                 frame.dispose();
+            }
+        });
+
+        removeCircleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String circleName = (String) circleListComboBox.getSelectedItem();
+                if (!circleName.isEmpty()) {
+                    connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
+                    circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom de cercle valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
