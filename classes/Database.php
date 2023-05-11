@@ -374,6 +374,38 @@ if ( ! class_exists( 'Database' ) ) {
 			$sql = 'UPDATE user SET ' . $sql_set_line . ' WHERE id=' . $user_id . ';';
 			$conn->query( $sql );
 		}
+
+		public static function get_user_circles($user_id) {
+			global $conn;
+
+			$sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id)";
+
+			$res = $conn->query($sql);
+			$circles = array();
+			foreach ($res as $line) {
+				$circle                 = array();
+				$circle['title']     	= $line['title'];
+				$circle['description']  = $line['description'];
+				$circle['image_url']  	= $line['image_url'];
+				$circle['admin_id']  	= $line['admin_id'];
+				$circles[$line['id']]  			= $circle;
+			}
+
+			return ($circles === null) ? null : $circles;
+		}
+
+		public static function create_circle($title, $description, $admin_id, $image_url=null) {
+			global $conn;
+			if ($image_url) {
+				$image_url = "'$image_url'";
+			} else {
+				$image_url = "NULL";
+			}
+			$sql = "INSERT INTO circle (title, description, " . $image_url . ", admin_id) VALUES ('$title', '$description', '$image_url', $admin_id)";
+
+			$conn->query($sql);
+		}
+
 	}
 }
 
