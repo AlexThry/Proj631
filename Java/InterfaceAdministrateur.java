@@ -167,9 +167,20 @@ public class InterfaceAdministrateur {
         JScrollPane usersScrollPane = new JScrollPane(usersTextArea);
         usersPanel.add(usersScrollPane, BorderLayout.SOUTH);
 
+//panel pour supprimer les review
         JPanel removeReviewPanel = new JPanel();
         tabbedPane.addTab("Supprimer Avis", removeReviewPanel);
-//panel pour supprimer les review
+
+
+        JLabel bookRemoveLabel = new JLabel("Filtre");
+        removeReviewPanel.add(bookRemoveLabel);
+        ArrayList<String> book = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookRemoveListComboBox = new JComboBox();
+        for(String mot:book) {
+            bookRemoveListComboBox.addItem(mot);
+        }
+        removeReviewPanel.add(bookRemoveListComboBox);
+
         JLabel bookTitleLabel = new JLabel("Avis:");
         removeReviewPanel.add(bookTitleLabel);
 
@@ -275,6 +286,17 @@ public class InterfaceAdministrateur {
 
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        bookRemoveListComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String bookChoosen = (String) bookRemoveListComboBox.getSelectedItem();
+                reviewListComboBox.removeAllItems();
+                ArrayList<String[]> reviewContent = connectionDatabase.selectList3("SELECT review.content, user.user_name, book.title  FROM review JOIN user ON user.id=review.id_user JOIN book ON book.id=review.id_book WHERE book.title=\""+bookChoosen+"\";",connect,"content", "user_name","title");
+                for(String[] tab:reviewContent) {
+                    reviewListComboBox.addItem(tab[0]+" : "+tab[1]+" : "+tab[2]);
                 }
             }
         });
