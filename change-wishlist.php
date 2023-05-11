@@ -5,34 +5,36 @@
 
 require_once 'functions.php';
 
+$previous_url = isset( $_GET['previous-url'] ) ? $_GET['previous-url'] : null;
 
-if ( isset( $_GET['book'] ) && isset( $_GET['previous-url'] ) && get_user() ) {
-    $user_id = get_user()['id'];
-    $book_id = $_GET['book'];
-
-
-    // Check if book is already in wishlist
-    $sql = "SELECT id FROM wants_to_read WHERE id_user = $user_id AND id_book = $book_id";
-    $res = $conn->query($sql);
-
-    $in_wishlist = mysqli_num_rows($res) > 0;
-    if($in_wishlist) {
-        // Removing
-        $sql = "DELETE FROM wants_to_read WHERE id_user = $user_id AND id_book = $book_id";
-    } else {
-        // Adding
-        $sql = "INSERT INTO wants_to_read(id_book, id_user) VALUES ($book_id, $user_id)";
-    }
-
-    $conn->query($sql);
-
-    header('Location: account.php?tab=user_wishlist');
+// End if book_id is not given, or if user is not connected
+if(!isset($_GET['book_id']) || !get_user()) {
+    if($previous_url !== null) header("Location: $previous_url");
+    else header("Location: connection.php");
     exit();
 }
 
-if(isset( $_GET['previous-url'] )) {
-    header('Location: '.$_GET['previous-url']);
+$user_id = get_user()['id'];
+$book_id = $_GET['book_id'];
+
+// Check if book is already in wishlist
+$sql = "SELECT id FROM wants_to_read WHERE id_user = $user_id AND id_book = $book_id";
+$res = $conn->query($sql);
+
+$in_wishlist = mysqli_num_rows($res) > 0;
+if($in_wishlist) {
+    // Removing
+    $sql = "DELETE FROM wants_to_read WHERE id_user = $user_id AND id_book = $book_id";
 } else {
-    header( 'Location: connection.php' );
+    // Adding
+    $sql = "INSERT INTO wants_to_read(id_book, id_user) VALUES ($book_id, $user_id)";
+}
+
+$conn->query($sql);
+
+if($previous_url !== null) {
+    header("Location: $previous_url");
+} else {
+    header("Location: account.php?tab=user_wishlist");
 }
 exit();
