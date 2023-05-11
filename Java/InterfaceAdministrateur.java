@@ -117,8 +117,8 @@ public class InterfaceAdministrateur {
         JLabel bookDescLabel = new JLabel("Description :");
         bookPanel.add(bookDescLabel);
 
-        JTextField bookTitleField = new JTextField(15);
-        bookPanel.add(bookTitleField);
+        JTextField bookDescField = new JTextField(15);
+        bookPanel.add(bookDescField);
 
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
@@ -214,6 +214,7 @@ public class InterfaceAdministrateur {
                 String author = authorTextField.getText();
                 String genre = (String) bookGenreComboBox.getSelectedItem();
                 String publicationDate = publicationDateTextField.getText();
+                String description = bookDescField.getText();
                 if (!book.isEmpty() && !author.isEmpty()  && !publicationDate.isEmpty()) {
                     textArea.append("Livre ajouté: " + book + " | Auteur: " + author + " | Genre: " + genre + " | Date de parution: " + publicationDate + "\n");
                     bookTextField.setText("");
@@ -221,7 +222,7 @@ public class InterfaceAdministrateur {
                     bookGenreComboBox.setSelectedIndex(0);
                     publicationDateTextField.setText("");
                     //on fait les requete pour ajouté le livre et l'associé à un genre
-                    String sqlAddBook = "INSERT INTO book (title , author, parution_date,image_url,description) VALUES(\"" +book+"\",\""+author+"\",\""+publicationDate+"\",'www.test.fr','description test');";
+                    String sqlAddBook = "INSERT INTO book (title , author, parution_date,image_url,description) VALUES(\"" +book+"\",\""+author+"\",\""+publicationDate+"\",\"www.test.fr\",\""+description+"\");";
                     connectionDatabase.insert(sqlAddBook,connect);
                     String sqlIdBook = "SELECT id FROM book  where title='"+book+"'AND author='"+author+"';";
                     String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
@@ -285,6 +286,12 @@ public class InterfaceAdministrateur {
                 if (selectedBook != null) {
                     // Supprimez le livre sélectionné de vos données et mettez à jour le menu déroulant des livres
                     textArea.append("Livre supprimé: " + selectedBook + "\n");
+                    String sqlIdBook = "SELECT id FROM book  where title='"+selectedBook+"';";
+                    String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
+                    connectionDatabase.delete("DELETE FROM book WHERE title = '"+selectedBook+"';",connect);
+                    connectionDatabase.delete("DELETE FROM has_genre WHERE id_book = '"+idBook+"';",connect);
+                    createAndShowGUI();
+                    frame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
