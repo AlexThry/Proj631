@@ -135,9 +135,12 @@ public class InterfaceAdministrateur {
 
         JLabel userLabel = new JLabel("Nom d'utilisateur:");
         usersPanel.add(userLabel);
-
-        JTextField userTextField = new JTextField(15);
-        usersPanel.add(userTextField);
+        ArrayList<String> users = connectionDatabase.selectList("SELECT user_name FROM user;",connect,"user_name");
+        JComboBox userListComboBox = new JComboBox();
+        for(String mot:users) {
+            userListComboBox.addItem(mot);
+        }
+        usersPanel.add(userListComboBox);
 
         JButton removeUserButton = new JButton("Supprimer utilisateur");
         usersPanel.add(removeUserButton);
@@ -239,11 +242,10 @@ public class InterfaceAdministrateur {
         removeUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = userTextField.getText();
+                String username = (String) userListComboBox.getSelectedItem();
                 if (!username.isEmpty()) {
                     connectionDatabase.delete("DELETE FROM user WHERE user_name = '"+username+"';",connect);
                     usersTextArea.append("Utilisateur supprimé: " + username + "\n");
-                    userTextField.setText("");
 
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
