@@ -1,7 +1,7 @@
 <?php
 
-const DB_USERNAME = 'root';
-const DB_PASSWORD = '';
+const DB_USER_NAME = 'root';
+const DB_PASSWORD  = '';
 
 if ( ! class_exists( 'Database' ) ) {
 	/**
@@ -17,7 +17,7 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function connect_db() {
 			global $conn;
 
-			$conn = new mysqli( 'localhost', DB_USERNAME, DB_PASSWORD );
+			$conn = new mysqli( 'localhost', DB_USER_NAME, DB_PASSWORD );
 
 			if ( ! $conn ) {
 				echo 'Erreur de connexion à la bdd';
@@ -33,8 +33,7 @@ if ( ! class_exists( 'Database' ) ) {
 		 * @param int $id_book Book id.
 		 * @return array
 		 */
-		public static function get_reviews_by_book($id_book): array
-		{
+		public static function get_reviews_by_book( $id_book ): array {
 			global $conn;
 
 			$sql     = "SELECT * FROM review JOIN user ON review.id_user = user.id WHERE id_book = $id_book";
@@ -42,16 +41,16 @@ if ( ! class_exists( 'Database' ) ) {
 			$reviews = array();
 
 			foreach ( $res as $line ) {
-				$review                  = array();
-				$review['id_user']       = $line['id_user'];
-				$review['user_name']      = $line['user_name'];
+				$review                    = array();
+				$review['id_user']         = $line['id_user'];
+				$review['user_name']       = $line['user_name'];
 				$review['user_first_name'] = $line['first_name'];
-				$review['user_last_name'] = $line['last_name'];
-				$review['profile_url']   = $line['profile_url'];
-				$review['content']       = $line['content'];
-				$review['score']         = $line['score'];
-				$review['parution_date'] = $line['parution_date'];
-				$reviews[]               = $review;
+				$review['user_last_name']  = $line['last_name'];
+				$review['profile_url']     = $line['profile_url'];
+				$review['content']         = $line['content'];
+				$review['score']           = $line['score'];
+				$review['parution_date']   = $line['parution_date'];
+				$reviews[]                 = $review;
 			}
 			return $reviews;
 		}
@@ -106,8 +105,8 @@ if ( ! class_exists( 'Database' ) ) {
 				$book['score']      = $reviews[0]['score'];
 				$book['nb_reviews'] = $reviews_size;
 			} else {
-				$book['score'] = "Aucune note";
-				$book['nb_reviews'] = "Aucun ";
+				$book['score']      = 'Aucune note';
+				$book['nb_reviews'] = 'Aucun ';
 			}
 
 			return $book;
@@ -181,8 +180,7 @@ if ( ! class_exists( 'Database' ) ) {
 		 *              All parameters are optionnal.
 		 * @return array $books Books matching the query.
 		 */
-		public static function get_sorted_books($args): array
-		{
+		public static function get_sorted_books( $args ): array {
 			global $conn;
 
 			$genre  = isset( $args['genre'] ) && ! empty( $args['genre'] ) ? $args['genre'] : null;
@@ -194,7 +192,7 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$sql = 'SELECT book.*, avg(score) "score" FROM book LEFT JOIN review ON review.id_book = book.id';
 
-			if (isset($genre)) {
+			if ( isset( $genre ) ) {
 				$sql .= " WHERE id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'))";
 			}
 
@@ -219,33 +217,62 @@ if ( ! class_exists( 'Database' ) ) {
 			return isset( $search ) ? self::search_books( $books, $search ) : $books;
 		}
 
-		public static function get_book_genre($genres)
-		{
+		public static function get_book_genre( $genres ) {
 			global $conn;
-		
+
 			$book = array();
-			foreach ($genres as $genre) {
-				$sql = "SELECT * FROM book b INNER JOIN has_genre hg ON b.id = hg.id_book INNER JOIN genre g ON g.id = hg.id_genre WHERE g.label = '$genre'";
-				$res = mysqli_query($conn, $sql);
+			foreach ( $genres as $genre ) {
+				$sql      = "SELECT * FROM book b INNER JOIN has_genre hg ON b.id = hg.id_book INNER JOIN genre g ON g.id = hg.id_genre WHERE g.label = '$genre'";
+				$res      = mysqli_query( $conn, $sql );
 				$num_rows = $res->num_rows;
-				if ($num_rows >= 4 && sizeof($book) === 0) {
-					$book = Database::get_sorted_books(['genre' => $genre, 'start' => 0, 'limit' => 4, 'sort' => 'genre', 'order' => 'ASC']);
+				if ( $num_rows >= 4 && sizeof( $book ) === 0 ) {
+					$book = self::get_sorted_books(
+						array(
+							'genre' => $genre,
+							'start' => 0,
+							'limit' => 4,
+							'sort'  => 'genre',
+							'order' => 'ASC',
+						)
+					);
 				} else {
-					$book = array_merge($book, Database::get_sorted_books(['genre' => $genre, 'start' => 0, 'limit' => 4 - sizeof($book), 'sort' => 'genre', 'order' => 'ASC']));
+					$book = array_merge(
+						$book,
+						self::get_sorted_books(
+							array(
+								'genre' => $genre,
+								'start' => 0,
+								'limit' => 4 - sizeof( $book ),
+								'sort'  => 'genre',
+								'order' => 'ASC',
+							)
+						)
+					);
 				}
 			}
-		
-			if (sizeof($book) < 4) {
-				$sql = "SELECT label FROM genre WHERE label NOT IN ('" . implode("','", $genres) . "')";
-				$res = mysqli_query($conn, $sql);
-				$row = mysqli_fetch_assoc($res);
+
+			if ( sizeof( $book ) < 4 ) {
+				$sql        = "SELECT label FROM genre WHERE label NOT IN ('" . implode( "','", $genres ) . "')";
+				$res        = mysqli_query( $conn, $sql );
+				$row        = mysqli_fetch_assoc( $res );
 				$otherGenre = $row['label'];
-				$book = array_merge($book, Database::get_sorted_books(['genre' => $otherGenre, 'start' => 0, 'limit' => 4 - sizeof($book), 'sort' => 'genre', 'order' => 'ASC']));
+				$book       = array_merge(
+					$book,
+					self::get_sorted_books(
+						array(
+							'genre' => $otherGenre,
+							'start' => 0,
+							'limit' => 4 - sizeof( $book ),
+							'sort'  => 'genre',
+							'order' => 'ASC',
+						)
+					)
+				);
 			}
-		
+
 			return $book;
 		}
-		
+
 
 		/**
 		 * Get the number of books matching the query.
@@ -413,31 +440,31 @@ if ( ! class_exists( 'Database' ) ) {
 			global $conn;
 
 			// $sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id);";
-			$sql = "SELECT *
+			$sql = 'SELECT *
 			FROM circle
 			JOIN user ON circle.admin_id = user.id
 			WHERE circle.id IN (
 				SELECT circle_id
-				FROM user_in_circle);";
+				FROM user_in_circle);';
 
-			$res = $conn->query($sql);
+			$res     = $conn->query( $sql );
 			$circles = array();
-			foreach ($res as $line) {
-				$circle                 = array();
-				$circle['admin_username']   = $line['user_name'];
-				$circle['admin_firstname']   = $line['first_name'];
-				$circle['admin_lastname']   = $line['last_name'];
-				$circle['title']     	= $line['title'];
-				$circle['description']  = $line['description'];
-				$circle['image_url']  	= $line['image_url'];
-				$circle['admin_id']  	= $line['admin_id'];
-				$circles[$line['id']]  			= $circle;
+			foreach ( $res as $line ) {
+				$circle                     = array();
+				$circle['admin_user_name']  = $line['user_name'];
+				$circle['admin_first_name'] = $line['first_name'];
+				$circle['admin_last_name']  = $line['last_name'];
+				$circle['title']            = $line['title'];
+				$circle['description']      = $line['description'];
+				$circle['image_url']        = $line['image_url'];
+				$circle['admin_id']         = $line['admin_id'];
+				$circles[ $line['id'] ]     = $circle;
 			}
 
-			return ($circles === null) ? null : $circles;
+			return ( $circles === null ) ? null : $circles;
 		}
 
-		public static function get_user_circles($user_id) {
+		public static function get_user_circles( $user_id ) {
 			global $conn;
 
 			// $sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id);";
@@ -450,22 +477,22 @@ if ( ! class_exists( 'Database' ) ) {
 				WHERE user_id = $user_id
 			);";
 
-			$res = $conn->query($sql);
+			$res     = $conn->query( $sql );
 			$circles = array();
-			foreach ($res as $line) {
-				$circle                 = array();
-				$circle['id']  			= $line['id'];
-				$circle['admin_username']   = $line['user_name'];
-				$circle['admin_firstname']   = $line['first_name'];
-				$circle['admin_lastname']   = $line['last_name'];
-				$circle['title']     	= $line['title'];
-				$circle['description']  = $line['description'];
-				$circle['image_url']  	= $line['image_url'];
-				$circle['admin_id']  	= $line['admin_id'];
-				$circles[]  			= $circle;
+			foreach ( $res as $line ) {
+				$circle                     = array();
+				$circle['id']               = $line['id'];
+				$circle['admin_user_name']  = $line['user_name'];
+				$circle['admin_first_name'] = $line['first_name'];
+				$circle['admin_last_name']  = $line['last_name'];
+				$circle['title']            = $line['title'];
+				$circle['description']      = $line['description'];
+				$circle['image_url']        = $line['image_url'];
+				$circle['admin_id']         = $line['admin_id'];
+				$circles[]                  = $circle;
 			}
 
-			return ($circles === null) ? null : $circles;
+			return ( $circles === null ) ? null : $circles;
 		}
 
 		/**
@@ -474,20 +501,20 @@ if ( ! class_exists( 'Database' ) ) {
 		 * @param int $circle_id The circle's id.
 		 * @return array|null The circle's data.
 		 */
-		public static function create_circle($title, $description, $admin_id, $image_url = null): void {
+		public static function create_circle( $title, $description, $admin_id, $image_url = null ): void {
 			global $conn;
-			if ($image_url) {
+			if ( $image_url ) {
 				$image_url = "'$image_url'";
 			} else {
-				$image_url = "NULL";
+				$image_url = 'NULL';
 			}
 
 			$sql = "SELECT * FROM circle WHERE title = '$title';";
-			if (mysqli_query($conn, $sql)->num_rows > 0) {
-				throw new Exception("Le nom de cercle est déjà utilisé.");
+			if ( mysqli_query( $conn, $sql )->num_rows > 0 ) {
+				throw new Exception( 'Le nom de cercle est déjà utilisé.' );
 			}
 			$sql = "INSERT INTO circle (title, description, image_url, admin_id) VALUES ('$title', '$description', $image_url, $admin_id)";
-			$conn->query($sql);
+			$conn->query( $sql );
 		}
 
 

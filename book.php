@@ -65,7 +65,7 @@ $book = Database::get_single_book( $book_id );
 				  <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Notes et Avis</h2>
 			</div>
 			<div class="flex items-center mb-3">
-				<?php echo Component::user_score($book['score'])?>
+				<?php echo Component::display_user_score($book['score'])?>
 			</div>
 			<p class="text-sm font-medium text-gray-500 dark:text-gray-400">
 				<?php
