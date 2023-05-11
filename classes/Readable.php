@@ -37,10 +37,6 @@ if ( ! class_exists( 'Readable' ) ) {
 			require_once 'classes/AlertManager.php';
 			require_once 'classes/Database.php';
 			require_once 'classes/Component.php';
-			require_once 'classes/Book.php';
-			require_once 'classes/User.php';
-			require_once 'classes/Review.php';
-
 			require_once 'core/connection-helpers.php';
 			require_once 'core/session-helpers.php';
 		}

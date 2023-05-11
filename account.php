@@ -75,12 +75,12 @@ if ( ! get_user() ) {
 					break;
 				case 'user_books':
 					// Premier tab: Mes livres --------------------------------------------------->
-					$books = get_user()->books();
+					$books = Database::get_user_books( get_user()['id'] );
 					Component::display_books( $books );
 					break;
 				case 'user_wishlist':
 					// Deuxième tab: Ma Whishlist (TODO) ----------------------------------------->
-					$whishlist = get_user()->wishlist();
+					$whishlist = Database::get_user_wishlist( get_user()['id'] );
 
 					?>
 					<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-800"> 
