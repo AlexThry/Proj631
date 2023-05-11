@@ -46,12 +46,12 @@ if ( ! class_exists( 'Component' ) ) {
 					<img class="h-auto max-w-full rounded-lg" src="<?php echo addslashes( $image_url ); ?>" alt="<?php echo addslashes( $title ); ?>">
 					<h3 class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200"><?php echo addslashes( $title ); ?></h3>
 					<span class="mt-1 text-gray-600 dark:text-gray-400"><?php echo addslashes( $author ); ?></span>
-	
+
 					<div class="flex items-center">
 						<?php self::display_user_score( $score ); ?>
 					</div>
 				</a>
-				
+
 				<div class="single-book-buttons height-full">
 					<div class="single-book-buttons">
 						<?php $active = true; ?>
@@ -83,6 +83,7 @@ if ( ! class_exists( 'Component' ) ) {
 						</button>
 					</div>
 				</div>
+				<!-- sldfsdlfj -->
 
 			</div>
 			<?php
