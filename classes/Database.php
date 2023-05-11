@@ -126,7 +126,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$book['description']   = $line['description'];
 				$book['image_url']     = $line['image_url'];
 				$book['parution_date'] = $line['parution_date'];
-				$books[ $line['id'] ]  = $book;
+				$books[]               = $book;
 			}
 			return $books;
 		}
@@ -211,7 +211,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$book['image_url']     = $line['image_url'];
 				$book['parution_date'] = $line['parution_date'];
 				$book['score']         = $line['score'];
-				$books[ $line['id'] ]  = $book;
+				$books[]               = $book;
 			}
 
 			return isset( $search ) ? self::search_books( $books, $search ) : $books;
@@ -292,10 +292,11 @@ if ( ! class_exists( 'Database' ) ) {
 			$users = array();
 			foreach ( $res as $line ) {
 				$user                  = array();
+				$user['id']            = $line['id'];
 				$user['user_name']     = $line['user_name'];
 				$user['password']      = $line['password'];
 				$user['creation_date'] = $line['creation_date'];
-				$users[ $line['id'] ]  = $user;
+				$users[]               = $user;
 			}
 			return $users;
 		}
@@ -451,6 +452,7 @@ if ( ! class_exists( 'Database' ) ) {
 			$circles = array();
 			foreach ( $res as $line ) {
 				$circle                     = array();
+				$circle['id']               = $line['id'];
 				$circle['admin_user_name']  = $line['user_name'];
 				$circle['admin_first_name'] = $line['first_name'];
 				$circle['admin_last_name']  = $line['last_name'];
@@ -458,10 +460,19 @@ if ( ! class_exists( 'Database' ) ) {
 				$circle['description']      = $line['description'];
 				$circle['image_url']        = $line['image_url'];
 				$circle['admin_id']         = $line['admin_id'];
-				$circles[ $line['id'] ]     = $circle;
+				$circles[]                  = $circle;
 			}
 
 			return ( $circles === null ) ? null : $circles;
+		}
+
+		// on doit recup
+		// les utilisateurs
+		// les livres
+		// todo: ajouter un champ date_ajout dans la db pour les livres ajoutés à un cercle
+		public static function get_single_circle($circle_id): array {
+			// to code here
+			return array();
 		}
 
 		public static function get_user_circles( $user_id ) {

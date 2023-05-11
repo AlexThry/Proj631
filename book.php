@@ -23,7 +23,7 @@ $book = Database::get_single_book( $book_id );
 
 				<div class="flex items-center mt-4 mb-3">
 					<svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Rating star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-					<p class="ml-2 text-sm font-bold text-gray-900 dark:text-white"><?php echo $book['score']===0 ? "Aucune note": $book['score']; ?></p>
+					<p class="ml-2 text-sm font-bold text-gray-900 dark:text-white"><?php echo $book['score'] === 0 ? 'Aucune note' : $book['score']; ?></p>
 					<span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
 					<a href="#reviews" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white"><?php echo $book['nb_reviews']; ?> avis</a>
 				</div>
@@ -35,7 +35,7 @@ $book = Database::get_single_book( $book_id );
 				<dl class="flex items-center space-x-6">
 					<div>
 						<dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Catégories</dt>
-						<dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"><?php echo join(", ",$book['genres'])?></dd>
+						<dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"><?php echo join( ', ', $book['genres'] ); ?></dd>
 					</div>
 					<div>
 						<dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Auteur</dt>
@@ -65,12 +65,12 @@ $book = Database::get_single_book( $book_id );
 				  <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Notes et Avis</h2>
 			</div>
 			<div class="flex items-center mb-3">
-				<?php echo Component::display_user_score($book['score'])?>
+				<?php echo Component::display_user_score( $book['score'] ); ?>
 			</div>
 			<p class="text-sm font-medium text-gray-500 dark:text-gray-400">
 				<?php
-				$reviews_count = count(Database::get_reviews_by_book($book_id));
-				echo ($reviews_count === 1) ? $reviews_count . " note" : $reviews_count . " notes";
+				$reviews_count = count( Database::get_reviews_by_book( $book_id ) );
+				echo ( $reviews_count === 1 ) ? $reviews_count . ' note' : $reviews_count . ' notes';
 				?>
 			</p>			
 			<div class="flex items-center mt-4">
@@ -111,11 +111,11 @@ $book = Database::get_single_book( $book_id );
 		  </section>
 
 
-		  <?php 
-		 if (isset($_POST['comment']) && !empty($_POST['comment']) && key_exists('comment', $_POST)) {
-			echo '1';
-		 }
-		  ?>
+		  <?php
+			if ( isset( $_POST['comment'] ) && ! empty( $_POST['comment'] ) && key_exists( 'comment', $_POST ) ) {
+				echo '1';
+			}
+			?>
 
 
 
@@ -123,13 +123,13 @@ $book = Database::get_single_book( $book_id );
 
 		  <section class="not-format">
 			  <div class="flex justify-between items-center mb-6">
-				  <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Commentaires (<?php echo count(Database::get_reviews_by_book($book['id'])); ?>)</h2>
+				  <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Commentaires (<?php echo count( Database::get_reviews_by_book( $book['id'] ) ); ?>)</h2>
 			  </div>
 			  <form class="mb-6">
 				  <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
 					  <label for="comment" class="sr-only">Your comment</label>
 					  <textarea id="comment" rows="6"
-					  	name="comment"
+						  name="comment"
 						class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
 						placeholder="Write a comment..." required></textarea>
 				  </div>
@@ -347,31 +347,32 @@ $book = Database::get_single_book( $book_id );
 <aside aria-label="Vous aimerez peut-être aussi" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
   <div class="px-4 mx-auto max-w-screen-xl">
 	  <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Vous aimerez peut-être aussi</h2>
-		<?php 
-			$limite_books = 8;
-			$number_books = 0;
-			$genres = $book['genres'];
+		<?php
+			$limite_books     = 8;
+			$number_books     = 0;
+			$genres           = $book['genres'];
 			$associated_books = array();
-			
-			foreach ($genres as $genre) {
-				$books = Database::get_sorted_books(['genre' => $genre]);
-			
-				foreach ($books as $book) {
-					if ($book['id'] !== $book_id && $number_books < $limite_books) {
-						$associated_books[] = $book;
-						$number_books ++;
-					}
-					if (count($associated_books) >= $limite_books) {
-						break;
-					}
+
+		foreach ( $genres as $genre ) {
+			$books = Database::get_sorted_books( array( 'genre' => $genre ) );
+
+			foreach ( $books as $book ) {
+				if ( $book['id'] !== $book_id && $number_books < $limite_books ) {
+					$associated_books[] = $book;
+					$number_books ++;
+				}
+				if ( count( $associated_books ) >= $limite_books ) {
+					break;
 				}
 			}
-			
-			if (count($associated_books) === 0) {
-				$associated_books = Database::get_sorted_books(['limit' => 4]);
-			}
+		}
 
-			Component::display_books($associated_books); ?>
+		if ( count( $associated_books ) === 0 ) {
+			$associated_books = Database::get_sorted_books( array( 'limit' => 4 ) );
+		}
+
+			Component::display_books( $associated_books );
+		?>
   </div>
 </aside>
 
