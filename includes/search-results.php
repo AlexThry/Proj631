@@ -22,7 +22,7 @@ function display_books_grid( $books ): void {
 		<?php
 
 		foreach ( $books as $book ) {
-			Component::display_single_book( $book['title'], $book['link'], $book['author'], $book['id'], $book['score'] );
+			Component::display_single_book( $book['title'], $book['image_url'], $book['author'], $book['id'], $book['score'] );
 		}
 
 		?>

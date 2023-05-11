@@ -47,7 +47,7 @@ function connect_user( $user_name, $password ) {
 
 	$result = $conn->query( $query );
 	if ( ! $result ) {
-		return 'Erreur de connexion (' . mysql_error() . ')';
+		return 'Erreur de connexion (' . $conn->error . ')';
 	}
 
 	$result = mysqli_fetch_assoc( $result );
@@ -66,7 +66,8 @@ function connect_user( $user_name, $password ) {
 		'first_name' =>$result['first_name'],
 		'last_name' =>$result['last_name'],
 		'password' =>$result['password'],
-		'email' =>$result['email']
+		'email' =>$result['email'],
+		'profile_url' =>$result['profile_url']
 	);
 
 	$_SESSION['current_user'] = $user;

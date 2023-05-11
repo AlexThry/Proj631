@@ -17,7 +17,7 @@ $book = Database::get_single_book( $book_id );
   <div class="flex justify-between px-4 mx-auto max-w-screen-2xl ">
 	  <article class="mx-auto w-full max-w-5xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
 		  <header class="relative gap-4 items-start py-8 px-4 mx-auto max-w-7xl sm:static xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6">
-			  <img class="w-lg rounded" src="<?php echo $book['link']; ?>" alt="<?php echo $book['title']; ?>">
+			  <img class="w-lg rounded" src="<?php echo $book['image_url']; ?>" alt="<?php echo $book['title']; ?>">
 			<div class="mt-4 md:mt-0">
 				<h2 class="mb-2 text-5xl font-bold leading-none text-gray-900 md:text-5xl dark:text-white"><?php echo $book['title']; ?></h2>
 
