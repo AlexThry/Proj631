@@ -16,7 +16,7 @@ function password_is_secure_enough( $password ): bool {
 }
 
 /**
- * Comute connection.
+ * Attempt connection.
  *
  * @param string $user_name Username.
  * @param string $password Password.
@@ -60,6 +60,18 @@ function connect_user( $user_name, $password ) {
 		return 'Mot de passe incorrect.';
 	}
 
+	add_user_to_session($result);
+
+	return true;
+}
+
+/**
+ * Adds a user to the session, using the result of a query.
+ *
+ * @param array $result The row of a database query (must represent a user)
+ * @return void
+ */
+function add_user_to_session( array $result ): void {
 	$user = array(
 		'id' => (int) $result['id'],
 		'user_name' =>$result['user_name'],
@@ -71,19 +83,15 @@ function connect_user( $user_name, $password ) {
 	);
 
 	$_SESSION['current_user'] = $user;
-
-	return true;
 }
-
-
 /**
- * Compute subscription.
+ * Compute subscription and redirects the user.
  *
  * @param string $user_name Username.
  * @param string $password Password.
  * @param string $confirm_password Confirm password.
  *
- * @return true|string True if success, error message otherwise.
+ * @return string An error message.
  */
 function subscribe_user( $user_name, $password, $confirm_password ) {
 	global $conn;
@@ -113,13 +121,25 @@ function subscribe_user( $user_name, $password, $confirm_password ) {
 		return 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.';
 	}
 
+	// Check if user already exists
+	$res = $conn->query("SELECT * FROM user WHERE user.user_name = \"$username\" LIMIT 1");
+	if(mysqli_num_rows($res)) return "Ce compte existe déjà, insérez un autre nom d'utilisateur.";
+
 	$date          = date( 'Y-m-d' );
 	$hash_password = md5( $password );
 	$sql           = "INSERT INTO user (user_name, password, creation_date) VALUES ('" . $user_name . "','" . $hash_password . "','" . $date . "')";
 
-	if ( mysqli_query( $conn, $sql ) ) {
-		return true;
-	} else {
-		return "Erreur lors de l'inscription.";
-	}
+	// Launch query
+	$res = $conn->query($sql);
+	if( !$res ) return "Error lors de l'inscription";
+
+	// Get newly created user
+	$res = $conn->query("SELECT * FROM user WHERE id = LAST_INSERT_ID()");
+
+	// Connect user
+	add_user_to_session(mysqli_fetch_assoc($res));
+
+	// Redirect to home page
+	header( 'Location: account.php' );
+	exit();
 }
