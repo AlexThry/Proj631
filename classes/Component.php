@@ -44,7 +44,7 @@ if ( ! class_exists( 'Component' ) ) {
 			<div class="book-card cursor-pointer hover:scale-90 transition ease duration-300 relative">
 				<a href="book.php?id=<?php echo htmlentities( $id ); ?>">
 					<img class="h-auto max-w-full rounded-lg" src="<?php echo addslashes( $image_url ); ?>" alt="<?php echo addslashes( $title ); ?>">
-					<h3 class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200"><?php echo addslashes( $title ); ?></h3>
+					<h3 class="mt-2 text-xl font-semibold text-gray-800 dark:text-gray-200"><?php echo $title; ?></h3>
 					<span class="mt-1 text-gray-600 dark:text-gray-400"><?php echo addslashes( $author ); ?></span>
 
 					<div class="flex items-center">

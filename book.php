@@ -72,41 +72,92 @@ $book = Database::get_single_book( $book_id );
 				$reviews_count = count(Database::get_reviews_by_book($book_id));
 				echo ($reviews_count === 1) ? $reviews_count . " note" : $reviews_count . " notes";
 				?>
-			</p>			
+			</p>
+			<?php 
+				$reviews = Database::get_reviews_by_book($book_id); 
+				$five_stars = 0;
+				$four_stars = 0;
+				$three_stars = 0;
+				$two_stars = 0;
+				$one_stars = 0;
+				$pourcent_five = 0;
+				$pourcent_four = 0;
+				$pourcent_three = 0;
+				$pourcent_two = 0;
+				$pourcent_one = 0;
+
+				foreach ($reviews as $review) {
+					if ($review['score'] == 5) {
+						$five_stars++;
+					}
+					if ($review['score'] == 4) {
+						$four_stars++;
+					}
+					if ($review['score'] == 3) {
+						$three_stars++;
+					}
+					if ($review['score'] == 2) {
+						$two_stars++;
+					}
+					if ($review['score'] == 1) {
+						$one_stars++;
+					}
+				}
+
+				$sum = $five_stars + $four_stars + $three_stars + $two_stars + $one_stars;
+				if ($sum !== 0){
+					$pourcent_five = ($five_stars / $sum) * 100;
+					$pourcent_four = ($four_stars / $sum) * 100;
+					$pourcent_three = ($three_stars / $sum) * 100;
+					$pourcent_two = ($two_stars / $sum) * 100;
+					$pourcent_one = ($one_stars / $sum) * 100;
+				}
+
+			?>			
 			<div class="flex items-center mt-4">
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">5 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<div class="h-5 bg-yellow-400 rounded" style="width: 30%"></div>
+					<?php if ($pourcent_five > 0) { ?>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_five ?>%"></div>
+					<?php } ?>
 				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">70%</span>
+				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"> <?php echo $pourcent_five?>% </span>
 			</div>
 			<div class="flex items-center mt-4">
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">4 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<div class="h-5 bg-yellow-400 rounded" style="width: 17%"></div>
+					<?php if ($pourcent_four > 0) { ?>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_four?> %"></div>
+					<?php } ?>
 				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">17%</span>
+				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_four?> %</span>
 			</div>
 			<div class="flex items-center mt-4">
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">3 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<div class="h-5 bg-yellow-400 rounded" style="width: 8%"></div>
+					<?php if ($pourcent_three > 0) { ?>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_three?> %"></div>
+					<?php } ?>
 				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">8%</span>
+				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_three?> %</span>
 			</div>
 			<div class="flex items-center mt-4">
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">2 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<div class="h-5 bg-yellow-400 rounded" style="width: 4%"></div>
+					<?php if ($pourcent_two > 0) { ?>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_two?> %"></div>
+					<?php } ?>
 				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">4%</span>
+				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_two?> %</span>
 			</div>
 			<div class="flex items-center mt-4">
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">1 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<div class="h-5 bg-yellow-400 rounded" style="width: 1%"></div>
+					<?php if ($pourcent_one > 0) { ?>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_one?> %"></div>
+					<?php } ?>
 				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">1%</span>
+				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_one?>%</span>
 			</div>   
 		  </section>
 
