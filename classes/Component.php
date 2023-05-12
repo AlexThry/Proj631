@@ -81,6 +81,31 @@ if ( ! class_exists( 'Component' ) ) {
 							<?php endif; ?>
 							Wishlist
 						</button>
+						
+						
+						
+						<button type="button" data-dropdown-toggle="dropdown-single-cercles-book-<?php echo $id; ?>" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800">Cercles</button>
+						<div id="dropdown-single-cercles-book-<?php echo $id; ?>" class="z-100 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+							<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+								<li>
+									<a href="#" class="inline-flex align-items px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+										<?php if ( $active ) : ?>
+											<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1"© viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+											</svg>
+										<?php endif; ?>
+										Cercle 1
+									</a>
+								</li>
+							</ul>
+						</div>
+						
+
+
+
+
+
+
 					</div>
 				</div>
 				<!-- sldfsdlfj -->
