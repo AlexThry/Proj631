@@ -80,7 +80,7 @@ public class InterfaceAdministrateur {
         JButton removeGenreButton = new JButton("Supprimer genre");
         genrePanel.add(removeGenreButton);
 
-        // Panel pour ajouter et supprimer un livre
+        // Panel pour ajouter un livre
         JPanel bookPanel = new JPanel();
         booksAndGenresPanel.add(bookPanel,BorderLayout.SOUTH);
 
@@ -118,6 +118,11 @@ public class InterfaceAdministrateur {
         JTextField bookDescField = new JTextField(15);
         bookPanel.add(bookDescField);
 
+        JLabel bookUrlLabel = new JLabel("image url :");
+        bookPanel.add(bookUrlLabel);
+        JTextField bookUrlField = new JTextField(15);
+        bookPanel.add(bookUrlField);
+
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
 
@@ -139,7 +144,6 @@ public class InterfaceAdministrateur {
 
         booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
 
-        // TODO : Sa sert à quoi ça Arthur ptn
         JTextArea textArea = new JTextArea(10, 50);
         textArea.setEditable(false);
 
@@ -248,14 +252,15 @@ public class InterfaceAdministrateur {
                 String genre = (String) bookGenreComboBox.getSelectedItem();
                 String publicationDate = publicationDateTextField.getText();
                 String description = bookDescField.getText();
-                if (!book.isEmpty() && !author.isEmpty()  && !publicationDate.isEmpty()) {
+                String imageUrl = bookUrlField.getText();
+                if (!book.isEmpty() && !author.isEmpty()  && !publicationDate.isEmpty() && !description.isEmpty() && !imageUrl.isEmpty()) {
                     textArea.append("Livre ajouté: " + book + " | Auteur: " + author + " | Genre: " + genre + " | Date de parution: " + publicationDate + "\n");
                     bookTextField.setText("");
                     authorTextField.setText("");
                     bookGenreComboBox.setSelectedIndex(0);
                     publicationDateTextField.setText("");
                     //on fait les requete pour ajouté le livre et l'associé à un genre
-                    String sqlAddBook = "INSERT INTO book (title , author, parution_date,image_url,description) VALUES(\"" +book+"\",\""+author+"\",\""+publicationDate+"\",\"www.test.fr\",\""+description+"\");";
+                    String sqlAddBook = "INSERT INTO book (title , author, parution_date,image_url,description) VALUES(\"" +book+"\",\""+author+"\",\""+publicationDate+"\",\""+imageUrl+"\",\""+description+"\");";
                     connectionDatabase.insert(sqlAddBook,connect);
                     String sqlIdBook = "SELECT id FROM book  where title='"+book+"'AND author='"+author+"';";
                     String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
