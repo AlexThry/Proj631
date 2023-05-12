@@ -389,6 +389,18 @@ if ( ! class_exists( 'Database' ) ) {
 			return mysqli_num_rows($result) > 0;
 		}
 
+		/**
+		 * Returns whether a user is subscribed to a circle or not
+		 * @param int $user_id The user's id.
+		 * @param int $circle_id The circle's id.
+		 * @return bool
+		 */
+		public static function user_is_subscribed( $user_id, $circle_id ): bool {
+			global $conn;
+			$sql = "SELECT user_id FROM user_in_circle WHERE user_id = $user_id AND circle_id = $circle_id;";
+			$res = $conn->query($sql);
+			return mysqli_num_rows($res) > 0;
+		}
 
 		/**
 		 * Returns whether a user has read a book or not
