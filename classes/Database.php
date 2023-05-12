@@ -39,7 +39,6 @@ if ( ! class_exists( 'Database' ) ) {
 			$sql     = "SELECT * FROM review JOIN user ON review.id_user = user.id WHERE id_book = $id_book";
 			$res     = mysqli_query( $conn, $sql );
 			$reviews = array();
-
 			foreach ( $res as $line ) {
 				$review                    = array();
 				$review['id_user']         = $line['id_user'];
@@ -560,6 +559,50 @@ if ( ! class_exists( 'Database' ) ) {
 			}
 
 			return ( $circles === null ) ? null : $circles;
+		}
+
+		public static function get_circle_books( $circle_id ) {
+			global $conn;
+
+			$sql = "SELECT b.id, b.title, b.author, b.parution_date, b.image_url, r.score AS score
+					FROM book_in_circle bic
+					JOIN book b ON b.id = bic.book_id
+					LEFT JOIN review r ON r.id_book = b.id
+					WHERE bic.circle_id = $circle_id;";
+
+			$res   = $conn->query( $sql );
+			$books = array();
+			foreach ( $res as $line ) {
+				$book                  = array();
+				$book['id']            = $line['id'];
+				$book['author']        = $line['author'];
+				$book['parution_date'] = $line['parution_date'];
+				$book['title']         = $line['title'];
+				$book['image_url']     = $line['image_url'];
+				$book['score']         = $line['score'];
+				$books[]               = $book;
+			}
+			return $books;
+		}
+
+		public static function get_circle_users( $circle_id ) {
+			global $conn;
+
+			$sql = "SELECT * FROM user_in_circle uic
+					JOIN user ON uic.user_id = user.id
+					WHERE uic.circle_id = $circle_id";
+
+			$res   = $conn->query( $sql );
+			$users = array();
+			foreach ( $res as $line ) {
+				$user                  = array();
+				$user['id']            = $line['id'];
+				$user['user_name']     = $line['user_name'];
+				$user['password']      = $line['password'];
+				$user['creation_date'] = $line['creation_date'];
+				$users[]               = $user;
+			}
+			return $users;
 		}
 
 		/**
