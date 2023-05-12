@@ -11,11 +11,10 @@ if ( isset( $_POST['connection-user_name'] ) && isset( $_POST['connection-passwo
 	// This is painful, but we must keep the "=== true", because connect_user returns a bool or a non-empty string
 	if ( $res === true ) {
 		header( 'Location: account.php' );
-		exit();
 	} else {
 		header( 'Location: connection.php?connection_error=' . htmlentities( $res ) );
-		exit();
 	}
+	exit();
 }
 
 header( 'Location: connection.php' );

@@ -248,10 +248,6 @@ function display_pagination( $total_books, $genre, $start, $limit, $sort, $order
 						);
 						?>
 
-						<li>
-							<a href="<?php echo $no_limit_url; ?>" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Pas de limite</a>
-						</li>
-
 						<?php
 
 						for ( $i = 1; $i < 11; $i++ ) :

@@ -56,6 +56,21 @@ if ( ! class_exists( 'Database' ) ) {
 		}
 
 		/**
+		 * Returns the average score of a book
+		 * If there's no score, returns null
+		 * @param $id_book The book's id
+		 * @return null|float
+		 */
+		private static function calculate_average_scores_by_book($id_book) {
+			global $conn;
+			$sql     = "SELECT avg(score) `moyenne` FROM review JOIN user ON review.id_user = user.id WHERE id_book = $id_book";
+			$res     = $conn->query($sql);
+			$avg_score = mysqli_fetch_assoc($res)['moyenne'];
+			return $avg_score;
+		}
+
+
+		/**
 		 * Get a single book.
 		 *
 		 * @param int $book_id Book id.
@@ -98,14 +113,13 @@ if ( ! class_exists( 'Database' ) ) {
 
 			$book['genres'] = $genres;
 
-			$reviews      = self::get_reviews_by_book( $book_id );
-			$reviews_size = sizeof( $reviews );
+			$reviews        = self::get_reviews_by_book( $book_id );
+			$reviews_size   = sizeof( $reviews );
+			$book['score']  = self::calculate_average_scores_by_book($book_id);
 
 			if ( $reviews_size > 0 ) {
-				$book['score']      = $reviews[0]['score'];
 				$book['nb_reviews'] = $reviews_size;
 			} else {
-				$book['score'] = 0;
 				$book['nb_reviews'] = "Aucun ";
 			}
 
@@ -187,16 +201,19 @@ if ( ! class_exists( 'Database' ) ) {
 			$start  = isset( $args['start'] ) ? $args['start'] : 0;
 			$limit  = isset( $args['limit'] ) ? $args['limit'] : null;
 			$sort   = isset( $args['sort'] ) ? $args['sort'] : 'parution_date, score';
+			$sort   = $sort == 'genre' ? 'genre.label' : $sort;
 			$order  = isset( $args['order'] ) && 'DESC' === $args['order'] ? $args['order'] : 'ASC';
 			$search = isset( $args['search'] ) ? $args['search'] : null;
 
 			$sql = 'SELECT book.*, avg(score) "score" FROM book LEFT JOIN review ON review.id_book = book.id';
+			if($sort == 'genre.label') $sql .= " LEFT JOIN genre ON genre.id = book.id";
 
 			if (isset($genre)) {
 				$sql .= " WHERE book.id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'))";
 			}
 
 			$sql .= ' GROUP BY book.id ';
+
 			$sql .= ' ORDER BY ' . $sort . ' ' . $order . ( isset( $limit ) ? ' LIMIT ' . $limit . ' OFFSET ' . $start : '' ) . ';';
 
 			$res = mysqli_query( $conn, $sql );
@@ -310,10 +327,10 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function get_user_books( $user_id ): array {
 			global $conn;
 
-			$sql = 'SELECT b.id, b.title, b.author, b.parution_date, b.image_url, COALESCE(r.score, 0) AS score
+			$sql = "SELECT b.id, b.title, b.author, b.parution_date, b.image_url, r.score AS score
 					FROM book b
-					JOIN has_read hr ON hr.id_user = 2 AND hr.id_book = b.id
-					LEFT JOIN review r ON r.id_book = b.id;';
+					JOIN has_read hr ON hr.id_user = $user_id AND hr.id_book = b.id
+					LEFT JOIN review r ON r.id_book = b.id;";
 
 			$res   = $conn->query( $sql );
 			$books = array();
@@ -339,10 +356,10 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function get_user_wishlist( $user_id ): array {
 			global $conn;
 
-			$sql = 'SELECT b.id, b.title, b.author, b.parution_date, b.image_url, COALESCE(r.score, 0) AS score
+			$sql = "SELECT b.id, b.title, b.author, b.parution_date, b.image_url, r.score AS score
 					FROM book b
-					JOIN wants_to_read wr ON wr.id_user = 2 AND wr.id_book = b.id
-					LEFT JOIN review r ON r.id_book = b.id;';
+					JOIN wants_to_read wr ON wr.id_user = $user_id AND wr.id_book = b.id
+					LEFT JOIN review r ON r.id_book = b.id;";
 
 			$res   = $conn->query( $sql );
 			$books = array();
@@ -357,6 +374,33 @@ if ( ! class_exists( 'Database' ) ) {
 				$books[]               = $book;
 			}
 			return $books;
+		}
+
+		/**
+		 * Returns whether a user wants to read a book or not
+		 * @param int $user_id The user's id.
+		 * @param int $book_id The book's id.
+		 * @return bool
+		 */
+		public static function user_wants_to_read( $user_id, $book_id ): bool {
+			global $conn;
+			$sql = "SELECT * FROM wants_to_read WHERE id_user = $user_id AND id_book = $book_id LIMIT 1";
+			$result = $conn->query($sql);
+			return mysqli_num_rows($result) > 0;
+		}
+
+
+		/**
+		 * Returns whether a user has read a book or not
+		 * @param int $user_id The user's id.
+		 * @param int $book_id The book's id.
+		 * @return bool
+		 */
+		public static function user_has_read( $user_id, $book_id ): bool {
+			global $conn;
+			$sql = "SELECT * FROM has_read WHERE id_user = $user_id AND id_book = $book_id LIMIT 1";
+			$result = $conn->query($sql);
+			return mysqli_num_rows($result) > 0;
 		}
 
 		public static function get_review( $user_id, $book_id ) {

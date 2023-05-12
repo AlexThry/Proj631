@@ -9,8 +9,9 @@ if ( ! $book_id ) {
 	exit();
 }
 
+$has_read = Database::user_has_read(get_user()['id'], $book_id);
+$wants_to_read = Database::user_wants_to_read(get_user()['id'], $book_id);
 $book = Database::get_single_book( $book_id );
-
 ?>
 
 <main class="pt-4 pb-8 lg:pt-8 lg:pb-12 bg-white dark:bg-gray-900">
@@ -27,6 +28,24 @@ $book = Database::get_single_book( $book_id );
 					<span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
 					<a href="#reviews" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white"><?php echo $book['nb_reviews']; ?> avis</a>
 				</div>
+
+				<?php if($has_read) : ?>
+				<div class="disabled text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
+					<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+					Lu
+				</div>
+				<?php endif; ?>
+
+				<?php if($wants_to_read && !$has_read) : ?>
+				<div class="disabled text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
+					<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
+					</svg>
+					En cours
+				</div>
+				<?php endif; ?>
 
 				<dl>
 					<dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Description</dt>
@@ -47,14 +66,37 @@ $book = Database::get_single_book( $book_id );
 					</div>
 				</dl>
 				<div class="flex items-center space-x-4">
-					<button type="button" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-						<svg aria-hidden="true" class="mr-1 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
-						Ajouter à ma liste
-					</button>   
-					<button type="button" class="opacity-50 inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+					<?php if($has_read) : ?>
+					<a href="<?php echo "change-my-books?book_id=$book_id&previous-url=$_SERVER[REQUEST_URI]&with-redirect=true" ?>"  class="opacity-50 inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+						<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
+						</svg>
+						Je n'ai pas terminé
+					</a>
+					<?php endif; ?>
+
+					<?php if($wants_to_read && !$has_read) : ?>
+					<a href="<?php echo "change-my-books?book_id=$book_id&previous-url=$_SERVER[REQUEST_URI]&with-redirect=true" ?>" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+						<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+						</svg>
+						J'ai terminé
+					</a>
+
+					<a href="<?php echo "change-wishlist?book_id=$book_id&previous-url=$_SERVER[REQUEST_URI]&with-redirect=true" ?>"   class="opacity-50 inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
 						<svg aria-hidden="true" class="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
 						Supprimer de ma liste
-					</button> 
+					</a>
+					<?php endif; ?>
+
+					<?php if(!$wants_to_read && !$has_read) : ?>
+					<a href="<?php echo "change-wishlist?book_id=$book_id&previous-url=$_SERVER[REQUEST_URI]&with-redirect=true" ?>"  class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+						<svg fill="none" stroke="currentColor" class="w-5 h-5 mr-2 -ml-1" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+						</svg>
+						Ajouter à ma liste
+					</a>
+					<?php endif; ?>
 				</div>
 			</div>
 		  </header>
@@ -65,7 +107,7 @@ $book = Database::get_single_book( $book_id );
 				  <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Notes et Avis</h2>
 			</div>
 			<div class="flex items-center mb-3">
-				<?php echo Component::display_user_score( $book['score'] ); ?>
+				<?php echo Component::display_user_score($book['score']); ?>
 			</div>
 			<p class="text-sm font-medium text-gray-500 dark:text-gray-400">
 				<?php
@@ -73,8 +115,8 @@ $book = Database::get_single_book( $book_id );
 				echo ( $reviews_count === 1 ) ? $reviews_count . ' note' : $reviews_count . ' notes';
 				?>
 			</p>
-			<?php 
-				$reviews = Database::get_reviews_by_book($book_id); 
+			<?php
+				$reviews = Database::get_reviews_by_book($book_id);
 				$five_stars = 0;
 				$four_stars = 0;
 				$three_stars = 0;
@@ -106,14 +148,14 @@ $book = Database::get_single_book( $book_id );
 
 				$sum = $five_stars + $four_stars + $three_stars + $two_stars + $one_stars;
 				if ($sum !== 0){
-					$pourcent_five = ($five_stars / $sum) * 100;
-					$pourcent_four = ($four_stars / $sum) * 100;
-					$pourcent_three = ($three_stars / $sum) * 100;
-					$pourcent_two = ($two_stars / $sum) * 100;
-					$pourcent_one = ($one_stars / $sum) * 100;
+					$pourcent_five = round(($five_stars / $sum) * 100,1);
+					$pourcent_four = round(($four_stars / $sum) * 100,1);
+					$pourcent_three = round(($three_stars / $sum) * 100,1);
+					$pourcent_two = round(($two_stars / $sum) * 100,1);
+					$pourcent_one = round(($one_stars / $sum) * 100,1);
 				}
 
-			?>			
+			?>
 			<div class="flex items-center mt-4">
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">5 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
@@ -127,7 +169,7 @@ $book = Database::get_single_book( $book_id );
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">4 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
 					<?php if ($pourcent_four > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_four?> %"></div>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_four?>%"></div>
 					<?php } ?>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_four?> %</span>
@@ -136,7 +178,7 @@ $book = Database::get_single_book( $book_id );
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">3 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
 					<?php if ($pourcent_three > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_three?> %"></div>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_three?>%"></div>
 					<?php } ?>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_three?> %</span>
@@ -145,7 +187,7 @@ $book = Database::get_single_book( $book_id );
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">2 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
 					<?php if ($pourcent_two > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_two?> %"></div>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_two?>%"></div>
 					<?php } ?>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_two?> %</span>
@@ -154,11 +196,11 @@ $book = Database::get_single_book( $book_id );
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">1 star</span>
 				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
 					<?php if ($pourcent_one > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_one?> %"></div>
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_one?>%"></div>
 					<?php } ?>
 				</div>
 				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_one?>%</span>
-			</div>   
+			</div>
 		  </section>
 
 
@@ -403,10 +445,10 @@ $book = Database::get_single_book( $book_id );
 			$number_books     = 0;
 			$genres           = $book['genres'];
 			$associated_books = array();
-			
+
 			foreach ($genres as $genre) {
 				$books = Database::get_sorted_books(['genre' => $genre]);
-			
+
 				foreach ($books as $book) {
 					if ($book['id'] !== $book_id && $number_books < $limite_books) {
 						$associated_books[] = $book;
@@ -417,7 +459,7 @@ $book = Database::get_single_book( $book_id );
 					}
 				}
 			}
-			
+
 			if (count($associated_books) === 0) {
 				$associated_books = Database::get_sorted_books(['limit' => 4]);
 			}
