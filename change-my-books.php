@@ -25,6 +25,8 @@ $in_mybooks = mysqli_num_rows($res) > 0;
 if($in_mybooks) {
     // Removing
     $sql = "DELETE FROM has_read WHERE id_user = $user_id AND id_book = $book_id;";
+    // Adding tp wihlist
+    $sql .= "INSERT INTO wants_to_read(id_book, id_user) VALUES ($book_id, $user_id);";
 } else {
     // Adding
     $sql = "INSERT INTO has_read(id_book, id_user) VALUES ($book_id, $user_id);";

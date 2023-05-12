@@ -201,16 +201,19 @@ if ( ! class_exists( 'Database' ) ) {
 			$start  = isset( $args['start'] ) ? $args['start'] : 0;
 			$limit  = isset( $args['limit'] ) ? $args['limit'] : null;
 			$sort   = isset( $args['sort'] ) ? $args['sort'] : 'parution_date, score';
+			$sort   = $sort == 'genre' ? 'genre.label' : $sort;
 			$order  = isset( $args['order'] ) && 'DESC' === $args['order'] ? $args['order'] : 'ASC';
 			$search = isset( $args['search'] ) ? $args['search'] : null;
 
 			$sql = 'SELECT book.*, avg(score) "score" FROM book LEFT JOIN review ON review.id_book = book.id';
+			if($sort == 'genre.label') $sql .= " LEFT JOIN genre ON genre.id = book.id";
 
 			if (isset($genre)) {
 				$sql .= " WHERE book.id in (SELECT id_book FROM has_genre WHERE id_genre in (SELECT id FROM genre WHERE label = '" . $genre . "'))";
 			}
 
 			$sql .= ' GROUP BY book.id ';
+
 			$sql .= ' ORDER BY ' . $sort . ' ' . $order . ( isset( $limit ) ? ' LIMIT ' . $limit . ' OFFSET ' . $start : '' ) . ';';
 
 			$res = mysqli_query( $conn, $sql );
