@@ -29,7 +29,7 @@ public class ConnectionDatabase {
     //fonction qui permet d'insérer des lignes dans une base de données SQL
     public void insert(String query, Connection conn){
         try {
-            //étape 3: créer l'objet statement
+            //étape 3: créer l'objet statement et execute une requete de type update
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
             System.out.println("la requète "+query+" est valide");
@@ -39,8 +39,10 @@ public class ConnectionDatabase {
     }
     //fonction qui permet de renvoyer des données contenues dans une colonne de la base de données
     public ArrayList<String> selectList(String query, Connection conn, String colonne){
+        //selectList prend en parametre une requete, une connection et le nom de l'atribut selectionner
+        //selectList retourne une liste
         ArrayList<String> tab= new ArrayList<String>();
-        // créer l'objet statement
+        // créer l'objet statement et execute une requete de type select
         try{
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);
@@ -59,7 +61,7 @@ public class ConnectionDatabase {
     //fonction qui permet de renvoyer des données contenues dans trois colonnes de la base de données
     public ArrayList<String[]> selectList3(String query, Connection conn, String colonne1, String colonne2, String colonne3){
         ArrayList<String[]> tab= new ArrayList<String[]>();
-        // créer l'objet statement
+        // créer l'objet statement et execute une requete de type select
         try{
             Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery(query);

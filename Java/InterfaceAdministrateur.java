@@ -88,25 +88,6 @@ public class InterfaceAdministrateur {
         JButton addGenreButton = new JButton("Ajouter genre");
         genrePanel.add(addGenreButton);
 
-        //L'actionListener qui permet d'ajouter un genre quand on appuie sur le bouton
-        addGenreButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String genre = genreTextField.getText();
-                if (!genre.isEmpty()) {
-                    String sql = "INSERT INTO genre (label) " +
-                            "VALUES ('"+genre+"');";
-                    connectionDatabase.insert(sql,connect);
-                    textArea.append("Genre ajouté: " + genre + "\n");
-                    genreTextField.setText("");
-                    createAndShowGUI();
-                    frame.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
         //création d'un bouton et d'une boite qui permet de supprimer des genres de la base de données
         JLabel genreListLabel = new JLabel("Sélectionnez un genre:");
         genrePanel.add(genreListLabel);
@@ -121,6 +102,28 @@ public class InterfaceAdministrateur {
         JButton removeGenreButton = new JButton("Supprimer genre");
         genrePanel.add(removeGenreButton);
 
+        //L'actionListener qui permet d'ajouter un genre quand on appuie sur le bouton
+        addGenreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String genre = genreTextField.getText();
+                if (!genre.isEmpty()) {
+                    String sql = "INSERT INTO genre (label) " +
+                            "VALUES ('"+genre+"');";
+                    connectionDatabase.insert(sql,connect);
+                    textArea.append("Genre ajouté: " + genre + "\n");
+                    genreTextField.setText("");
+                    ArrayList<String> genres = connectionDatabase.selectList("SELECT label FROM genre;",connect,"label");
+                    genreComboBox.removeAllItems();
+                    for(String mot:genres) {
+                        genreComboBox.addItem(mot);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         //L'actionListener qui permet de supprimer un genre quand on appuie sur le bouton
         removeGenreButton.addActionListener(new ActionListener() {
             @Override
@@ -130,6 +133,7 @@ public class InterfaceAdministrateur {
                     // Supprimez le genre sélectionné de vos données et mettez à jour le menu déroulant des genres
                     connectionDatabase.delete("DELETE FROM genre WHERE label = '"+selectedGenre+"';",connect);
                     textArea.append("Genre supprimé: " + selectedGenre + "\n");
+                    ArrayList<String> genres = connectionDatabase.selectList("SELECT label FROM genre;",connect,"label");
                     genreComboBox.removeAllItems();
                     for(String mot:genres) {
                         genreComboBox.addItem(mot);
@@ -186,6 +190,25 @@ public class InterfaceAdministrateur {
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
 
+
+        // Suppression de livre, contenant le selecteur ainsi que le bouton de supression
+        JPanel bookDeletePanel = new JPanel();
+
+        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
+        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookListComboBox = new JComboBox();
+        for(String mot:livres) {
+            bookListComboBox.addItem(mot);
+        }
+        bookDeletePanel.add(bookListLabel);
+
+        bookDeletePanel.add(bookListComboBox);
+
+        JButton removeBookButton = new JButton("Supprimer livre");
+        bookDeletePanel.add(removeBookButton);
+
+        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
+
         //action qui se réalise quand on appuie sur le bouton, grâce à des commande SQL, on peut mettre à jour différentes bases de données quand on ajoute un livre
         addBookButton.addActionListener(new ActionListener() {
             @Override
@@ -211,31 +234,17 @@ public class InterfaceAdministrateur {
                     String idGenre = connectionDatabase.selectList(sqlIdGenre, connect,"id").get(0);
                     String sqladdHasGenre = "INSERT INTO has_genre (id_book,id_genre) VALUES('"+idBook+"','"+idGenre+"');";
                     connectionDatabase.insert(sqladdHasGenre,connect);
-                    createAndShowGUI();
-                    frame.dispose();
+                    //on réactualise la liste de livres
+                    ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+                    bookListComboBox.removeAllItems();
+                    for(String mot:livres) {
+                        bookListComboBox.addItem(mot);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer toutes les informations requises (titre, auteur, genre et date de parution).", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-
-        // Suppression de livre, contenant le selecteur ainsi que le bouton de supression
-        JPanel bookDeletePanel = new JPanel();
-
-        JLabel bookListLabel = new JLabel("Sélectionnez un livre:");
-        ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
-        JComboBox bookListComboBox = new JComboBox();
-        for(String mot:livres) {
-            bookListComboBox.addItem(mot);
-        }
-        bookDeletePanel.add(bookListLabel);
-
-        bookDeletePanel.add(bookListComboBox);
-
-        JButton removeBookButton = new JButton("Supprimer livre");
-        bookDeletePanel.add(removeBookButton);
-
-        booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
 
         // permet de supprimer le livre sélectionné lors de l'appuie sur le bouton
         removeBookButton.addActionListener(new ActionListener() {
@@ -245,12 +254,17 @@ public class InterfaceAdministrateur {
                 if (selectedBook != null) {
                     // Supprimez le livre sélectionné de vos données et mettez à jour le menu déroulant des livres
                     textArea.append("Livre supprimé: " + selectedBook + "\n");
-                    String sqlIdBook = "SELECT id FROM book  where title='"+selectedBook+"';";
+                    String sqlIdBook = "SELECT id FROM book  where title=\""+selectedBook+"\";";
                     String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
-                    connectionDatabase.delete("DELETE FROM book WHERE title = '"+selectedBook+"';",connect);
-                    connectionDatabase.delete("DELETE FROM has_genre WHERE id_book = '"+idBook+"';",connect);
-                    createAndShowGUI();
-                    frame.dispose();
+                    connectionDatabase.delete("DELETE FROM book WHERE title = \""+selectedBook+"\";",connect);
+                    connectionDatabase.delete("DELETE FROM has_genre WHERE id_book = \""+idBook+"\";",connect);
+                    //on réactualise la liste de livres
+                    ArrayList<String> livres = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+                    bookListComboBox.removeAllItems();
+                    for(String mot:livres) {
+                        bookListComboBox.addItem(mot);
+                    }
+
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -416,8 +430,10 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 String circleName = (String) circleListComboBox.getSelectedItem();
                 if (!circleName.isEmpty()) {
-                    connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
+                    connectionDatabase.delete("DELETE FROM circle WHERE title = \""+circleName+"\";",connect);
                     circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
+                    //reactualise la liste de cercle
+                    ArrayList<String> circles = connectionDatabase.selectList("SELECT title FROM circle;",connect,"title");
                     circleListComboBox.removeAllItems();
                     for(String mot:circles) {
                         circleListComboBox.addItem(mot);
