@@ -289,7 +289,7 @@ function display_pagination( $total_books, $genre, $start, $limit, $sort, $order
 			try {
 				$args_copy          = $args;
 				$args_copy['limit'] = null;
-				$total_books        = Database::get_sorted_books_length( $args_copy );
+				$total_books        = count(Database::get_sorted_books( $args_copy ));
 				$books              = Database::get_sorted_books( $args );
 
 				display_books_grid( $books );

@@ -302,16 +302,6 @@ if ( ! class_exists( 'Database' ) ) {
 			return $book;
 		}
 
-		/**
-		 * Get the number of books matching the query.
-		 *
-		 * @param array $args See get_sorted_books() for the list of arguments.
-		 * @return integer Number of books matching the query.
-		 */
-		public static function get_sorted_books_length( $args ): int {
-			return count( self::get_sorted_books( $args ) );
-		}
-
 		public static function get_users(): array {
 			global $conn;
 
@@ -395,7 +385,7 @@ if ( ! class_exists( 'Database' ) ) {
 		 */
 		public static function user_wants_to_read( $user_id, $book_id ): bool {
 			global $conn;
-			$sql = "SELECT * FROM wants_to_read WHERE id_user = $user_id AND id_book = $book_id LIMIT 1";
+			$sql = "SELECT id_user FROM wants_to_read WHERE id_user = $user_id AND id_book = $book_id LIMIT 1";
 			$result = $conn->query($sql);
 			return mysqli_num_rows($result) > 0;
 		}
