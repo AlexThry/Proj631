@@ -460,7 +460,40 @@ if ( ! class_exists( 'Database' ) ) {
 			$conn->query($sql);
 		}
 
+		/**
+		 * Get circle by id.
+		 *
+		 * @param int $circle_id The circle's id.
+		 * @return array|null The circle's data.
+		 */
+		public static function get_moyenne_by_book($book_id) {
+			global $conn;
 
+			$sql = "SELECT AVG(score) as moyenne FROM review JOIN book ON book.id = review.id_book WHERE id_book = $book_id;";
+			$res = $conn->query($sql);
+			$moyenne = $res->fetch_assoc()['moyenne'];
+			return $moyenne;
+		}
+
+		/**
+		 * Get circle by id.
+		 *
+		 * @param int $circle_id The circle's id.
+		 * @return array|null The circle's data.
+		 */
+		public static function add_review($content, $id_book, $id_user, $parution_date, $score) {
+			global $conn;
+
+			$sql = "SELECT * FROM review WHERE id_book = $id_book AND id_user = $id_user AND content = '$content';";
+			$res = $conn->query($sql);
+			if ($res->num_rows > 0) {
+				throw new Exception("Vous avez déjà écrit une critique pour ce livre.");
+			} else {
+				$sql = 'INSERT INTO review (content, id_book, id_user, parution_date, score) VALUES ("' . $content . '", ' . $id_book . ', ' . $id_user . ', "' . $parution_date . '", ' . $score . ');';
+				$conn->query($sql);
+
+			}
+		}
 	}
 }
 

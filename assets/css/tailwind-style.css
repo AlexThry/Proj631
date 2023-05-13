@@ -85,3 +85,24 @@ form input {
   pointer-events: all;
 }
 
+.comment-stars {
+  display: flex;
+}
+
+.comment-stars-display {
+  display: flex;
+}
+
+.comment-rating-stars {
+  display: flex;
+  margin: 10px;
+}
+
+.star {
+  color: yellow;
+}
+
+.ratin-section {
+  display: flex;
+  align-items: center;
+}
