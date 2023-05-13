@@ -631,7 +631,7 @@ if ( ! class_exists( 'Database' ) ) {
 		/**
 		 * Get circle by id.
 		 *
-		 * @param int $circle_id The circle's id.
+		 * @param int         $circle_id The circle's id.
 		 * @return array|null The circle's data.
 		 */
 		public static function create_circle( $title, $description, $admin_id, $image_url = null ): void {
@@ -648,6 +648,44 @@ if ( ! class_exists( 'Database' ) ) {
 			}
 			$sql = "INSERT INTO circle (title, description, image_url, admin_id) VALUES ('$title', '$description', $image_url, $admin_id)";
 			$conn->query( $sql );
+		}
+
+		/**
+		 * Gets the average score of a book by it's id.
+		 *
+		 * @param int    $book_id The book's id.
+		 * @return float The book's average score.
+		 */
+		public static function get_book_average($book_id): float {
+			global $conn;
+
+			$sql = "SELECT AVG(score) as moyenne FROM review JOIN book ON book.id = review.id_book WHERE id_book = $book_id;";
+			$res = $conn->query($sql);
+			$moyenne = $res->fetch_assoc()['moyenne'];
+			return $moyenne;
+		}
+
+		/**
+		 * Adds a review.
+		 *
+		 * @param string      $content The review's comment.
+		 * @param int         $id_book The rated book id.
+		 * @param int         $id_user The user that rated the book.
+		 * @param string      $parution_date The date the review was published.
+		 * @param int         $score The score that gave the user.
+		 */
+		public static function add_review($content, $id_book, $id_user, $parution_date, $score) {
+			global $conn;
+
+			$sql = "SELECT * FROM review WHERE id_book = $id_book AND id_user = $id_user AND content = '$content';";
+			$res = $conn->query($sql);
+			if ($res->num_rows > 0) {
+				throw new Exception("Vous avez déjà écrit une critique pour ce livre.");
+				return;
+			}
+
+			$sql = 'INSERT INTO review (content, id_book, id_user, parution_date, score) VALUES ("' . $content . '", ' . $id_book . ', ' . $id_user . ', "' . $parution_date . '", ' . $score . ');';
+			$conn->query($sql);
 		}
 	}
 }

@@ -1,30 +1,32 @@
 <?php
 
 require_once 'includes/header.php';
-
-$book_id = $_GET['id'];
+$book_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ( ! $book_id ) {
 	header( 'Location: ' . get_home_url() );
 	exit();
 }
-
-$has_read = Database::user_has_read(get_user()['id'], $book_id);
-$wants_to_read = Database::user_wants_to_read(get_user()['id'], $book_id);
+if (get_user() !== false) {
+	$has_read = Database::user_has_read(get_user()['id'], $book_id);
+	$wants_to_read = Database::user_wants_to_read(get_user()['id'], $book_id);
+} else {
+	$has_read = false;
+	$wants_to_read = false;
+}
 $book = Database::get_single_book( $book_id );
 ?>
 
 <main class="pt-4 pb-8 lg:pt-8 lg:pb-12 bg-white dark:bg-gray-900">
-  <div class="flex justify-between px-4 mx-auto max-w-screen-2xl ">
-	  <article class="mx-auto w-full max-w-5xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
-		  <header class="relative gap-4 items-start py-8 px-4 mx-auto max-w-7xl sm:static xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6">
-			  <img class="w-lg rounded" src="<?php echo $book['image_url']; ?>" alt="<?php echo $book['title']; ?>">
-			<div class="mt-4 md:mt-0">
-				<h2 class="mb-2 text-5xl font-bold leading-none text-gray-900 md:text-5xl dark:text-white"><?php echo $book['title']; ?></h2>
-
+  	<div class="flex justify-between px-4 mx-auto max-w-screen-2xl ">
+	  	<article class="mx-auto w-full max-w-5xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+		  	<header class="relative gap-4 items-start py-8 px-4 mx-auto max-w-7xl sm:static xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6">
+			  	<img class="w-lg rounded" src="<?php echo $book['image_url']; ?>" alt="<?php echo $book['title']; ?>">
+				<div class="mt-4 md:mt-0">
+					<h2 class="mb-2 text-5xl font-bold leading-none text-gray-900 md:text-5xl dark:text-white"><?php echo $book['title']; ?></h2>
 				<div class="flex items-center mt-4 mb-3">
 					<svg aria-hidden="true" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Rating star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
-					<p class="ml-2 text-sm font-bold text-gray-900 dark:text-white"><?php echo $book['score'] === 0 ? 'Aucune note' : $book['score']; ?></p>
+					<p class="ml-2 text-sm font-bold text-gray-900 dark:text-white"><?php echo $book['score'] === 0 ? 'Aucune note' : round($book['score'], 1); ?></p>
 					<span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
 					<a href="#reviews" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white"><?php echo $book['nb_reviews']; ?> avis</a>
 				</div>
@@ -204,270 +206,186 @@ $book = Database::get_single_book( $book_id );
 		  </section>
 
 
-		  <?php
-			if ( isset( $_POST['comment'] ) && ! empty( $_POST['comment'] ) && key_exists( 'comment', $_POST ) ) {
-				echo '1';
-			}
-			?>
 
 
+			<section class="not-format">
+				<div class="flex justify-between items-center mb-6">
+					<h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Commentaires (<?php echo count(Database::get_reviews_by_book($book['id'])); ?>)</h2>
+				</div>
 
+				<?php
+				if (get_user() !== false) {
+					if (isset($_POST['comment']) && !empty($_POST['comment']) && key_exists('comment', $_POST)
+					&& isset($_POST['star-input1']) && !empty($_POST['star-input1']) && key_exists('star-input1', $_POST)
+					&& isset($_POST['star-input2']) && !empty($_POST['star-input2']) && key_exists('star-input2', $_POST)
+					&& isset($_POST['star-input3']) && !empty($_POST['star-input3']) && key_exists('star-input3', $_POST)
+					&& isset($_POST['star-input4']) && !empty($_POST['star-input4']) && key_exists('star-input4', $_POST)
+					&& isset($_POST['star-input5']) && !empty($_POST['star-input5']) && key_exists('star-input5', $_POST)) {
+						$unflitered_comment = $_POST['comment'];
+						$user_id = get_user()['id'];
+						$date = date('Y-m-d', strtotime('today'));
+						$score = 0;
+						$star_inputs = array($_POST['star-input1'],$_POST['star-input2'],$_POST['star-input3'],$_POST['star-input4'],$_POST['star-input5']);
+						$patern = '/[<>\'\"%&()=+]/';
+						$comment = preg_replace($patern, "", $unflitered_comment);
 
+						foreach ($star_inputs as $input) {
+							$score += 1;
+							if ($input == "on") {
+								break;
+							}
+						}
 
-		  <section class="not-format">
-			  <div class="flex justify-between items-center mb-6">
-				  <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Commentaires (<?php echo count( Database::get_reviews_by_book( $book['id'] ) ); ?>)</h2>
-			  </div>
-			  <form class="mb-6">
-				  <div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-					  <label for="comment" class="sr-only">Your comment</label>
-					  <textarea id="comment" rows="6"
-						  name="comment"
-						class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
-						placeholder="Write a comment..." required></textarea>
-				  </div>
-				  <button type="submit"
-					  class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-					  Post comment
-				  </button>
-			  </form>
-			  <article class="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900">
-				  <footer class="flex justify-between items-center mb-2">
-					  <div class="flex items-center">
-						  <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"><img
-								  class="mr-2 w-6 h-6 rounded-full"
-								  src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-								  alt="Michael Gough">Michael Gough</p>
-						  <p class="text-sm text-gray-600 dark:text-gray-400"><time pubdate datetime="2022-02-08"
-								  title="February 8th, 2022">Feb. 8, 2022</time></p>
-					  </div>
-					  <button id="dropdownComment1Button" data-dropdown-toggle="dropdownComment1"
-						  class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-						  type="button">
-						  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-							  xmlns="http://www.w3.org/2000/svg">
-							  <path
-								  d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-							  </path>
-						  </svg>
-						  <span class="sr-only">Comment settings</span>
-					  </button>
-					  <!-- Dropdown menu -->
-					  <div id="dropdownComment1"
-						  class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-						  <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
-							  aria-labelledby="dropdownMenuIconHorizontalButton">
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
-							  </li>
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
-							  </li>
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
-							  </li>
-						  </ul>
-					  </div>
-				  </footer>
-				  <p class="text-gray-700 dark:text-gray-300">Very straight-to-point article. Really worth time reading. Thank you! But tools are just the
-					  instruments for the UX designers. The knowledge of the design tools are as important as the
-					  creation of the design strategy.</p>
-				  <div class="flex items-center mt-4 space-x-4">
-					  <button type="button"
-						  class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400">
-						  <svg aria-hidden="true" class="mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-						  Reply
-					  </button>
-				  </div>
-			  </article>
-			  <article class="p-6 mb-6 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-900">
-				  <footer class="flex justify-between items-center mb-2">
-					  <div class="flex items-center">
-						  <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"><img
-								  class="mr-2 w-6 h-6 rounded-full"
-								  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-								  alt="Jese Leos">Jese Leos</p>
-						  <p class="text-sm text-gray-600 dark:text-gray-400"><time pubdate datetime="2022-02-12"
-								  title="February 12th, 2022">Feb. 12, 2022</time></p>
-					  </div>
-					  <button id="dropdownComment2Button" data-dropdown-toggle="dropdownComment2"
-						  class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-						  type="button">
-						  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-							  xmlns="http://www.w3.org/2000/svg">
-							  <path
-								  d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-							  </path>
-						  </svg>
-						  <span class="sr-only">Comment settings</span>
-					  </button>
-					  <!-- Dropdown menu -->
-					  <div id="dropdownComment2"
-						  class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-						  <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
-							  aria-labelledby="dropdownMenuIconHorizontalButton">
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
-							  </li>
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
-							  </li>
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
-							  </li>
-						  </ul>
-					  </div>
-				  </footer>
-				  <p class="text-gray-700 dark:text-gray-300">Much appreciated! Glad you liked it ☺️</p>
-				  <div class="flex items-center mt-4 space-x-4">
-					  <button type="button"
-						  class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400">
-						  <svg aria-hidden="true" class="mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-						  Reply
-					  </button>
-				  </div>
-			  </article>
-			  <article class="p-6 mb-6 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-				  <footer class="flex justify-between items-center mb-2">
-					  <div class="flex items-center">
-						  <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"><img
-								  class="mr-2 w-6 h-6 rounded-full"
-								  src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
-								  alt="Bonnie Green">Bonnie Green</p>
-						  <p class="text-sm text-gray-600 dark:text-gray-400"><time pubdate datetime="2022-03-12"
-								  title="March 12th, 2022">Mar. 12, 2022</time></p>
-					  </div>
-					  <button id="dropdownComment3Button" data-dropdown-toggle="dropdownComment3"
-						  class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-						  type="button">
-						  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-							  xmlns="http://www.w3.org/2000/svg">
-							  <path
-								  d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-							  </path>
-						  </svg>
-						  <span class="sr-only">Comment settings</span>
-					  </button>
-					  <!-- Dropdown menu -->
-					  <div id="dropdownComment3"
-						  class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-						  <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
-							  aria-labelledby="dropdownMenuIconHorizontalButton">
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
-							  </li>
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
-							  </li>
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
-							  </li>
-						  </ul>
-					  </div>
-				  </footer>
-				  <p class="text-gray-700 dark:text-gray-300">The article covers the essentials, challenges, myths and stages the UX designer should consider while creating the design strategy.</p>
-				  <div class="flex items-center mt-4 space-x-4">
-					  <button type="button"
-						  class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400">
-						  <svg aria-hidden="true" class="mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-						  Reply
-					  </button>
-				  </div>
-			  </article>
-			  <article class="p-6 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-				  <footer class="flex justify-between items-center mb-2">
-					  <div class="flex items-center">
-						  <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white"><img
-								  class="mr-2 w-6 h-6 rounded-full"
-								  src="https://flowbite.com/docs/images/people/profile-picture-4.jpg"
-								  alt="Helene Engels">Helene Engels</p>
-						  <p class="text-sm text-gray-600 dark:text-gray-400"><time pubdate datetime="2022-06-23"
-								  title="June 23rd, 2022">Jun. 23, 2022</time></p>
-					  </div>
-					  <button id="dropdownComment4Button" data-dropdown-toggle="dropdownComment4"
-						  class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-						  type="button">
-						  <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-							  xmlns="http://www.w3.org/2000/svg">
-							  <path
-								  d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
-							  </path>
-						  </svg>
-					  </button>
-					  <!-- Dropdown menu -->
-					  <div id="dropdownComment4"
-						  class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-						  <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
-							  aria-labelledby="dropdownMenuIconHorizontalButton">
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
-							  </li>
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
-							  </li>
-							  <li>
-								  <a href="#"
-									  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
-							  </li>
-						  </ul>
-					  </div>
-				  </footer>
-				  <p class="text-gray-700 dark:text-gray-300">Thanks for sharing this. I do came from the Backend development and explored some of the tools to design my Side Projects.</p>
-				  <div class="flex items-center mt-4 space-x-4">
-					  <button type="button"
-						  class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400">
-						  <svg aria-hidden="true" class="mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-						  Reply
-					  </button>
-				  </div>
-			  </article>
-		  </section>
-	  </article>
-  </div>
-</main>
-
-<aside aria-label="Vous aimerez peut-être aussi" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
-  <div class="px-4 mx-auto max-w-screen-xl">
-	  <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Vous aimerez peut-être aussi</h2>
-		<?php
-			$limite_books     = 8;
-			$number_books     = 0;
-			$genres           = $book['genres'];
-			$associated_books = array();
-
-			foreach ($genres as $genre) {
-				$books = Database::get_sorted_books(['genre' => $genre]);
-
-				foreach ($books as $book) {
-					if ($book['id'] !== $book_id && $number_books < $limite_books) {
-						$associated_books[] = $book;
-						$number_books ++;
+						try {
+							Database::add_review($comment, $book_id, $user_id, $date, $score);
+							echo "<script>alert('Votre commentaire a bien été ajouté !')</script>";
+						} catch (Exception $e) {
+							echo $e->getMessage();
+						}
 					}
-					if (count($associated_books) >= $limite_books) {
-						break;
-					}
+					echo "<form method='post' class='mb-6 comment-form' action='book.php?id=$book_id'?>
+					<div class='ratin-section'>
+						<label for='rating'> Note : </label>
+						<div class='comment-rating-stars'>
+							<svg aria-hidden='true' class='rating-star w-5 h-5 text-yellow-400' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-index=1><title>First star</title><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'></path></svg>
+							<svg aria-hidden='true' class='rating-star w-5 h-5 text-yellow-400' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-index=2><title>Second star</title><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'></path></svg>
+							<svg aria-hidden='true' class='rating-star w-5 h-5 text-yellow-400' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-index=3><title>Third star</title><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'></path></svg>
+							<svg aria-hidden='true' class='rating-star w-5 h-5 text-gray-300 dark:text-gray-500' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-index=4><title>Fourth star</title><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'></path></svg>
+							<svg aria-hidden='true' class='rating-star w-5 h-5 text-gray-300 dark:text-gray-500' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-index=5><title>Fifth star</title><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'></path></svg>
+							<input id='1star' type='hidden' name='star-input1' class='star-input' data-index=1 value='off'>
+							<input id='2star' type='hidden' name='star-input2' class='star-input' data-index=2 value='off'>
+							<input id='3star' type='hidden' name='star-input3' class='star-input' data-index=3 value='on'>
+							<input id='4star' type='hidden' name='star-input4' class='star-input' data-index=4 value='off'>
+							<input id='5star' type='hidden' name='star-input5' class='star-input' data-index=5 value='off'>
+						</div>
+					</div>
+					<div class='py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700'>
+						<label for='comment' class='sr-only'>Your comment</label>
+						<textarea id='comment' rows='6'
+							name='comment'
+							class='px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800'
+							placeholder='Write a comment...' required></textarea>
+					</div>
+					<button type='submit'
+						class='inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800'>
+						Post comment
+						</button>
+					</form>";
+
+				} else {
+					echo "<h1>Veuillez vous connecter pour poster un commentaire</h1>";
 				}
-			}
-
-			if (count($associated_books) === 0) {
-				$associated_books = Database::get_sorted_books(['limit' => 4]);
-			}
-
-			Component::display_books( $associated_books );
-		?>
-  </div>
-</aside>
+				?>
 
 
-<?php require_once 'includes/footer.php'; ?>
+
+				<?php
+
+				$infos = Database::get_reviews_by_book($book_id);
+				foreach ($infos as $info) {
+					$user_name = $info['user_name'];
+					$comment = $info['content'];
+					$rating = $info['score'];
+					$date = $info['parution_date'];
+					if ($info['profile_url'] == null) {
+						$avatar = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
+					} else {
+						$avatar = $info['profile_url'];
+					}
+
+
+
+					if ($rating == 1) {
+						$stars =
+						'<div class="comment-stars">
+
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=2><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=3><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=4><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+					</div>';
+					} elseif ($rating == 2) {
+						$stars =
+						'<div class="comment-stars">
+
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=2><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=3><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=4><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+					</div>';
+					} elseif ($rating == 3) {
+						$stars =
+						'<div class="comment-stars">
+
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=2><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=3><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=4><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+					</div>';
+					} elseif ($rating == 4) {
+						$stars =
+						'<div class="comment-stars">
+
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=2><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400 selected" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=3><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=4><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+					</div>';
+					} elseif ($rating == 5) {
+						$stars =
+						'<div class="comment-stars">
+
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=2><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400 selected" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=3><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=4><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+					</div>';
+					}
+
+
+
+					echo "<article class='p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900'>
+						<footer class='flex justify-between items-center mb-2'>
+							<div class='flex items-center'>
+								<p class='inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white'><img
+										class='mr-2 w-6 h-6 rounded-full'
+										src='" . $avatar . "'
+										alt=''>" . $user_name . "</p>
+								<p class='text-sm text-gray-600 dark:text-gray-400'><time pubdate datetime=" . $date . "
+										title=" . $date . ">" . $date . "</time></p>
+							" . $stars . "
+							</div>
+							<div id='dropdownComment1'
+							class='hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600'>
+							<ul class='py-1 text-sm text-gray-700 dark:text-gray-200'
+								aria-labelledby='dropdownMenuIconHorizontalButton'>
+								<li>
+									<a href=''
+										class='block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'>Edit</a>
+								</li>
+								<li>
+									<a href='#'
+										class='block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'>Remove</a>
+								</li>
+								<li>
+									<a href='#'
+										class='block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white'>Report</a>
+								</li>
+							</ul>
+						</div>
+					</footer>
+					<p class='text-gray-700 dark:text-gray-300'>" . $comment . "</p>
+					</article>";
+				}
+
+				?>
+
+
+
+
+	<?php require_once 'includes/footer.php'; ?>
