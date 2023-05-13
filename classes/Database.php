@@ -27,6 +27,20 @@ if ( ! class_exists( 'Database' ) ) {
 			$conn->query( 'SET NAMES utf8' );
 		}
 
+		public static function get_circle( $circle_id ): array {
+			global $conn;
+			$sql = "SELECT * FROM circle WHERE id=$circle_id LIMIT 1;";
+			$res     = mysqli_fetch_assoc($conn->query( $sql ));
+			$circle = array(
+				'id' => $res['id'],
+				'title' => $res['title'],
+				'description' => $res['description'],
+				'admin_id' => $res['admin_id'],
+				'image_url' => $res['image_url'],
+			);
+			return $circle;
+		}
+
 		/**
 		 * Get reviews by book.
 		 *
@@ -67,7 +81,6 @@ if ( ! class_exists( 'Database' ) ) {
 			$avg_score = mysqli_fetch_assoc($res)['moyenne'];
 			return $avg_score;
 		}
-
 
 		/**
 		 * Get a single book.
@@ -289,7 +302,6 @@ if ( ! class_exists( 'Database' ) ) {
 			return $book;
 		}
 
-
 		/**
 		 * Get the number of books matching the query.
 		 *
@@ -414,6 +426,32 @@ if ( ! class_exists( 'Database' ) ) {
 			return mysqli_num_rows($result) > 0;
 		}
 
+		/**
+		 * Returns whether a user is the admin of a certain circle
+		 * @param int $user_id The user's id.
+		 * @param int $book_id The circle's id.
+		 * @return bool
+		 */
+		public static function user_is_circle_admin( $user_id, $circle_id ): bool {
+			global $conn;
+			$sql = "SELECT id FROM circle WHERE admin_id = $user_id AND id = $circle_id LIMIT 1";
+			$result = $conn->query($sql);
+			return mysqli_num_rows($result) > 0;
+
+		}
+		/**
+		 * Returns whether a book is in a circle or not
+		 * @param int $user_id The user's id.
+		 * @param int $book_id The circle's id.
+		 * @return bool
+		 */
+		public static function book_is_in_circle( $book_id, $circle_id ): bool {
+			global $conn;
+			$sql = "SELECT book_id FROM book_in_circle WHERE book_id = $book_id AND circle_id = $circle_id LIMIT 1";
+			$result = $conn->query($sql);
+			return mysqli_num_rows($result) > 0;
+		}
+
 		public static function get_review( $user_id, $book_id ) {
 			global $conn;
 
@@ -442,7 +480,7 @@ if ( ! class_exists( 'Database' ) ) {
 		 * @param int $user_id The user's id.
 		 * @return array|null The user's data.
 		 */
-		public static function get_user_by_id( $user_id ) {
+		public static function get_user( $user_id ) {
 			global $conn;
 			$sql   = "SELECT * FROM user WHERE id='" . $user_id . "'";
 			$res   = $conn->query( $sql );
@@ -494,23 +532,13 @@ if ( ! class_exists( 'Database' ) ) {
 
 		public static function get_circles() {
 			global $conn;
-
-			// $sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id);";
-			$sql = 'SELECT *
-			FROM circle
-			JOIN user ON circle.admin_id = user.id
-			WHERE circle.id IN (
-				SELECT circle_id
-				FROM user_in_circle);';
+			$sql = 'SELECT * FROM circle';
 
 			$res     = $conn->query( $sql );
 			$circles = array();
 			foreach ( $res as $line ) {
 				$circle                     = array();
 				$circle['id']               = $line['id'];
-				$circle['admin_user_name']  = $line['user_name'];
-				$circle['admin_first_name'] = $line['first_name'];
-				$circle['admin_last_name']  = $line['last_name'];
 				$circle['title']            = $line['title'];
 				$circle['description']      = $line['description'];
 				$circle['image_url']        = $line['image_url'];
@@ -518,7 +546,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$circles[]                  = $circle;
 			}
 
-			return ( $circles === null ) ? null : $circles;
+			return $circles;
 		}
 
 		// on doit recup
@@ -534,23 +562,18 @@ if ( ! class_exists( 'Database' ) ) {
 			global $conn;
 
 			// $sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id);";
-			$sql = "SELECT *
-			FROM circle
-			JOIN user ON circle.admin_id = user.id
-			WHERE circle.id IN (
-				SELECT circle_id
-				FROM user_in_circle
-				WHERE user_id = $user_id
-			);";
+			$sql = "SELECT c.* FROM user u
+				JOIN circle c ON c.admin_id = u.id
+				WHERE u.id = $user_id;";
 
 			$res     = $conn->query( $sql );
 			$circles = array();
 			foreach ( $res as $line ) {
 				$circle                     = array();
 				$circle['id']               = $line['id'];
-				$circle['admin_user_name']  = $line['user_name'];
-				$circle['admin_first_name'] = $line['first_name'];
-				$circle['admin_last_name']  = $line['last_name'];
+				// $circle['admin_user_name']  = $line['user_name'];
+				// $circle['admin_first_name'] = $line['first_name'];
+				// $circle['admin_last_name']  = $line['last_name'];
 				$circle['title']            = $line['title'];
 				$circle['description']      = $line['description'];
 				$circle['image_url']        = $line['image_url'];
@@ -564,7 +587,7 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function get_circle_books( $circle_id ) {
 			global $conn;
 
-			$sql = "SELECT b.id, b.title, b.author, b.parution_date, b.image_url, r.score AS score
+			$sql = "SELECT b.*, r.score AS score
 					FROM book_in_circle bic
 					JOIN book b ON b.id = bic.book_id
 					LEFT JOIN review r ON r.id_book = b.id
@@ -626,8 +649,6 @@ if ( ! class_exists( 'Database' ) ) {
 			$sql = "INSERT INTO circle (title, description, image_url, admin_id) VALUES ('$title', '$description', $image_url, $admin_id)";
 			$conn->query( $sql );
 		}
-
-
 	}
 }
 

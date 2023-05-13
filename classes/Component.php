@@ -33,13 +33,42 @@ if ( ! class_exists( 'Component' ) ) {
 			<?php
 		}
 
+		public static function display_book_circle_choices( $book_id, $circles ) {
+			?>
+			<button type="button" data-dropdown-toggle="dropdown-single-cercles-book-<?php echo $book_id; ?>" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800">Cercles</button>
+			<div id="dropdown-single-cercles-book-<?php echo $book_id; ?>" class="z-100 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+				<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+					<?php foreach($circles as $circle) : ?>
+					<?php $book_is_in_circle = Database::book_is_in_circle($book_id, $circle['id']); ?>
+					<?php $change_circle_url = "change-circle-book?circle-id=".$circle['id']."&book-id=".$book_id."&previous-url=$_SERVER[REQUEST_URI]"; ?>
+					<li>
+						<a href="<?php echo $change_circle_url; ?>" class="whitespace-nowrap inline-flex align-items px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+							<?php if ( $book_is_in_circle ) : ?>
+							<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1"© viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							</svg>
+							<?php else : ?>
+							<svg fill="none" stroke="currentColor" class="w-5 h-5 mr-2 -ml-1" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+							</svg>
+							<?php endif; ?>
+							<?php echo $circle['title'] ?>
+						</a>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+			<?php
+		}
+
 		/**
 		 * Display a single book.
 		 *
 		 * @param Book $book The book to display.
+		 * @param array $circles An array of each circles that the book can be added in
 		 * @return void
 		 */
-		public static function display_single_book( $title, $image_url, $author, $id, $score ) : void {
+		public static function display_single_book( $title, $image_url, $author, $id, $score, $circles ) : void {
 			?>
 			<div class="book-card cursor-pointer hover:scale-90 transition ease duration-300 relative">
 				<a href="book.php?id=<?php echo htmlentities( $id ); ?>">
@@ -90,42 +119,30 @@ if ( ! class_exists( 'Component' ) ) {
 							</a>
 						<?php endif; ?>
 
-						<button type="button" data-dropdown-toggle="dropdown-single-cercles-book-<?php echo $id; ?>" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800">Cercles</button>
-						<div id="dropdown-single-cercles-book-<?php echo $id; ?>" class="z-100 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-							<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-								<li>
-									<a href="#" class="whitespace-nowrap inline-flex align-items px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-										<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1"© viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-										</svg>
-										Cercle 1
-									</a>
-								</li>
-							</ul>
-						</div>
+						<?php if ( $circles ) Component::display_book_circle_choices( $id, $circles ); ?>
 					</div>
 				</div>
-				<!-- sldfsdlfj -->
-
 			</div>
 			<?php
 		}
 
 		/**
 		 * Displays a grid of books with there respective cover, title
-		 * and the note the current user gave it.
+		 * the note the current user gave it, and the list of circles that it can be added in.
 		 * If theres no book, displays a message and a like to get more books.
 		 *
 		 * @param array $books Array of Books.
 		 * @return void
 		 */
 		public static function display_books( $books ): void {
+			$circles = array();
+			if(get_user()) $circles = Database::get_user_circles(get_user()['id']);
 			if ( $books ) :
 				?>
 				<div class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
 					<?php
 					foreach ( $books as $book ) :
-						self::display_single_book( $book['title'], $book['image_url'], $book['author'], $book['id'], $book['score'] );
+						self::display_single_book( $book['title'], $book['image_url'], $book['author'], $book['id'], $book['score'], $circles );
 					endforeach;
 					?>
 				 </div>

@@ -26,7 +26,7 @@ function refresh_user(): void {
 	}
 
 	$id   = $session_user['id'];
-	$user = Database::get_user_by_id( $id );
+	$user = Database::get_user( $id );
 	if ( ! $user ) {
 		throw new Exception( 'User not found' );
 	}
