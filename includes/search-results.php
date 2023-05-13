@@ -20,9 +20,11 @@ function display_books_grid( $books ): void {
 	?>
 	<div class="grid grid-cols-2 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
 		<?php
+		$circles = array();
+		if(get_user()) $circles = Database::get_user_circles(get_user()['id']);
 
 		foreach ( $books as $book ) {
-			Component::display_single_book( $book['title'], $book['image_url'], $book['author'], $book['id'], $book['score'] );
+			Component::display_single_book( $book['title'], $book['image_url'], $book['author'], $book['id'], $book['score'], $circles );
 		}
 
 		?>

@@ -1,7 +1,7 @@
 <?php
 
 require_once 'includes/header.php';
-$book_id = $_GET['id'];
+$book_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 if ( ! $book_id ) {
 	header( 'Location: ' . get_home_url() );
@@ -118,102 +118,34 @@ $book = Database::get_single_book( $book_id );
 				?>
 			</p>
 			<?php
-				$reviews = Database::get_reviews_by_book($book_id);
-				$five_stars = 0;
-				$four_stars = 0;
-				$three_stars = 0;
-				$two_stars = 0;
-				$one_stars = 0;
-				$pourcent_five = 0;
-				$pourcent_four = 0;
-				$pourcent_three = 0;
-				$pourcent_two = 0;
-				$pourcent_one = 0;
+			$reviews = Database::get_reviews_by_book($book_id);
+			$star_notes = array_fill_keys(range(0,5), 0);
+			foreach($reviews as $review) $star_notes[$review['score']]++;
 
-				foreach ($reviews as $review) {
-					if ($review['score'] == 5) {
-						$five_stars++;
-					}
-					if ($review['score'] == 4) {
-						$four_stars++;
-					}
-					if ($review['score'] == 3) {
-						$three_stars++;
-					}
-					if ($review['score'] == 2) {
-						$two_stars++;
-					}
-					if ($review['score'] == 1) {
-						$one_stars++;
-					}
-				}
+			$pondered_sum = 0;
+			foreach($star_notes as $note => $value) $pondered_sum += $note*$value;
+			$nb_note = array_sum($star_notes);
 
-				$sum = $five_stars + $four_stars + $three_stars + $two_stars + $one_stars;
-				if ($sum !== 0){
-					$pourcent_five = round(($five_stars / $sum) * 100,1);
-					$pourcent_four = round(($four_stars / $sum) * 100,1);
-					$pourcent_three = round(($three_stars / $sum) * 100,1);
-					$pourcent_two = round(($two_stars / $sum) * 100,1);
-					$pourcent_one = round(($one_stars / $sum) * 100,1);
-				}
-
+			// $mean = ($nb_note === 0) ? 0 : $pondered_sum / $nb_note;
 			?>
-			<div class="flex items-center mt-4">
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">5 star</span>
-				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<?php if ($pourcent_five > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_five ?>%"></div>
-					<?php } ?>
+
+			<?php foreach($star_notes as $note => $value) : ?>
+				<div class="flex items-center mt-4">
+					<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $note; ?> star</span>
+					<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
+						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo ($value === 0) ? 0 : round($value/$nb_note*100, 0); ?>%"></div>
+					</div>
+					<span class="text-sm font-medium text-blue-600 dark:text-blue-500"> <?php echo ($value === 0) ? 0 : round($value/$nb_note*100, 0); ?>% </span>
 				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"> <?php echo $pourcent_five?>% </span>
-			</div>
-			<div class="flex items-center mt-4">
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">4 star</span>
-				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<?php if ($pourcent_four > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_four?>%"></div>
-					<?php } ?>
-				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_four?> %</span>
-			</div>
-			<div class="flex items-center mt-4">
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">3 star</span>
-				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<?php if ($pourcent_three > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_three?>%"></div>
-					<?php } ?>
-				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_three?> %</span>
-			</div>
-			<div class="flex items-center mt-4">
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">2 star</span>
-				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<?php if ($pourcent_two > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_two?>%"></div>
-					<?php } ?>
-				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_two?> %</span>
-			</div>
-			<div class="flex items-center mt-4">
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500">1 star</span>
-				<div class="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700 flex-1">
-					<?php if ($pourcent_one > 0) { ?>
-						<div class="h-5 bg-yellow-400 rounded" style="width: <?php echo $pourcent_one?>%"></div>
-					<?php } ?>
-				</div>
-				<span class="text-sm font-medium text-blue-600 dark:text-blue-500"><?php echo $pourcent_one?>%</span>
-			</div>
+			<?php endforeach; ?>
 		  </section>
-
-
-
 
 			<section class="not-format">
 				<div class="flex justify-between items-center mb-6">
 					<h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Commentaires (<?php echo count(Database::get_reviews_by_book($book['id'])); ?>)</h2>
 				</div>
 
-				<?php 
+				<?php
 				if (get_user() !== false) {
 					if (isset($_POST['comment']) && !empty($_POST['comment']) && key_exists('comment', $_POST)
 					&& isset($_POST['star-input1']) && !empty($_POST['star-input1']) && key_exists('star-input1', $_POST)
@@ -244,7 +176,7 @@ $book = Database::get_single_book( $book_id );
 						}
 					}
 					echo "<form method='post' class='mb-6 comment-form' action='book.php?id=$book_id'?>
-					<div class='ratin-section'>	
+					<div class='ratin-section'>
 						<label for='rating'> Note : </label>
 						<div class='comment-rating-stars'>
 							<svg aria-hidden='true' class='rating-star w-5 h-5 text-yellow-400' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' data-index=1><title>First star</title><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'></path></svg>
@@ -266,7 +198,7 @@ $book = Database::get_single_book( $book_id );
 							class='px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800'
 							placeholder='Write a comment...' required></textarea>
 					</div>
-					<button type='submit' 
+					<button type='submit'
 						class='inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800'>
 						Post comment
 						</button>
@@ -296,7 +228,7 @@ $book = Database::get_single_book( $book_id );
 
 
 					if ($rating == 1) {
-						$stars = 
+						$stars =
 						'<div class="comment-stars">
 
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -306,7 +238,7 @@ $book = Database::get_single_book( $book_id );
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
 					</div>';
 					} elseif ($rating == 2) {
-						$stars = 
+						$stars =
 						'<div class="comment-stars">
 
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -316,7 +248,7 @@ $book = Database::get_single_book( $book_id );
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
 					</div>';
 					} elseif ($rating == 3) {
-						$stars = 
+						$stars =
 						'<div class="comment-stars">
 
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -326,7 +258,7 @@ $book = Database::get_single_book( $book_id );
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
 					</div>';
 					} elseif ($rating == 4) {
-						$stars = 
+						$stars =
 						'<div class="comment-stars">
 
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -336,7 +268,7 @@ $book = Database::get_single_book( $book_id );
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-gray-300 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
 					</div>';
 					} elseif ($rating == 5) {
-						$stars = 
+						$stars =
 						'<div class="comment-stars">
 
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=1><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
@@ -346,9 +278,9 @@ $book = Database::get_single_book( $book_id );
 						<svg aria-hidden="true" class="comment-star w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-index=5><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
 					</div>';
 					}
-				
-				
-			
+
+
+
 					echo "<article class='p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900'>
 						<footer class='flex justify-between items-center mb-2'>
 							<div class='flex items-center'>
@@ -384,8 +316,8 @@ $book = Database::get_single_book( $book_id );
 				}
 
 				?>
-						
-				
-				
+
+
+
 
 	<?php require_once 'includes/footer.php'; ?>
