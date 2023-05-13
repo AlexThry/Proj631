@@ -416,7 +416,9 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 String circleName = (String) circleListComboBox.getSelectedItem();
                 if (!circleName.isEmpty()) {
+                    String sqlIdCircle = connectionDatabase.selectList("SELECT id FROM circle WHERE title=\""+circleName+"\";", connect,"id").get(0);
                     connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
+                    connectionDatabase.delete("DELETE FROM user_in_circle WHERE circle_id = '"+sqlIdCircle+"';",connect);
                     circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
                     circleListComboBox.removeAllItems();
                     for(String mot:circles) {
