@@ -417,14 +417,16 @@ public class InterfaceAdministrateur {
                 String circleName = (String) circleListComboBox.getSelectedItem();
                 if (!circleName.isEmpty()) {
                     String sqlIdCircle = connectionDatabase.selectList("SELECT id FROM circle WHERE title=\""+circleName+"\";", connect,"id").get(0);
-                    connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
                     connectionDatabase.delete("DELETE FROM user_in_circle WHERE circle_id = '"+sqlIdCircle+"';",connect);
+                    connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
                     circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
                     circleListComboBox.removeAllItems();
                     for(String mot:circles) {
                         circleListComboBox.addItem(mot);
                     }
-                } else {
+                }
+
+                else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom de cercle valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
