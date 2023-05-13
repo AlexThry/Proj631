@@ -80,7 +80,7 @@ public class InterfaceAdministrateur {
         JButton removeGenreButton = new JButton("Supprimer genre");
         genrePanel.add(removeGenreButton);
 
-        // Panel pour ajouter et supprimer un livre
+        // Panel pour ajouter un livre
         JPanel bookPanel = new JPanel();
         booksAndGenresPanel.add(bookPanel,BorderLayout.SOUTH);
 
@@ -118,6 +118,11 @@ public class InterfaceAdministrateur {
         JTextField bookDescField = new JTextField(15);
         bookPanel.add(bookDescField);
 
+        JLabel bookUrlLabel = new JLabel("image url :");
+        bookPanel.add(bookUrlLabel);
+        JTextField bookUrlField = new JTextField(15);
+        bookPanel.add(bookUrlField);
+
         JButton addBookButton = new JButton("Ajouter livre");
         bookPanel.add(addBookButton);
 
@@ -139,7 +144,6 @@ public class InterfaceAdministrateur {
 
         booksAndGenresPanel.add(bookDeletePanel,BorderLayout.CENTER);
 
-        // TODO : Sa sert à quoi ça Arthur ptn
         JTextArea textArea = new JTextArea(10, 50);
         textArea.setEditable(false);
 
@@ -167,28 +171,31 @@ public class InterfaceAdministrateur {
         JScrollPane usersScrollPane = new JScrollPane(usersTextArea);
         usersPanel.add(usersScrollPane, BorderLayout.SOUTH);
 
+//panel pour supprimer les review
         JPanel removeReviewPanel = new JPanel();
         tabbedPane.addTab("Supprimer Avis", removeReviewPanel);
 
-        JLabel bookTitleLabel = new JLabel("Titre du livre:");
+
+        JLabel bookRemoveLabel = new JLabel("Filtre");
+        removeReviewPanel.add(bookRemoveLabel);
+        ArrayList<String> book = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
+        JComboBox bookRemoveListComboBox = new JComboBox();
+        for(String mot:book) {
+            bookRemoveListComboBox.addItem(mot);
+        }
+        removeReviewPanel.add(bookRemoveListComboBox);
+
+        JLabel bookTitleLabel = new JLabel("Avis:");
         removeReviewPanel.add(bookTitleLabel);
 
-        ArrayList<String> booktitle = connectionDatabase.selectList("SELECT title FROM book;",connect,"title");
-        JComboBox bookList2ComboBox = new JComboBox();
-        for(String mot:booktitle) {
-            bookList2ComboBox.addItem(mot);
-        }
-        removeReviewPanel.add(bookList2ComboBox);
+        ArrayList<String[]> reviewContent = connectionDatabase.selectList3("SELECT review.content, user.user_name, book.title  FROM review JOIN user ON user.id=review.id_user JOIN book ON book.id=review.id_book;",connect,"content", "user_name","title");
 
-        JLabel reviewerNameLabel = new JLabel("Nom d'utilisateur:");
-        removeReviewPanel.add(reviewerNameLabel);
 
-        ArrayList<String> users2= connectionDatabase.selectList("SELECT user_name FROM user;",connect,"user_name");
-        JComboBox user2ListComboBox = new JComboBox();
-        for(String mot:users) {
-            user2ListComboBox.addItem(mot);
+        JComboBox reviewListComboBox = new JComboBox();
+        for(String[] tab:reviewContent) {
+            reviewListComboBox.addItem(tab[0]+" : "+tab[1]+" : "+tab[2]);
         }
-        removeReviewPanel.add(user2ListComboBox);
+        removeReviewPanel.add(reviewListComboBox);
 
         JButton removeReviewButton = new JButton("Supprimer Avis");
         removeReviewPanel.add(removeReviewButton);
@@ -245,14 +252,15 @@ public class InterfaceAdministrateur {
                 String genre = (String) bookGenreComboBox.getSelectedItem();
                 String publicationDate = publicationDateTextField.getText();
                 String description = bookDescField.getText();
-                if (!book.isEmpty() && !author.isEmpty()  && !publicationDate.isEmpty()) {
+                String imageUrl = bookUrlField.getText();
+                if (!book.isEmpty() && !author.isEmpty()  && !publicationDate.isEmpty() && !description.isEmpty() && !imageUrl.isEmpty()) {
                     textArea.append("Livre ajouté: " + book + " | Auteur: " + author + " | Genre: " + genre + " | Date de parution: " + publicationDate + "\n");
                     bookTextField.setText("");
                     authorTextField.setText("");
                     bookGenreComboBox.setSelectedIndex(0);
                     publicationDateTextField.setText("");
                     //on fait les requete pour ajouté le livre et l'associé à un genre
-                    String sqlAddBook = "INSERT INTO book (title , author, parution_date,image_url,description) VALUES(\"" +book+"\",\""+author+"\",\""+publicationDate+"\",\"www.test.fr\",\""+description+"\");";
+                    String sqlAddBook = "INSERT INTO book (title , author, parution_date,image_url,description) VALUES(\"" +book+"\",\""+author+"\",\""+publicationDate+"\",\""+imageUrl+"\",\""+description+"\");";
                     connectionDatabase.insert(sqlAddBook,connect);
                     String sqlIdBook = "SELECT id FROM book  where title='"+book+"'AND author='"+author+"';";
                     String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
@@ -286,13 +294,29 @@ public class InterfaceAdministrateur {
                 }
             }
         });
+        bookRemoveListComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String bookChoosen = (String) bookRemoveListComboBox.getSelectedItem();
+                reviewListComboBox.removeAllItems();
+                ArrayList<String[]> reviewContent = connectionDatabase.selectList3("SELECT review.content, user.user_name, book.title  FROM review JOIN user ON user.id=review.id_user JOIN book ON book.id=review.id_book WHERE book.title=\""+bookChoosen+"\";",connect,"content", "user_name","title");
+                for(String[] tab:reviewContent) {
+                    reviewListComboBox.addItem(tab[0]+" : "+tab[1]+" : "+tab[2]);
+                }
+            }
+        });
 
         removeReviewButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String bookTitle = (String) bookList2ComboBox.getSelectedItem();
-                String reviewerName =(String) user2ListComboBox.getSelectedItem();
-                if (bookTitle != null && !reviewerName.isEmpty()) {
+                String bookReview = (String) reviewListComboBox.getSelectedItem();
+                String[] bookReviewSeparated = bookReview.split(" : ");
+                String bookTitle = bookReviewSeparated[2];
+                String reviewerName  = bookReviewSeparated[1];
+
+                System.out.println(bookReview);
+                if (bookReview != null ) {
+
                     String sqlIdBook = "SELECT id FROM book  where title=\""+bookTitle+"\";";
                     String idBook = connectionDatabase.selectList(sqlIdBook, connect,"id").get(0);
                     String sqlIdUser = "SELECT id FROM user  where user_name=\""+reviewerName+"\";";
@@ -300,6 +324,13 @@ public class InterfaceAdministrateur {
                     connectionDatabase.delete("DELETE FROM review where id_user='"+idUser+"' AND id_book='"+idBook+"';",connect);
 
                     reviewsTextArea.append("Avis supprimé pour le livre \"" + bookTitle + "\" de l'utilisateur \"" + reviewerName + "\"\n");
+                    ArrayList<String> reviewContent = connectionDatabase.selectList("SELECT content FROM review;",connect,"content");
+                    ArrayList<String> reviewUser = connectionDatabase.selectList("SELECT user_name FROM user where user.id=(SELECT id_user FROM review);",connect,"user_name");
+                    ArrayList<String> reviewBook = connectionDatabase.selectList("SELECT title FROM book where book.id=(SELECT id_book FROM review);",connect,"title");
+                    reviewListComboBox.removeAllItems();
+                    for(int i = 0;i<reviewContent.size();i++) {
+                        reviewListComboBox.addItem(reviewContent.get(i)+" : "+reviewUser.get(i)+" : "+reviewBook.get(i));
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un livre et entrer un nom d'utilisateur valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -314,8 +345,10 @@ public class InterfaceAdministrateur {
                     // Supprimez le genre sélectionné de vos données et mettez à jour le menu déroulant des genres
                     connectionDatabase.delete("DELETE FROM genre WHERE label = '"+selectedGenre+"';",connect);
                     textArea.append("Genre supprimé: " + selectedGenre + "\n");
-                    createAndShowGUI();
-                    frame.dispose();
+                    genreComboBox.removeAllItems();
+                    for(String mot:genres) {
+                        genreComboBox.addItem(mot);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez sélectionner un genre valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -356,8 +389,10 @@ public class InterfaceAdministrateur {
                 if (!circleName.isEmpty()) {
                     connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
                     circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
-                    createAndShowGUI();
-                    frame.dispose();
+                    circleListComboBox.removeAllItems();
+                    for(String mot:circles) {
+                        circleListComboBox.addItem(mot);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(frame, "Veuillez entrer un nom de cercle valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }

@@ -11,11 +11,10 @@ if ( isset( $_POST['subscription-user_name'] ) && isset( $_POST['subscription-pa
 		$_POST['subscription-first_name'], $_POST['subscription-last_name'], $_POST['subscription-mail'] );
 	if ( $res === true ) {
 		header( 'Location: account.php' );
-		exit();
 	} else {
 		header( 'Location: subscription.php?subscription_error=' . $res );
-		exit();
 	}
+	exit();
 }
 
 
