@@ -10,7 +10,7 @@ if ( ! $user_id ) {
 if ( ! empty( $_POST ) && $user_id !== false ) {
 
 	if (
-		! empty( $_POST['circle_name'] ) 
+		! empty( $_POST['circle_name'] )
 	) {
 		$circle_label = 'Veuillez entrer un nom de cercle.';
 	}
@@ -21,7 +21,7 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 		! empty( $_POST['circle_name'] ) &&
 		key_exists( 'description', $_POST ) &&
 		isset( $_POST['description'] ) &&
-		! empty( $_POST['description'] ) 
+		! empty( $_POST['description'] )
 	) {
 		if ( key_exists( 'circle_url', $_POST ) && isset( $_POST['circle_url'] ) && ! empty( $_POST['circle_url'] ) ) {
 			$circle_name = $_POST['circle_name'];
@@ -35,10 +35,10 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 			);
 			try {
 				Database::create_circle(
-					$submitted_args['circle_name'], 
+					$submitted_args['circle_name'],
 					$submitted_args['description'],
 					$submitted_args['admin_id'],
-					$submitted_args['circle_url']  
+					$submitted_args['circle_url']
 				);
 			}
 			catch (Exception $e) {
@@ -59,7 +59,7 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 			);
 			try {
 				Database::create_circle(
-					$submitted_args['circle_name'], 
+					$submitted_args['circle_name'],
 					$submitted_args['description'],
 					$submitted_args['admin_id'],
 				);
@@ -72,18 +72,18 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 		}
 	}
 }
-	
+
 
 ?>
 
-<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-700"> 
+<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-700">
 	<h1 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Mes Cercles</h1>
 	<p class="mb-4 text-lg text-gray-600 dark:text-gray-400">Visualisez vos cercles ou créez-en un nouveau.</p>
 </div>
 
 <!--
   This example requires some changes to your config:
-  
+
   ```
   // tailwind.config.js
   module.exports = {
@@ -124,7 +124,7 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 					<div class="mt-2">
 						<div
 							class="flex rounded-md focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-							<input type="text" name="circle_name" id="circle_name" autocomplete="circle_name" 
+							<input type="text" name="circle_name" id="circle_name" autocomplete="circle_name"
 								class="pl-3 text-gray-500 sm:text-sm block flex-1 rounded bg-gray-50 border-gray-300 py-1.5 pl-1 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
 								placeholder="Nom du Cercle">
 						</div>
@@ -136,7 +136,7 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 						<div class="mt-2">
 							<textarea id="description" name="description" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required></textarea>
 						</div>
-					<p class="mt-3 text-sm leading-6 text-gray-600">Décrivez une description de ce que vous voullez voir dans ce cercle.</p>
+					<p class="mt-3 text-sm leading-6 text-gray-600">Donnez une description de ce que vous voulez voir dans ce cercle.</p>
 				</div>
 
 				<div class="col-span-full">
@@ -152,16 +152,16 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 							class="block w-full rounded-md bg-gray-50 border-gray-300 py-1.5 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 							<p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
 						</div>
-			
+
 					</div>
 				</div>
-	  
+
 
 			</div>
 		</div>
 
 		<div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
-			
+
 
 
 	<div class="mt-6 flex items-center justify-end gap-x-6">

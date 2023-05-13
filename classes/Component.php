@@ -83,8 +83,9 @@ if ( ! class_exists( 'Component' ) ) {
 
 				<div class="single-book-buttons height-full">
 					<div class="single-book-buttons">
-						<?php $has_read = Database::user_has_read(get_user()['id'], $id); ?>
-						<?php $wants_to_read = Database::user_wants_to_read(get_user()['id'], $id); ?>
+						<?php $is_connected = get_user() !== false; ?>
+						<?php $has_read = $is_connected ? Database::user_has_read(get_user()['id'], $id) : false; ?>
+						<?php $wants_to_read = $is_connected ? Database::user_wants_to_read(get_user()['id'], $id) : false; ?>
 
 						<?php if ( $has_read ) : ?>
 							<a class="whitespace-nowrap disabled text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
