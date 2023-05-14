@@ -18,29 +18,29 @@
 						<div class="flex items-center space-x-6 lg:space-x-8">
 							<div class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
 							<div class="h-64 w-44 overflow-hidden rounded-lg sm:opacity-0 lg:opacity-100">
-								<img src="https://m.media-amazon.com/images/I/51tYQFOBhOL._SL320_.jpg" alt="" class="h-full w-full object-cover object-center">
+								<img src="https://m.media-amazon.com/images/I/916DM68L6cS.jpg" alt="" class="h-full w-full object-cover object-center">
 							</div>
 							<div class="h-64 w-44 overflow-hidden rounded-lg">
-								<img src="https://m.media-amazon.com/images/I/416yHF9RshL._SL500_.jpg" alt="" class="h-full w-full object-cover object-center">
+								<img src="https://m.media-amazon.com/images/I/91QAA9JXFJL.jpg" alt="" class="h-full w-full object-cover object-center">
 							</div>
 						</div>
 						<div class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
 							<div class="h-64 w-44 overflow-hidden rounded-lg">
-								<img src="https://m.media-amazon.com/images/I/510af+-z7EL._SL320_.jpg" alt="" class="h-full w-full object-cover object-center">
+								<img src="https://static.fnac-static.com/multimedia/Images/FR/NR/76/ac/e1/14789750/1507-1/tsp20230401085400/Force-de-vie.jpg" alt="" class="h-full w-full object-cover object-center">
 							</div>
 							<div class="h-64 w-44 overflow-hidden rounded-lg">
-								<img src="https://m.media-amazon.com/images/I/51mJKRFr+NL._SL500_.jpg" alt="" class="h-full w-full object-cover object-center">
+								<img src="https://m.media-amazon.com/images/I/71xXrddBk7L.jpg" alt="" class="h-full w-full object-cover object-center">
 							</div>
 							<div class="h-64 w-44 overflow-hidden rounded-lg">
-								<img src="https://m.media-amazon.com/images/I/51QsNB4GAaL._SL320_.jpg" alt="" class="h-full w-full object-cover object-center">
+								<img src="https://m.media-amazon.com/images/I/41ozBdkhBrL._SX316_BO1,204,203,200_.jpg" alt="" class="h-full w-full object-cover object-center">
 							</div>
 							</div>
 							<div class="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
 							<div class="h-64 w-44 overflow-hidden rounded-lg">
-								<img src="https://m.media-amazon.com/images/I/61+yngAg+uL._SL500_.jpg" alt="" class="h-full w-full object-cover object-center">
+								<img src="https://m.media-amazon.com/images/I/41ozBdkhBrL._SX316_BO1,204,203,200_.jpg" alt="" class="h-full w-full object-cover object-center">
 							</div>
 							<div class="h-64 w-44 overflow-hidden rounded-lg">
-								<img src="https://m.media-amazon.com/images/I/51dlPduJAXL._SL500_.jpg" alt="" class="h-full w-full object-cover object-center">
+								<img src="https://products-images.di-static.com/image/george-r-r-martin-le-trone-de-fer-a-game-of-thrones-book-1/9780006479888-475x500-1.jpg" alt="" class="h-full w-full object-cover object-center">
 							</div>
 							</div>
 						</div>
