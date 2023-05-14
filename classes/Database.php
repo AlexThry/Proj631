@@ -27,6 +27,11 @@ if ( ! class_exists( 'Database' ) ) {
 			$conn->query( 'SET NAMES utf8' );
 		}
 
+		/**
+		 * Get all books.
+		 *
+		 * @return array
+		 */
 		public static function get_circle( $circle_id ): array {
 			global $conn;
 			$sql = "SELECT * FROM circle WHERE id=$circle_id LIMIT 1;";
@@ -138,6 +143,11 @@ if ( ! class_exists( 'Database' ) ) {
 			return $book;
 		}
 
+		/**
+		 * Get all books.
+		 *
+		 * @return array
+		 */
 		public static function get_books(): array {
 			global $conn;
 
@@ -246,6 +256,17 @@ if ( ! class_exists( 'Database' ) ) {
 			return isset( $search ) ? self::search_books( $books, $search ) : $books;
 		}
 
+		/**
+		 * Get the best books according to the given parameters.
+		 *
+		 * @param array $args Arguemnts are :
+		 *                - start : int (default: 0)
+		 *                - limit : int (default: null)
+		 *                - sort : string (default: 'parution_date'). Possible values are 'title', 'author', 'parution_date', 'genre', 'score'.
+		 *                - order : string (default: 'ASC'). Possible values are 'ASC' and 'DESC'.
+		 *              All parameters are optionnal.
+		 * @return array $books Books matching the query.
+		 */
 		public static function get_book_genre( $genres ) {
 			global $conn;
 
@@ -302,6 +323,13 @@ if ( ! class_exists( 'Database' ) ) {
 			return $book;
 		}
 
+		/**
+		 * Return the list of books matching the search query
+		 *
+		 * @param array  $books The list of books to search in.
+		 * @param string $search The search query.
+		 * @return array
+		 */
 		public static function get_users(): array {
 			global $conn;
 
@@ -442,6 +470,12 @@ if ( ! class_exists( 'Database' ) ) {
 			return mysqli_num_rows($result) > 0;
 		}
 
+		/**
+		 * Returns whether a user has read a book or not
+		 * @param int $user_id The user's id.
+		 * @param int $book_id The book's id.
+		 * @return bool
+		 */
 		public static function get_review( $user_id, $book_id ) {
 			global $conn;
 
@@ -520,6 +554,12 @@ if ( ! class_exists( 'Database' ) ) {
 			$conn->query( $sql );
 		}
 
+		/**
+		 * Get user's circles.
+		 *
+		 * @param int $user_id The user's id.
+		 * @return array|null The user's circles.
+		 */
 		public static function get_circles() {
 			global $conn;
 			$sql = 'SELECT * FROM circle';
@@ -547,7 +587,13 @@ if ( ! class_exists( 'Database' ) ) {
 			// to code here
 			return array();
 		}
-
+		
+		/**
+		 * Get all books in a circle.
+		 *
+		 * @param int $circle_id The circle's id.
+		 * @return array|null The books' data.
+		 */
 		public static function get_user_circles( $user_id ) {
 			global $conn;
 
@@ -574,6 +620,12 @@ if ( ! class_exists( 'Database' ) ) {
 			return ( $circles === null ) ? null : $circles;
 		}
 
+		/**
+		 * Get all books in a circle.
+		 *
+		 * @param int $circle_id The circle's id.
+		 * @return array|null The books.
+		 */
 		public static function get_circle_books( $circle_id ) {
 			global $conn;
 
@@ -598,6 +650,12 @@ if ( ! class_exists( 'Database' ) ) {
 			return $books;
 		}
 
+		/**
+		 * Get all users in a circle.
+		 *
+		 * @param int $circle_id
+		 * @return array
+		 */
 		public static function get_circle_users( $circle_id ) {
 			global $conn;
 
@@ -613,6 +671,7 @@ if ( ! class_exists( 'Database' ) ) {
 				$user['user_name']     = $line['user_name'];
 				$user['password']      = $line['password'];
 				$user['creation_date'] = $line['creation_date'];
+				$user['profile_url']   = $line['profile_url'];
 				$users[]               = $user;
 			}
 			return $users;
