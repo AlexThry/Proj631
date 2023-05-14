@@ -11,8 +11,12 @@ $book_id = isset( $_GET['book_id'] ) ? $_GET['book_id'] : null;
 
 // End if book_id is not given, or if user is not connected
 if($book_id === null || $user_id === null) {
-    if($previous_url !== null) header("Location: $previous_url");
-    else header("Location: connection.php");
+    // Redirect to connection page if user is not connected
+    if($user_id === null) header("Location: connection.php");
+    // Redirect to previous page if previous url is given
+    else if($previous_url !== null) header("Location: $previous_url");
+    // Redirect to home page
+    else header("Location: ");
     exit();
 }
 
