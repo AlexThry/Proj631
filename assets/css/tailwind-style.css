@@ -114,7 +114,7 @@ form input {
 }
 
 .circle-user {
-  width: 100px;
+  padding: 0 10px;
   height: 40px;
   margin: 10px;
   background-color: #e2e8f0;
