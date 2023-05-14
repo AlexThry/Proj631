@@ -430,8 +430,20 @@ public class InterfaceAdministrateur {
             public void actionPerformed(ActionEvent e) {
                 String circleName = (String) circleListComboBox.getSelectedItem();
                 if (!circleName.isEmpty()) {
-                    connectionDatabase.delete("DELETE FROM circle WHERE title = '"+circleName+"';",connect);
+                    // Get the id of the circle
+                    String sqlIdCircle = "SELECT id FROM circle WHERE title=\"" + circleName + "\";";
+                    String idCircle = connectionDatabase.selectList(sqlIdCircle, connect, "id").get(0);
+
+                    // Delete the users from the circle in the user_in_circle table
+                    String sqlDeleteUsersInCircle = "DELETE FROM user_in_circle WHERE circle_id='" + idCircle + "';";
+                    connectionDatabase.delete(sqlDeleteUsersInCircle, connect);
+
+                    // Delete the circle from the circle table
+                    String sqlDeleteCircle = "DELETE FROM circle WHERE id=\"" + idCircle + "\";";
+                    connectionDatabase.delete(sqlDeleteCircle, connect);
+
                     circlesTextArea.append("Cercle supprimé: " + circleName + "\n");
+
                     //reactualise la liste de cercle
                     ArrayList<String> circles = connectionDatabase.selectList("SELECT title FROM circle;",connect,"title");
                     circleListComboBox.removeAllItems();
@@ -443,6 +455,7 @@ public class InterfaceAdministrateur {
                 }
             }
         });
+
 
         frame.setVisible(true);
     }
