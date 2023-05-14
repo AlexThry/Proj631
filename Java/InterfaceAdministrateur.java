@@ -182,7 +182,7 @@ public class InterfaceAdministrateur {
         JTextField bookDescField = new JTextField(15);
         bookPanel.add(bookDescField);
 
-        JLabel bookUrlLabel = new JLabel("image url :");
+        JLabel bookUrlLabel = new JLabel("Image Url :");
         bookPanel.add(bookUrlLabel);
         JTextField bookUrlField = new JTextField(15);
         bookPanel.add(bookUrlField);
@@ -241,7 +241,7 @@ public class InterfaceAdministrateur {
                         bookListComboBox.addItem(mot);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Veuillez entrer toutes les informations requises (titre, auteur, genre et date de parution).", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, "Veuillez entrer toutes les informations requises (titre, auteur, genre, description, image url et date de parution).", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
