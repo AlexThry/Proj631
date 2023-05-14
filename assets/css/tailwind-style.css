@@ -110,7 +110,7 @@ form input {
 .circle-users {
   display: flex;
   align-items: center;
-
+  flex-wrap: wrap;
 }
 
 .circle-user {
