@@ -1,6 +1,6 @@
 <?php
 
-require_once 'classes/Answerable.php';
+require_once 'classes/Readable.php';
 
 /**
  * Displays a value field for html inputs
@@ -81,4 +81,4 @@ function get_url_basename(): string {
 	return str_replace( '.' . $extension, '', $file_name ); // remove the extension to get the inscription part.
 }
 
-Answerable::start();
+Readable::start();
