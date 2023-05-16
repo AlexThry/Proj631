@@ -11,7 +11,7 @@ require_once 'functions.php';
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Readable</title>
+	<title>Answerable</title>
 	<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"  rel="stylesheet" />
 	<script src="https://cdn.tailwindcss.com"></script>
@@ -87,7 +87,7 @@ require_once 'functions.php';
 							<h1 class="logo-line text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight dark:text-white">
 								<img src="assets/images/logo.svg" alt="Readbable">
 								<span class="hidden lg:block">
-									Readable
+									Answerable
 								</span>
 							</h1>
 						</a>

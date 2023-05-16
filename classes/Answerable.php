@@ -1,10 +1,10 @@
 <?php
 
-if ( ! class_exists( 'Readable' ) ) {
+if ( ! class_exists( 'Answerable' ) ) {
 	/**
-	 * Readable class.
+	 * Answerable class.
 	 */
-	final class Readable {
+	final class Answerable {
 
 		/**
 		 * Main function.
