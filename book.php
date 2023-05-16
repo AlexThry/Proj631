@@ -51,7 +51,7 @@ $book = Database::get_single_book( $book_id );
 				<?php endif; ?>
 
 				<dl>
-					<dt class="mb-2 font-semibold leading-none text-gray-900 dark:text-white">Description</dt>
+					<dt class="mb-2 mt-4 font-semibold leading-none text-gray-900 dark:text-white">Description</dt>
 					<dd class="mb-4 font-light text-gray-500 sm:mb-5 dark:text-gray-400"><?php echo $book['description']; ?></dd>
 				</dl>
 				<dl class="flex items-center space-x-6">
