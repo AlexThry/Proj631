@@ -633,7 +633,8 @@ if ( ! class_exists( 'Database' ) ) {
 					FROM book_in_circle bic
 					JOIN book b ON b.id = bic.book_id
 					LEFT JOIN review r ON r.id_book = b.id
-					WHERE bic.circle_id = $circle_id;";
+					WHERE bic.circle_id = $circle_id
+					GROUP BY b.id;";
 
 			$res   = $conn->query( $sql );
 			$books = array();
