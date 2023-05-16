@@ -38,7 +38,7 @@ require_once 'includes/header.php';
 
 	  <div>
 		<div class="flex items-center justify-between">
-		  <label for="subscription-confirm-password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Confirmer votre mot de passe *</label>
+		  <label for="subscription-confirm-password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Confirmez votre mot de passe *</label>
 		</div>
 		<div class="mt-2">
 		  <input type="password" name="subscription-confirm-password" id="subscription-confirm-password-input-creation" placeholder="Mot de passe" autocomplete="current-password" required class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
