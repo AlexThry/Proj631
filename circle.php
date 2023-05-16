@@ -45,8 +45,18 @@ $users  = Database::get_circle_users( $circle_id );
 
 			<section id="users" class="bg-white dark:bg-gray-900">
 				<h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Les utilisateurs</h2>
-				<?php foreach ( $users as $user ) echo $user['user_name']; ?>
-				<!-- afficher les utilisateurs ici -->
+				<ul class="circle-users">
+				<?php 
+				foreach ( $users as $user ) {
+					if ( $user['profile_url'] != null) {
+						$avatar = $user['profile_url'];
+					} else {
+						$avatar = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
+					}
+					echo "<li class='circle-user'><img class='mr-2 w-6 h-6 rounded-full' src='" . $avatar . "' alt=''>" . $user['user_name'] . "</li>";
+					}
+					?>
+			</ul>
 			</section>
 
 		</article>

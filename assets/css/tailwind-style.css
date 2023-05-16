@@ -106,3 +106,21 @@ form input {
   display: flex;
   align-items: center;
 }
+
+.circle-users {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.circle-user {
+  padding: 0 10px;
+  height: 40px;
+  margin: 10px;
+  background-color: #e2e8f0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
