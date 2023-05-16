@@ -124,3 +124,10 @@ form input {
   align-items: center;
   margin-right: 10px;
 }
+
+.admin-circle a {
+  position: absolute;
+  right: 40px;
+  transform: translateY(-120%);
+
+}

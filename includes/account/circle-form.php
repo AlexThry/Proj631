@@ -1,11 +1,19 @@
 <?php
-
+$user 				  = get_user();
 $user_id              = get_user()['id'];
 $save_label           = null;
 
 if ( ! $user_id ) {
 	die();
-}
+} ?>
+
+
+
+
+
+
+<?php
+
 
 if ( ! empty( $_POST ) && $user_id !== false ) {
 
@@ -76,11 +84,37 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 
 ?>
 
-<div class="pb-4 mb-8 border-b border-gray-200 dark:border-gray-700">
+<div class="pb-4 border-b border-gray-200 dark:border-gray-700">
 	<h1 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Mes Cercles</h1>
-	<p class="mb-4 text-lg text-gray-600 dark:text-gray-400">Visualisez vos cercles ou créez-en un nouveau.</p>
+	<!-- <p class="mb-4 text-lg text-gray-600 dark:text-gray-400">Visualisez vos cercles ou créez-en un nouveau.</p> -->
 </div>
+<?php 
+$circles = Database::get_circles();
+echo '<ul role="list" class="divide-y divide-gray-100">';
+foreach ($circles as $circle) : 
+	if (Database::user_is_circle_admin($user_id, $circle['id'])): ?> 
 
+
+		<li class="flex justify-between gap-x-6 py-5">
+			<a href="circle.php?id=<?php echo $circle['id']; ?>">
+				<div class="flex gap-x-4">
+					<img class="object-cover h-12 w-12 flex-none rounded-full bg-gray-50 dark:bg-gray-600" src="<?php echo key_exists( 'image_url', $circle ) ? $circle['image_url'] : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'; ?>" alt="">
+					<div class="min-w-0 flex-auto">
+						<p class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"><?php echo $circle['title']; ?></p>
+						<p class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400"><?php echo $circle['description']; ?></p>
+					<p class="mt-1 text-xs leading-5 text-gray-500">Admin: Moi</p>
+					</div>
+				</div>
+			</a>
+
+			<div class="sm:flex sm:flex-col sm:items-end">
+				<a href="circle.php?id=<?php echo $circle['id']; ?>" class="text-sm font-medium text-gray-900 dark:text-gray-100">Modifier</a>
+			</div>
+		</li>
+	<?php endif ?>
+	<?php endforeach;
+	echo '</ul>';
+?>
 <!--
   This example requires some changes to your config:
 
@@ -95,6 +129,12 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
   }
   ```
 -->
+<div>
+
+
+</div>
+<h1 class="pt-2 inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Créer un cercle</h1>
+
 <form method="POST" action="account.php?tab=user_circles">
 	<div class="space-y-12">
 		<div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
