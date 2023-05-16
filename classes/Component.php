@@ -40,7 +40,7 @@ if ( ! class_exists( 'Component' ) ) {
 				<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
 					<?php foreach($circles as $circle) : ?>
 					<?php $book_is_in_circle = Database::book_is_in_circle($book_id, $circle['id']); ?>
-					<?php $change_circle_url = "change-circle-book?circle-id=".$circle['id']."&book-id=".$book_id."&previous-url=$_SERVER[REQUEST_URI]"; ?>
+					<?php $change_circle_url = "change-circle-book.php?circle-id=".$circle['id']."&book-id=".$book_id."&previous-url=$_SERVER[REQUEST_URI]"; ?>
 					<li>
 						<a href="<?php echo $change_circle_url; ?>" class="whitespace-nowrap inline-flex align-items px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
 							<?php if ( $book_is_in_circle ) : ?>

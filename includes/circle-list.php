@@ -10,7 +10,7 @@
 					$user_id = get_user() ? get_user()['id'] : null;
 					$circle_admin = Database::get_user($circle['admin_id']);
 					$is_subscribed = $user_id ? Database::user_is_subscribed($user_id, $circle['id']) : false;
-					$subscription_url = "change-circle-subscription?circle-id=".$circle['id']."&previous-url=$_SERVER[REQUEST_URI]";
+					$subscription_url = "change-circle-subscription.php?circle-id=".$circle['id']."&previous-url=$_SERVER[REQUEST_URI]";
 					?>
 					<li class="flex justify-between gap-x-6 py-5">
 						<a href="circle.php?id=<?php echo $circle['id']; ?>">
