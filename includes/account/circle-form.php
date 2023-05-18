@@ -88,33 +88,70 @@ if ( ! empty( $_POST ) && $user_id !== false ) {
 	<h1 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Mes Cercles</h1>
 	<!-- <p class="mb-4 text-lg text-gray-600 dark:text-gray-400">Visualisez vos cercles ou créez-en un nouveau.</p> -->
 </div>
+<div id="accordion-open" data-accordion="open">
 <?php 
 $circles = Database::get_circles();
 echo '<ul role="list" class="divide-y divide-gray-100">';
-foreach ($circles as $circle) : 
-	if (Database::user_is_circle_admin($user_id, $circle['id'])): ?> 
+$i = 1;
+$admin_circles = array();
+foreach ($circles as $circle) {
 
+	if (Database::user_is_circle_admin($user_id, $circle['id'])){
+		array_push($admin_circles, $circle);
+	} 
+}
+echo '	<h1 class="pt-2 inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Modifier mes cercles</h1>
+';
+foreach ($admin_circles as $circle) :
+	?> 
 
-		<li class="flex justify-between gap-x-6 py-5">
-			<a href="circle.php?id=<?php echo $circle['id']; ?>">
-				<div class="flex gap-x-4">
-					<img class="object-cover h-12 w-12 flex-none rounded-full bg-gray-50 dark:bg-gray-600" src="<?php echo key_exists( 'image_url', $circle ) ? $circle['image_url'] : 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'; ?>" alt="">
-					<div class="min-w-0 flex-auto">
-						<p class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"><?php echo $circle['title']; ?></p>
-						<p class="mt-1 truncate text-xs leading-5 text-gray-500 dark:text-gray-400"><?php echo $circle['description']; ?></p>
-					<p class="mt-1 text-xs leading-5 text-gray-500">Admin: Moi</p>
-					</div>
-				</div>
-			</a>
+		<?php if ($i == 1) : ?>
+		
+		<h2 id="accordion-open-heading-<?php echo $i ?>">
+			
+			<button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400" data-accordion-target="#accordion-open-body-<?php echo $i ?>" aria-expanded="false" aria-controls="accordion-open-body-<?php echo $i ?>">
+			<?php echo $circle['title']; ?>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			</button>
+		</h2>
+		<div id="accordion-open-body-<?php echo $i ?>" class="hidden" aria-labelledby="accordion-open-heading-<?php echo $i ?>">
+			<?php Component::form_modify_circle($circle['id']); ?>
+		</div>
+		<?php elseif($i != sizeof($admin_circles)): ?>
 
-			<div class="sm:flex sm:flex-col sm:items-end">
-				<a href="circle.php?id=<?php echo $circle['id']; ?>" class="text-sm font-medium text-gray-900 dark:text-gray-100">Modifier</a>
+		<h2 id="accordion-open-heading-<?php echo $i ?>">
+			<button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-b-0 border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-open-body-<?php echo $i ?>" aria-expanded="false" aria-controls="accordion-open-body-<?php echo $i ?>">
+			<?php echo $circle['title']; ?>
+			<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+			</button>
+		</h2>
+		<div id="accordion-open-body-<?php echo $i ?>" class="hidden" aria-labelledby="accordion-open-heading-<?php echo $i ?>">
+			<?php Component::form_modify_circle($circle['id']); ?>
+		</div>
+
+		<?php else: ?>
+			<h2 id="accordion-open-heading-<?php echo $i ?>">
+				<button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" data-accordion-target="#accordion-open-body-<?php echo $i ?>" aria-expanded="false" aria-controls="accordion-open-body-<?php echo $i ?>">
+				<?php echo $circle['title']; ?>
+				<svg data-accordion-icon class="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+				</button>
+			</h2>
+			<div id="accordion-open-body-<?php echo $i ?>" class="hidden" aria-labelledby="accordion-open-heading-<?php echo $i ?>">
+			<?php Component::form_modify_circle($circle['id']); ?>
 			</div>
-		</li>
-	<?php endif ?>
-	<?php endforeach;
-	echo '</ul>';
-?>
+
+
+		<?php endif; ?>
+
+		
+		
+	<?php 
+	$i++;
+	?>
+<?php endforeach; ?>
+</div>
+
+
 <!--
   This example requires some changes to your config:
 
@@ -133,7 +170,7 @@ foreach ($circles as $circle) :
 
 
 </div>
-<h1 class="pt-2 inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Créer un cercle</h1>
+<h1 class="pt-4 inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Créer un cercle</h1>
 
 <form method="POST" action="account.php?tab=user_circles">
 	<div class="space-y-12">
