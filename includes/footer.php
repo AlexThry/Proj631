@@ -15,7 +15,7 @@
         </footer>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js" defer></script>
-        <script src="assets/js/tailwind-script.js" defer></script>
+        <script src="assets/js/script.js" defer></script>
 	</main>
 </body>
 
