@@ -2,9 +2,9 @@
 
 require_once 'includes/header.php';
 
-$circle_id = isset($_GET['id']) ? $_GET['id'] : null;
+$circle_id = isset( $_GET['id'] ) ? $_GET['id'] : null;
 
-if ($circle_id === null ) {
+if ( $circle_id === null ) {
 	header( 'Location: ' . get_home_url() );
 	exit();
 }
@@ -32,7 +32,7 @@ $users  = Database::get_circle_users( $circle_id );
 					</div>
 
 					<div class="hidden lg:mt-0 lg:col-span-5 lg:flex">
-						<img src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/hero/phone-mockup.png" alt="mockup">
+						<img src="<?php echo $circle['image_url']; ?>" class="w-lg rounded" alt="mockup">
 					</div>
 
 				</div>
@@ -40,22 +40,22 @@ $users  = Database::get_circle_users( $circle_id );
 
 			<section id="books" class="bg-white dark:bg-gray-900">
 				<h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Les livres</h2>
-				<?php Component::display_books($books); ?>
+				<?php Component::display_books( $books ); ?>
 			</section>
 
 			<section id="users" class="bg-white dark:bg-gray-900">
 				<h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Les utilisateurs</h2>
 				<ul class="circle-users">
-				<?php 
+				<?php
 				foreach ( $users as $user ) {
-					if ( $user['profile_url'] != null) {
+					if ( $user['profile_url'] != null ) {
 						$avatar = $user['profile_url'];
 					} else {
 						$avatar = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 					}
-					echo "<li class='circle-user'><img class='mr-2 w-6 h-6 rounded-full' src='" . $avatar . "' alt=''>" . $user['user_name'] . "</li>";
-					}
-					?>
+					echo "<li class='circle-user'><img class='mr-2 w-6 h-6 rounded-full' src='" . $avatar . "' alt=''>" . $user['user_name'] . '</li>';
+				}
+				?>
 			</ul>
 			</section>
 
