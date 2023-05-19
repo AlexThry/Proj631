@@ -38,9 +38,9 @@ if ( ! class_exists( 'Component' ) ) {
 			<button type="button" data-dropdown-toggle="dropdown-single-cercles-book-<?php echo $book_id; ?>" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center mr-3 mb-3 dark:text-white dark:focus:ring-gray-800">Cercles</button>
 			<div id="dropdown-single-cercles-book-<?php echo $book_id; ?>" class="z-100 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
 				<ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-					<?php foreach($circles as $circle) : ?>
-					<?php $book_is_in_circle = Database::book_is_in_circle($book_id, $circle['id']); ?>
-					<?php $change_circle_url = "change-circle-book.php?circle-id=".$circle['id']."&book-id=".$book_id."&previous-url=$_SERVER[REQUEST_URI]"; ?>
+					<?php foreach ( $circles as $circle ) : ?>
+						<?php $book_is_in_circle = Database::book_is_in_circle( $book_id, $circle['id'] ); ?>
+						<?php $change_circle_url = 'change-circle-book.php?circle-id=' . $circle['id'] . '&book-id=' . $book_id . "&previous-url=$_SERVER[REQUEST_URI]"; ?>
 					<li>
 						<a href="<?php echo $change_circle_url; ?>" class="whitespace-nowrap inline-flex align-items px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
 							<?php if ( $book_is_in_circle ) : ?>
@@ -52,7 +52,7 @@ if ( ! class_exists( 'Component' ) ) {
 								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
 							</svg>
 							<?php endif; ?>
-							<?php echo $circle['title'] ?>
+							<?php echo $circle['title']; ?>
 						</a>
 					</li>
 					<?php endforeach; ?>
@@ -64,7 +64,7 @@ if ( ! class_exists( 'Component' ) ) {
 		/**
 		 * Display a single book.
 		 *
-		 * @param Book $book The book to display.
+		 * @param Book  $book The book to display.
 		 * @param array $circles An array of each circles that the book can be added in
 		 * @return void
 		 */
@@ -84,8 +84,8 @@ if ( ! class_exists( 'Component' ) ) {
 				<div class="single-book-buttons height-full">
 					<div class="single-book-buttons">
 						<?php $is_connected = get_user() !== false; ?>
-						<?php $has_read = $is_connected ? Database::user_has_read(get_user()['id'], $id) : false; ?>
-						<?php $wants_to_read = $is_connected ? Database::user_wants_to_read(get_user()['id'], $id) : false; ?>
+						<?php $has_read = $is_connected ? Database::user_has_read( get_user()['id'], $id ) : false; ?>
+						<?php $wants_to_read = $is_connected ? Database::user_wants_to_read( get_user()['id'], $id ) : false; ?>
 
 						<?php if ( $has_read ) : ?>
 							<a class="whitespace-nowrap disabled text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
@@ -96,14 +96,14 @@ if ( ! class_exists( 'Component' ) ) {
 							</a>
 						<?php endif; ?>
 
-						<?php if ( $wants_to_read && !$has_read ) : ?>
+						<?php if ( $wants_to_read && ! $has_read ) : ?>
 							<a class="whitespace-nowrap	disabled text-white bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center inline-flex items-center mr-2 dark:bg-green-600">
 								<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
 								</svg>
 								En cours
 							</a>
-							<a href="<?php echo "change-my-books.php?book_id=$id&previous-url=$_SERVER[REQUEST_URI]" ?>" class="whitespace-nowrap text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+							<a href="<?php echo "change-my-books.php?book_id=$id&previous-url=$_SERVER[REQUEST_URI]"; ?>" class="whitespace-nowrap text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 								<svg fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5 mr-2 -ml-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 								</svg>
@@ -111,8 +111,8 @@ if ( ! class_exists( 'Component' ) ) {
 							</a>
 						<?php endif; ?>
 
-						<?php if ( !$wants_to_read && !$has_read ) : ?>
-							<a href="<?php echo "change-wishlist.php?book_id=$id&previous-url=$_SERVER[REQUEST_URI]" ?>" class="whitespace-nowrap text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+						<?php if ( ! $wants_to_read && ! $has_read ) : ?>
+							<a href="<?php echo "change-wishlist.php?book_id=$id&previous-url=$_SERVER[REQUEST_URI]"; ?>" class="whitespace-nowrap text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 								<svg fill="none" stroke="currentColor" class="w-5 h-5 mr-2 -ml-1" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
 								</svg>
@@ -120,7 +120,10 @@ if ( ! class_exists( 'Component' ) ) {
 							</a>
 						<?php endif; ?>
 
-						<?php if ( $circles ) Component::display_book_circle_choices( $id, $circles ); ?>
+						<?php
+						if ( $circles ) {
+							self::display_book_circle_choices( $id, $circles );}
+						?>
 					</div>
 				</div>
 			</div>
@@ -137,7 +140,9 @@ if ( ! class_exists( 'Component' ) ) {
 		 */
 		public static function display_books( $books ): void {
 			$circles = array();
-			if(get_user()) $circles = Database::get_user_circles(get_user()['id']);
+			if ( get_user() ) {
+				$circles = Database::get_user_circles( get_user()['id'] );
+			}
 			if ( $books ) :
 				?>
 				<div class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-4">
@@ -152,37 +157,42 @@ if ( ! class_exists( 'Component' ) ) {
 					<h2 class="inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white" id="content">Aucun livre !</h2>
 					<p class="mb-4 text-lg text-gray-600 dark:text-gray-400">
 						Vous voulez découvrir de nouvelles oeuvres ? C'est par ici ->
-						<a href='<?php echo get_home_url() ?>' class="dark:text-white">découvrir +</a>
+						<a href='<?php echo get_home_url(); ?>' class="dark:text-white">découvrir +</a>
 					</p>
 				</div>
-			<?php endif;
+				<?php
+			endif;
 		}
 
 		public static function form_modify_circle( $circle_id ) {
-			$circle = Database::get_single_circle( $circle_id ); ?>
+			$circle = Database::get_single_circle( $circle_id );
+			?>
 			<div class="cadre">
 				<form method="POST" action="account.php?tab=user_circles">
 					<div class="space-y-12">
 							
 						<div class="border-b border-gray-900/10 dark:border-gray-700 pb-12">
 
+							<a href="circle.php?id=<?php echo htmlentities( $circle_id ); ?>" target="_blank" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Voir le cercle</a>
 
-							<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+							<div class="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+
 								<div class="sm:col-span-4">
-									<label for="circle_name_modification_<?php echo $circle_id ?>" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom
+									<label for="circle_name_modification_<?php echo htmlentities( $circle_id ); ?>" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Nom
 										du cercle</label>
 									<div class="mt-2">
 										<div class="flex rounded-md focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-											<input required type="text" name="circle_name_modification_<?php echo $circle_id ?>" id="circle_name" autocomplete="circle_name" value="<?php echo $circle['title'] ?>"
+											<input required type="text" name="circle_name_modification_<?php echo htmlentities( $circle_id ); ?>" id="circle_name" autocomplete="circle_name" value="<?php echo $circle['title']; ?>"
 												class="pl-3 text-gray-500 sm:text-sm block flex-1 rounded bg-gray-50 border-gray-300 py-1.5 pl-1 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 										</div>
 									</div>
 								</div>
 
 								<div class="col-span-full">
-									<label for="description_modification_<?php echo $circle_id ?>" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Description</label>
+									<label for="description_modification_<?php echo htmlentities( $circle_id ); ?>" class="block text-sm font-medium leading-6 text-gray-900 dark:text-white">Description</label>
 									<div class="mt-2">
-										<textarea id="description" name="description_modification_<?php echo $circle_id ?>" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required><?php echo $circle['description'] ?></textarea>
+										<textarea id="description" name="description_modification_<?php echo htmlentities( $circle_id ); ?>" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required><?php echo $circle['description']; ?></textarea>
 									</div>
 									<p class="mt-3 text-sm leading-6 text-gray-600">Modifiez la description du cercle</p>
 								</div>
@@ -193,11 +203,11 @@ if ( ! class_exists( 'Component' ) ) {
 										<img class="w-16 h-16 rounded-full" src="<?php echo ! empty( $circle['image_url'] ) ? $circle['image_url'] : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'; ?>" alt="Photo de profil" />
 
 										<div class="flex-1">
-											<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="description_modification_<?php echo $circle_id ?>">Changer l'image</label>
+											<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="description_modification_<?php echo htmlentities( $circle_id ); ?>">Changer l'image</label>
 											<input
 											required
-											name="circle_url_modification_<?php echo $circle_id ?>"
-											type="text" id="circle_url" autocomplete="off" value="<?php echo $circle['image_url'] ?>"
+											name="circle_url_modification_<?php echo htmlentities( $circle_id ); ?>"
+											type="text" id="circle_url" autocomplete="off" value="<?php echo $circle['image_url']; ?>"
 											class="block w-full rounded-md bg-gray-50 border-gray-300 py-1.5 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 											<p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
 										</div>
@@ -218,10 +228,9 @@ if ( ! class_exists( 'Component' ) ) {
 				</form>
 			</div>
 			<?php
-			if (isset($_POST['circle_name_modification_' . $circle_id]) && isset($_POST['description_modification_' . $circle_id]) && isset($_POST['circle_url_modification_' . $circle_id])) {
-				Database::update_circle($circle_id, $_POST['circle_name_modification_' . $circle_id], $_POST['description_modification_' . $circle_id], $_POST['circle_url_modification_' . $circle_id]);
+			if ( isset( $_POST[ 'circle_name_modification_' . $circle_id ] ) && isset( $_POST[ 'description_modification_' . $circle_id ] ) && isset( $_POST[ 'circle_url_modification_' . $circle_id ] ) ) {
+				Database::update_circle( $circle_id, $_POST[ 'circle_name_modification_' . $circle_id ], $_POST[ 'description_modification_' . $circle_id ], $_POST[ 'circle_url_modification_' . $circle_id ] );
 			}
 		}
 	}
 }
-

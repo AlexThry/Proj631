@@ -100,8 +100,7 @@ foreach ($circles as $circle) {
 		array_push($admin_circles, $circle);
 	} 
 }
-echo '	<h1 class="pt-4 pb-4 inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Modifier mes cercles</h1>
-';
+echo '<h1 class="pt-4 pb-4 inline-block mb-2 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white dark:text-white" id="content">Modifier mes cercles</h1>';
 foreach ($admin_circles as $circle) :
 	?> 
 
@@ -152,20 +151,6 @@ foreach ($admin_circles as $circle) :
 </div>
 
 
-<!--
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-	// ...
-	plugins: [
-	  // ...
-	  require('@tailwindcss/forms'),
-	],
-  }
-  ```
--->
 <div>
 
 
