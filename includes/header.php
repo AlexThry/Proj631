@@ -54,7 +54,7 @@ require_once 'functions.php';
 			document.documentElement.classList.remove('dark')
 		}
 	</script>
-	<link rel="stylesheet" href="assets/css/tailwind-style.css">
+	<link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body class="page-<?php echo get_url_basename(); ?> bg-white dark:bg-gray-800">
