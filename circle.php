@@ -11,6 +11,10 @@ if ($circle_id === null ) {
 $circle = Database::get_circle( $circle_id );
 $books  = Database::get_circle_books( $circle_id );
 $users  = Database::get_circle_users( $circle_id );
+$admin_id = $circle['admin_id'];
+$admin_name = Database::get_user($admin_id)['user_name'];
+$admin_profile = Database::get_user($admin_id)['profile_url'];
+
 ?>
 
 <main class="pt-4 pb-8 lg:pt-8 lg:pb-12 bg-white dark:bg-gray-900">
@@ -54,7 +58,8 @@ $users  = Database::get_circle_users( $circle_id );
 						$avatar = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 					}
 					echo "<li class='circle-user'><img class='mr-2 w-6 h-6 rounded-full' src='" . $avatar . "' alt=''>" . $user['user_name'] . "</li>";
-					}
+				}
+				echo "<li class='circle-user'><img class='mr-2 w-6 h-6 rounded-full' src='" . $admin_profile . "' alt=''>" . $admin_name . "</li>";
 					?>
 			</ul>
 			</section>
