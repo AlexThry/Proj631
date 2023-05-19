@@ -71,33 +71,6 @@ function initSearchDropdown() {
   });
 }
 
-
-// function starNotation() {
-//   let listStar = document.querySelectorAll(".rating-star");
-//   let listInput = document.querySelectorAll(".star-input");
-//   listStar.forEach((star) => {
-//     star.addEventListener("click", function () {
-//       let index = star.getAttribute("data-index");
-//       listStar.forEach(star => {
-//         if (parseInt(star.getAttribute("data-index")) <= parseInt(index)) {
-//           star.classList.remove("text-gray-300");
-//           star.classList.remove("dark:text-gray-500");
-//           star.classList.add("text-yellow-400");
-//         } else {
-//           star.classList.remove("text-yellow-400");
-//           star.classList.add("text-gray-300");
-//           star.classList.add("dark:text-gray-500");
-//         }
-//         if (parseInt(star.getAttribute("data-index")) == parseInt(index)) {
-//           star.classList.add("selected");
-//         } else {
-//           star.classList.remove("selected");
-//         }
-//       });
-//     });
-//   });
-// }
-
 function starNotation() {
   let listStar = document.querySelectorAll(".rating-star");
   let listInput = document.querySelectorAll(".star-input");

@@ -774,7 +774,8 @@ if ( ! class_exists( 'Database' ) ) {
 		public static function update_circle( $circle_id, $title, $description, $image_url ) {
 			global $conn;
 
-			$sql = "UPDATE circle SET title = '$title', description = '$description', image_url = '$image_url' WHERE id = $circle_id;";
+			$sql = "UPDATE circle SET title = '" . htmlentities( $title ) . "', description = '" . htmlentities( $description ) . "', image_url = '" . htmlentities( $image_url ) . "' WHERE id = $circle_id;";
+			var_dump( $sql );
 			$conn->query($sql);
 		}
 	}

@@ -206,7 +206,7 @@ if ( ! class_exists( 'Component' ) ) {
 											<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="description_modification_<?php echo htmlentities( $circle_id ); ?>">Changer l'image</label>
 											<input
 											required
-											name="circle_url_modification_<?php echo htmlentities( $circle_id ); ?>"
+											name="circle_url_modification_<?php echo $circle_id; ?>"
 											type="text" id="circle_url" autocomplete="off" value="<?php echo $circle['image_url']; ?>"
 											class="block w-full rounded-md bg-gray-50 border-gray-300 py-1.5 text-gray-900 dark:text-white placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
 											<p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
@@ -216,10 +216,6 @@ if ( ! class_exists( 'Component' ) ) {
 							</div>
 						</div>
 					</div>
-
-							
-
-
 
 					<div class="mt-6 flex items-center justify-end gap-x-6">
 						<button type="submit"
