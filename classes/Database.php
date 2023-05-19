@@ -599,10 +599,33 @@ if ( ! class_exists( 'Database' ) ) {
 		}
 		
 		/**
-		 * Get all books in a circle.
+		 * Get user's circles.
 		 *
-		 * @param int $circle_id The circle's id.
-		 * @return array|null The books' data.
+		 * @param int $user_id The user's id.
+		 * @return array|null The user's circles.
+		 */
+		public static function get_all_user_cirlces($user_id) {
+			global $conn;
+			$sql = "SELECT * FROM circle WHERE id IN (SELECT circle_id FROM user_in_circle WHERE user_id = $user_id)";
+			$res = mysqli_query($conn, $sql);
+			$circles = array();
+			foreach ($res as $line) {
+				$circle = array();
+				$circle['id'] = $line['id'];
+				$circle['title'] = $line['title'];
+				$circle['description'] = $line['description'];
+				$circle['image_url'] = $line['image_url'];
+				$circle['admin_id'] = $line['admin_id'];
+				$circles[] = $circle;
+			}
+			return $circles;
+		}
+
+		/**
+		 * Get user's circles where he is admin.
+		 *
+		 * @param int $user_id The user's id.
+		 * @return array|null The user's circles.
 		 */
 		public static function get_user_circles( $user_id ) {
 			global $conn;

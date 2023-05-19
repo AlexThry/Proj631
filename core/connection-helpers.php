@@ -143,7 +143,7 @@ function subscribe_user( $user_name, $password, $confirm_password, $first_name, 
 	}
 
 	// Check if user already exists
-	$res = $conn->query("SELECT id FROM user WHERE user.user_name = \"$username\" LIMIT 1");
+	$res = $conn->query("SELECT id FROM user WHERE user.user_name = \"$user_name\" LIMIT 1");
 	if(mysqli_num_rows($res)) return "Ce compte existe déjà, insérez un autre nom d'utilisateur.";
 
 	$date          = date( 'Y-m-d' );
