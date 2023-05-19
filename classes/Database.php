@@ -579,13 +579,23 @@ if ( ! class_exists( 'Database' ) ) {
 			return $circles;
 		}
 
-		// on doit recup
-		// les utilisateurs
-		// les livres
-		// todo: ajouter un champ date_ajout dans la db pour les livres ajoutés à un cercle
-		public static function get_single_circle($circle_id): array {
-			// to code here
-			return array();
+
+		public static function get_single_circle($circle_id) {
+			global $conn;
+			$sql = "SELECT * FROM circle WHERE id = $circle_id";
+
+			$res     = $conn->query( $sql );
+			foreach ( $res as $line ) {
+				$circle                     = array();
+				$circle['id']               = $line['id'];
+				$circle['title']            = $line['title'];
+				$circle['description']      = $line['description'];
+				$circle['image_url']        = $line['image_url'];
+				$circle['admin_id']         = $line['admin_id'];
+			}
+
+			return $circle;
+			
 		}
 		
 		/**
@@ -735,6 +745,13 @@ if ( ! class_exists( 'Database' ) ) {
 			}
 
 			$sql = 'INSERT INTO review (content, id_book, id_user, parution_date, score) VALUES ("' . $content . '", ' . $id_book . ', ' . $id_user . ', "' . $parution_date . '", ' . $score . ');';
+			$conn->query($sql);
+		}
+
+		public static function update_circle( $circle_id, $title, $description, $image_url ) {
+			global $conn;
+
+			$sql = "UPDATE circle SET title = '$title', description = '$description', image_url = '$image_url' WHERE id = $circle_id;";
 			$conn->query($sql);
 		}
 	}

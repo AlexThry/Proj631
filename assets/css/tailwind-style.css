@@ -124,3 +124,16 @@ form input {
   align-items: center;
   margin-right: 10px;
 }
+
+.admin-circle a {
+  position: absolute;
+  right: 40px;
+  transform: translateY(-120%);
+
+}
+
+.cadre {
+  border-left: solid 1px #e5e7eb;
+  border-right: solid 1px #e5e7eb;
+  padding: 20px;
+}
